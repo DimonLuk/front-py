@@ -12,25 +12,25 @@ def clean(self):
             toRm = i-1
     if toRm != 0:
         self.template = self.template[:toRm] + self.template[toRm+2:]
-def replace(self, content,position):
+def replace(self, content,index):
     toRm = 0
     count = 0
     for i in range(len(self.template)):
         if self.template[i-2]=="|" and self.template[i-1] == "|" and self.template[i]=="|":
             toRm = i-2
-            if count == position:
+            if count == index:
                 break
             else:
                 count = count + 1
     if toRm != 0:
         self.template = self.template[:toRm] + content + "|||" + self.template[toRm+3:]
-def cclean(self,position):
+def cclean(self,index):
     toRm = 0
     count = 0
     for i in range(len(self.template)): 
         if self.template[i-2] == "|" and self.template[i-1] == "|" and self.template[i]=="|":
             toRm = i-2
-            if count == position:
+            if count == index:
                 break
             else:
                 count = count +1
@@ -110,11 +110,11 @@ class ParagraphElement:
                         """
         replace(self,self.text,2)
         cclean(self,2)
-    def addClass(self,*cl):
+    def _addClass(self,*cl):
         for i in cl:
             replace(self,i+" ",0)
         cclean(self,0)
-    def addStyle(self, style):
+    def _addStyle(self, style):
         for i in style:
             replace(self,"%s:%s; " % (i,style[i]),1)
         cclean(self,1)
@@ -136,11 +136,11 @@ page = WebPage("test1","test1","utf-8")
 container = BlockContainer()
 
 text = ParagraphElement("Some test")
-text.addClass("mx-auto")
-text.addStyle({"color":"red","font-weight":"800"})
+text._addClass("mx-auto","col")
+text._addStyle({"color":"red","font-weight":"800"})
 otherText = ParagraphElement("OtherText")
-otherText.addClass("mx-auto")
-otherText.addStyle({"font-size":"3em","color":"orange"})
+otherText._addClass("mx-auto","col")
+otherText._addStyle({"font-size":"3em","color":"orange"})
 
 container.addContent(text,otherText,text,otherText)
 page.addContent(container)
