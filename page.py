@@ -56,7 +56,9 @@ class WebPage:
                 <link rel="stylesheet" type="text/css" href="style.css">
             </head>
             <body>
+            <div class="global">
             |||
+            </div>
             <script src="script.js"></script>
             </body>
         </html>
@@ -71,12 +73,12 @@ class WebPage:
         """
         for i in content:
             replace(self,i.template,0)
-        cclean(self,0)
     def load(self):
         """
         TODO fix clean function because now it cleans random times but should do it no more then required
         Creats html file
         """
+        cclean(self,0)
         with open("%s.html" % self.filename,"w") as file:
             file.write(self.template)
 
@@ -89,7 +91,7 @@ class BlockContainer:
     """
     def __init__(self):
         self.template = """
-        <div class="container"><div class="row">|||</div></div>
+        <div><div class="container"><div class="row">|||</div></div></div>
         """
     def addContent(self,*content):
         """
@@ -97,6 +99,7 @@ class BlockContainer:
         """
         for i in content:
             replace(self,i.template,0)
+    def render(self):
         cclean(self,0)
 
 
@@ -113,36 +116,36 @@ class ParagraphElement:
     def _addClass(self,*cl):
         for i in cl:
             replace(self,i+" ",0)
-        cclean(self,0)
     def _addStyle(self, style):
         for i in style:
             replace(self,"%s:%s; " % (i,style[i]),1)
-        cclean(self,1)
+    def render(self):
+        cclean(self,0)
+        cclean(self,0)
+        cclean(self,0)
 
 
 
-class Positions:
-    def __init__(self):
-        self.center = "mx-auto"
+class position:
+        centered = "mx-auto"
 
-
-
-class TextStyles:
-    def __init__(self):
-        self.center = "mx-auto"
-        
-page = WebPage("test1","test1","utf-8")
-
-container = BlockContainer()
+class size:
+    pass
 
 text = ParagraphElement("Some test")
-text._addClass("mx-auto","col")
-text._addStyle({"color":"red","font-weight":"800"})
+text._addClass(position.centered,"col")
+text._addStyle({"color":"grey","font-weight":"800"})
+text.render()
+
 otherText = ParagraphElement("OtherText")
 otherText._addClass("mx-auto","col")
 otherText._addStyle({"font-size":"3em","color":"orange"})
+otherText.render()
 
-container.addContent(text,otherText,text,otherText)
+container = BlockContainer()
+container.addContent(text,otherText,text,otherText,text,otherText)
+container.render()
+
+page = WebPage("test","Test","utf-8")
 page.addContent(container)
-
 page.load()
