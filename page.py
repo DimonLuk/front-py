@@ -3,8 +3,6 @@ This is to create website only with python
 All styles with bootstrap 4
 """
 from core.core import WebPage
-from containers import BlockContainer
-import inspect
 import core.default as d
 test = True
 page = WebPage("test","Test","utf-8")

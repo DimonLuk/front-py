@@ -1,5 +1,41 @@
 from .core import CoreElement
+"""
+This module contains main elements which is used to develop frameword
+It contains:
+    <menu>:_MenuElement
+    <nav>:_NavigationElement
+    <ul>:_UnnumberedListElement
+    <ol>:_NumberedListElement
+    <li>:_InListElement
+    <a>:_LinkElement
+    <p>:_ParagraphElement
+    <img>:_ImageElement
+    <div>:_BlockElement
+    <section>:_SectionElement
+    <aside>:_AsideElement
+    <span>:_TextElement
+    <footer>:_FooterElement
+    <form>:_FormElement
+    <input>(all types):_InputElement
+    <button>:_ButtonElement
+    <header>:_HeaderElement
+    <textarea>:_InputTextElement
 
+Copyright (C) 2018  Dima Lukashov github.com/DimonLuk
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/>.
+"""
 class _ParagraphElement(CoreElement):
     def __init__(self,text="",element="p",isClosing=True,isAddAttrs=True,attributes=["class","style"]):
         super().__init__(element,isClosing,isAddAttrs,attributes)
