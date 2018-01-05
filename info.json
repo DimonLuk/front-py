@@ -1,8 +1,8 @@
 {
-	"name":"web-python",
+	"name":"front-py",
 	"author":"Dima Lukashov",
 	"github":"https://github.com/DimonLuk",
-	"repositiory":"https://github.com/DimonLuk/web-python",
+	"repositiory":"https://github.com/DimonLuk/front-py",
 	"license":"gpl-3.0",
 	"licenseText":"LICENSE.md",
 	"version":"0.0.0",
