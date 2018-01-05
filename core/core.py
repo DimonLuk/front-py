@@ -1,3 +1,8 @@
+class InvalidInsertion(Exception):
+    def __init__(self,message):
+        super().__init__(message)
+
+
 class CoreMeta(type):
     """
     This metaclass add special methods of replacing and cleaning after replacing elements.
@@ -76,13 +81,16 @@ class WebPage(metaclass=CoreMeta):
         self._replace(self,self.encoding,1)#add encoding
         self._clean(self,0)#clean fileds to add
         self._clean(self,0)#clean filed to add
-    def addContent(self,*content):
+    def addElement(self,*content):
         self._content = content
         """
         Add any additional objects to body
         """
         for i in content:
-            self._replace(self,i._template,0)
+            try:
+                self._replace(self,i._template,0)
+            except AttributeError:
+                raise InvalidInsertion("You can't use '%s' to insert into WebPage, please use something from the framework library" % i)
     def load(self):
         """
         Creats html file
