@@ -4,21 +4,16 @@ All styles with bootstrap 4
 """
 from core.core import WebPage
 from containers import BlockContainer
-from core.default import Paragraph, Image
-
-text = Paragraph()
-text.addContent("Some text")
-text._addClass("mx-auto")
-text._addStyle({"color":"red"})
-
-im = Image()
-im._addClass("My class")
-im._addStyle({"color":"red"})
-im.render()
-
-text.addContent(im)
-text.render()
+import inspect
+import core.default as d
+test = True
 page = WebPage("test","Test","utf-8")
-page.addElement(text,im,object())
+if test:
+    for i in d._test:
+        obj = i()
+        obj.addContent(obj._element)
+        obj._addStyle({"color":"orange"})
+        obj._addClass("MyClass","My")
+        obj.render()
+        page.addElement(obj)
 page.load()
-print(page._template)
