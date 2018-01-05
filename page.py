@@ -1,9 +1,5 @@
-"""
-This is to create website only with python
-All styles with bootstrap 4
-"""
 from core.core import WebPage
-import core.default as d
+import core.elemetns as d
 test = True
 page = WebPage("test","Test","utf-8")
 if test:
