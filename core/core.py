@@ -1,3 +1,12 @@
+INVALID_INSERTION_MESSAGE = "You can't use '%s', please try some object from the framework library"
+class InvalidInsertion(Exception):
+    def __init__(self,message):
+        super().__init__(message)
+class EmptyWebPage(Exception):
+    def __init__(self):
+        super().__init__("You can't leave page empty, try to add some content with addElement method")
+
+
 class CoreMeta(type):
     """
     This metaclass add special methods of replacing and cleaning after replacing elements.
@@ -76,19 +85,25 @@ class WebPage(metaclass=CoreMeta):
         self._replace(self,self.encoding,1)#add encoding
         self._clean(self,0)#clean fileds to add
         self._clean(self,0)#clean filed to add
-    def addContent(self,*content):
+    def addElement(self,*content):
         self._content = content
         """
         Add any additional objects to body
         """
         for i in content:
-            self._replace(self,i._template,0)
+            try:
+                self._replace(self,i._template,0)
+            except AttributeError:
+                raise InvalidInsertion(INVALID_INSERTION_MESSAGE % i)
     def load(self):
         """
         Creats html file
         """
-        for i in range(len(self._content)):
-            self._clean(self,0)
+        try:
+            for i in range(len(self._content)):
+                self._clean(self,0)
+        except AttributeError:
+            raise EmptyWebPage()
         with open("%s.html" % self.filename,"w") as file:
             file.write(self._template)
 
@@ -152,18 +167,26 @@ class CoreElement(metaclass=CoreMeta):
         if "class" in self._indexesList:
             for i in self._cls:
                 self._replace(self,"%s " % i,self._indexesList["class"])
+    def _addAttrValue(self,attr,value):
+        if attr in self._indexesList:
+            self._replace(self,value,self._indexesList[attr])
+
                     
-    def addContent(self,content):
+    def addContent(self,*content):
         """
         Add content which is str or any object that contains _template field
         """
         self._content = content
-        if type(self._content) is str:#If content is str
-            if "content" in self._indexesList:#and it's field to add content
-                self._replace(self,self._content,self._indexesList["content"])
-        else:#If content is some object
-            if "content" in self._indexesList:
-                self._replace(self,self._content._template,self._indexesList["content"])
+        for i in self._content:
+            if type(i) is str:#If content is str
+                if "content" in self._indexesList:#and it's field to add content
+                    self._replace(self,i,self._indexesList["content"])
+            else:#If content is some object
+                if "content" in self._indexesList:
+                    try:
+                        self._replace(self,i._template,self._indexesList["content"])
+                    except AttributeError:
+                        raise InvalidInsertion(INVALID_INSERTION_MESSAGE % i)
     def render(self):
         """
         Preparing object to be used. REQURIED METHOD
