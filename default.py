@@ -1,11 +1,5 @@
 from core import CoreMeta
 
-
-class TestElement():
-    def __init__(self):
-        self.template = "TestTemplate"
-
-
 class ParagraphElement(metaclass=CoreMeta):
     def __init__(self, text):
         self.text = text
