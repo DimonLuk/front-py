@@ -1,10 +1,10 @@
-from core import CoreMeta
+from core.core import CoreMeta
 class BlockContainer(metaclass=CoreMeta):
     """
     It's just a <div>
     """
     def __init__(self):
-        self.template = """
+        self._template = """
         <div class="|||" style="|||"><div class="container"><div class="row">|||</div></div></div>
         """
     def addContent(self,*content):
@@ -12,7 +12,7 @@ class BlockContainer(metaclass=CoreMeta):
         Every content in block has to be added throuhg this function
         """
         for i in content:
-            self._replace(self,i.template,2)
+            self._replace(self,i._template,2)
     def render(self):
         self._clean(self,0)
         self._clean(self,0)
