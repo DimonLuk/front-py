@@ -75,5 +75,44 @@ class WebPage(metaclass=CoreMeta):
         with open("%s.html" % self.filename,"w") as file:
             file.write(self.template)
 
-page = WebPage("testMeta.html","test","utf-8")
-page.load()
+class CoreElement(metaclass=CoreMeta):
+    def __init__(self,element,isClosing,isAddAttrs,attributes):
+        self._element = element
+        self._isClosing = isClosing
+        self._attributes = attributes
+        self._index = 0
+        self._isAddAttrs = isAddAttrs
+        self._indexesList = dict()
+        if self._isClosing:
+            self.template = """<%s|||>|||</%s>""" % (element,element)
+        else:
+            self.template = """<%s|||>""" % element
+        if self._isAddAttrs:
+            for i in attributes:
+                self._replace(self," "+i+'="|||"',self._index)
+                self._indexesList[i] = self._index
+                self._index += 1
+            self._clean(self,self._index)
+            if self._isClosing:
+                self._indexesList["content"] = self._index
+        else:
+            self._clean(self,self._index)
+            if self._isClosing:
+                self._indexesList["content"] = self._index
+    def _addStyle(self,styles):
+        self._styles = styles
+        if "style" in self._indexesList:
+            for i in self._styles:
+                self._replace(self,"%s:%s; " % (i,self._styles[i]),self._indexesList["style"])
+    def _addClass(self,*cls):
+        self._cls = cls
+        if "class" in self._indexesList:
+            for i in self._cls:
+                self._replace(self,"%s " % i,self._indexesList["class"])
+                    
+    def addContent(self,content):
+        if "content" in self._indexesList:
+            self._replace(self,content,self._indexesList["content"])
+    def render(self):
+        for i in self._indexesList:
+            self._clean(self,0)

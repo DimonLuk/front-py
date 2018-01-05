@@ -4,24 +4,21 @@ All styles with bootstrap 4
 """
 from core import WebPage
 from containers import BlockContainer
-from default import ParagraphElement, ImageElement
+from default import Paragraph, Image
 
-image = ImageElement("test.png","Myalt")
-image._addClass("col-2")
-image._addStyle({"asdasd":"adasdas"})
-image.render()
-
-text = ParagraphElement("Some test")
+text = Paragraph()
+text.addContent("Some text")
+text._addStyle({"color":"red"})
 text._addClass("mx-auto")
-text.addContent(image)
+
+im = Image()
+im.render()
+
+text.addContent(im.template)
 text.render()
 
-otherText = ParagraphElement("OtherText")
-otherText._addClass("mx-auto")
-otherText.render()
-
 container = BlockContainer()
-container.addContent(text,otherText,text,otherText,text,otherText)
+container.addContent(text,im)
 container.render()
 
 page = WebPage("test","Test","utf-8")
