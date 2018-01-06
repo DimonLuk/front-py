@@ -21,8 +21,15 @@ class InvalidInsertion(Exception):
 class EmptyWebPage(Exception):
     def __init__(self):
         super().__init__("You can't leave page empty, try to add some content with addElement method")
-
-
+class UnlinkedElementsError(Exception):
+    def __init__(self,message):
+        super().__init__(message)
+class MissingParametrError(Exception):
+    def __init__(self,message):
+        super().__init__(message)
+class UnsupportedFeature(Exception):
+    def __init__(self,message):
+        super().__init__(message)
 class CoreMeta(type):
     """
     This metaclass add special methods of replacing and cleaning after replacing elements.
@@ -227,3 +234,45 @@ class CoreElement(metaclass=CoreMeta):
         """
         for i in self._indexesList:#Clean all replacement expressions
             self._clean(self,0)
+    def _linkElements(self,targets=[]):
+        """
+        Links number of elemnts to make them avaliable to add event. self is trigger, other elements are targets
+        """
+        targaetMark = self._trigger + "Target"
+        if targets:
+            for i in targets:
+                if "class" in i._indexesList:
+                    i._replace(i, "%s " % targaetMark,i._indexesList["class"])
+                else:
+                    raise MissingParametrError("Add attribute 'class' for html element %s" % i)
+        if "class" in self._indexesList:
+            self._replace(self,"%s " % self._trigger,self._indexesList["class"])
+        else:
+            raise MissingParametrError("Add attribute 'class' for html element %s" % i)
+    def _addScript(self,toDo):
+        """
+        Creates jquery interpritation of event for browsers
+        """
+        try:
+            with open("./pages/scripts/script.js","a") as script:
+                script.write(toDo)
+        except AttributeError:
+            raise UnlinkedElementsError("You haven't linked elements to create events between them")
+    def onClick(self,toDo,targets=[],params={}):
+        import datetime
+        self._trigger = "%s" % datetime.datetime.now()
+        self._trigger = self._trigger.split(" ")
+        self._trigger = self._trigger[0].split("-") + self._trigger[1].split(".")
+        self._trigger = self._trigger[0:3] + self._trigger[3].split(":") + self._trigger[4:]
+        self._trigger = "".join(self._trigger)
+        self._linkElements(targets)
+        self._target = self._trigger + "Target"
+        self._onClickParams = params
+        if toDo == "changeColor":
+            self._addScript(";(function(){var changed = false;var color = $('.%s').css('color');$('.%s').click(function(){if(changed){$('.%s').css({'color':color});changed = false;}else{$('.%s').css({'color':'%s'});changed = true;}});})();"%(self._target,self._trigger,self._target,self._target,self._onClickParams["color"]))
+        else:
+            raise UnsupportedFeature("'%s' event for click is unsupported, please write to author lds4ever2000@gmail.com" % toDo)
+
+
+
+
