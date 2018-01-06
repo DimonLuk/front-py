@@ -1,4 +1,8 @@
 """
+This is core module of application. It contains all exceptions types, CoreMeta and CoreElement which is the main feature of the framework
+which makes it possible to build html tags in python objects.
+
+
 Copyright (C) 2018  Dima Lukashov github.com/DimonLuk
     
 This program is free software: you can redistribute it and/or modify
@@ -82,14 +86,20 @@ class _clean:
             it._template = it._template[:toRm] + it._template[toRm+3:]
 
 def _generateTrigger(self):
+    """
+    Generetaes classname for html element which will be trigger for some event
+    """
     import datetime
     trigger = "%s" % datetime.datetime.now()
     trigger = trigger.split(" ")
     trigger = trigger[0].split("-") + trigger[1].split(".")
     trigger = trigger[0:3] + trigger[3].split(":") + trigger[4:]
-    trigger = "".join(trigger)
+    trigger = "".join(trigger) #All operations just remove all signs which is not numbers and creates one unique string
     return trigger
 def _generateTarget(self,trigger):
+    """
+    Generates classname for html element which will be changed during the event
+    """
     return trigger+"Target"
 class WebPage(metaclass=CoreMeta):
     """
@@ -144,7 +154,7 @@ class WebPage(metaclass=CoreMeta):
         """
         for i in content:
             try:
-                i._render()
+                i._render() #remove replacement expression
                 self._replace(self,i._template,0)
             except AttributeError:
                 raise InvalidInsertion(INVALID_INSERTION_MESSAGE % i)
@@ -163,20 +173,18 @@ class WebPage(metaclass=CoreMeta):
 class CoreElement(metaclass=CoreMeta):
     """
     This class presents is used to build core elements which is simple html tags
-    Inner methods (user mustn't use this methods):
+    Private methods (user mustn't use this methods):
         _addStyle - to add css style to html element
         _addClass - to add class to html element
+        _render - removes all replacement expression
         This list may be extended
-    Inner fields (user mustn't use this variables):
+    Private fields (user mustn't use this variables):
         _element - shows which html element to be created
         _isClosing - shows if the element has closing tag or not. True - has
         _isAddAttrs - shows if the method has to have attributes. True - has to
         _attributes - list or tuple of attributes that has to be added to the element
-        _template
-        Threre are fields that has been listed in the __init__ method
-        Other service fields are described in class
-    Public methods (which user can use):
-        render - removes all replacement expression
+        _template - DOM representation of the object
+    Public fields:
         addContent - adds any content into element if it's possible
     """
     def __init__(self,element,isClosing,isAddAttrs,attributes):
@@ -216,7 +224,7 @@ class CoreElement(metaclass=CoreMeta):
         Add classes
         *cls - tuple of classes to be added
         """
-        self._cls = cls
+        self._cls = cls#represents classes of html tag
         if "class" in self._indexesList:
             for i in self._cls:
                 self._replace(self,"%s " % i,self._indexesList["class"])
@@ -229,7 +237,7 @@ class CoreElement(metaclass=CoreMeta):
         """
         Add content which is str or any object that contains _template field
         """
-        self._content = content
+        self._content = content#Represents content to be added to 'self' object
         for i in self._content:
             if type(i) is str:#If content is str
                 if "content" in self._indexesList:#and it's field to add content
@@ -238,7 +246,7 @@ class CoreElement(metaclass=CoreMeta):
                 if "content" in self._indexesList:
                     try:
                         import copy
-                        cop = copy.deepcopy(i)
+                        cop = copy.deepcopy(i)#Deep copy because original object can be chenged later
                         cop._render()
                         self._replace(self,cop._template,self._indexesList["content"])
                     except AttributeError:
@@ -251,36 +259,45 @@ class CoreElement(metaclass=CoreMeta):
             self._clean(self,0)
     def _linkElements(self,targets=[]):
         """
-        Links number of elemnts to make them avaliable to add event. self is trigger, other elements are targets
+        Links number of elemnts to make them avaliable to add event. self is a trigger, other elements are targets
         """
-        targaetMark = self._trigger + "Target"
+        self._trigger = self._generateTrigger() #classname for tag which will emit the event
+        self._target = self._generateTarget(self._trigger)#classname for tag which will be changed during the event
         if targets:
             for i in targets:
-                if "class" in i._indexesList:
-                    i._replace(i, "%s " % targaetMark,i._indexesList["class"])
-                else:
-                    raise MissingParametrError("Add attribute 'class' for html element %s" % i)
+                try:#If sth not from framework has been passed
+                    if "class" in i._indexesList:
+                        i._replace(i, "%s " % self._target,i._indexesList["class"])
+                    else:
+                        raise MissingParametrError("Add attribute 'class' for html element %s" % i)
+                except AttributeError:
+                    raise InvalidInsertion(INVALID_INSERTION_MESSAGE % i)
+        else:
+            raise UnlinkedElementsError("You haven't linked any elements to create events between them")
         if "class" in self._indexesList:
-            self._replace(self,"%s " % self._trigger,self._indexesList["class"])
+            try:#Just for safety
+                self._replace(self,"%s " % self._trigger,self._indexesList["class"])
+            except AttributeError:
+                raise InvalidInsertion(INVALID_INSERTION_MESSAGE % self)
         else:
             raise MissingParametrError("Add attribute 'class' for html element %s" % i)
     def _addScript(self,toDo):
         """
         Creates jquery interpritation of event for browsers
         """
-        try:
-            with open("./pages/scripts/script.js","a") as script:
-                script.write(toDo)
-        except AttributeError:
-            raise UnlinkedElementsError("You haven't linked elements to create events between them")
+        with open("./pages/scripts/script.js","a") as script:
+            script.write(toDo)
     def onClick(self,toDo,targets=[],params={}):
-        import datetime
-        self._trigger = self._generateTrigger()
-        self._target = self._generateTarget(self._trigger)
+        """
+        Args:
+        the first - some predefined word
+        the second - elemetns which have to be involved as targets
+        the third - dictionary with parametres if they are required
+        """
         self._linkElements(targets)
         self._onClickParams = params
         if toDo == "changeColor":
-            self._addScript(";(function(){var changed = false;var color = $('.%s').css('color');$('.%s').click(function(){if(changed){$('.%s').css({'color':color});changed = false;}else{$('.%s').css({'color':'%s'});changed = true;}});})();"%(self._target,self._trigger,self._target,self._target,self._onClickParams["color"]))
+            self._addScript(";(function(){var changed = false;var color = $('.%s').css('color');$('.%s').click(function(event){event.stopPropagation();if(changed){$('.%s').css({'color':color});changed = false;}else{$('.%s').css({'color':'%s'});changed = true;}});})();"%(self._target,self._trigger,self._target,self._target,self._onClickParams["color"]))
         else:
             raise UnsupportedFeature("'%s' event for click is unsupported, please write to author lds4ever2000@gmail.com" % toDo)
 

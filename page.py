@@ -8,15 +8,16 @@ if test:
         obj.addContent(obj._element)
         obj._addStyle({"color":"orange"})
         obj._addClass("MyClass","My")
-        obj.render()
         page.addElement(obj)
 
 
 par = d._ParagraphElement("Trigger")
 text = d._TextElement("Target")
-par.onClick("changeColor",[par,text],{"color":"green"})
-par.addContent(text,text,text)
+inp = d._InputElement("text","Some helpful info",False)
+par.onClick("changeColor",[text],{"color":"green"})
+par.addContent(text,text,text,"Some text")
+text.addContent("additional")
+par.addContent(text)
 
-
-page.addElement(par,text,text)
+page.addElement(par,text,text,inp)
 page.load()
