@@ -99,14 +99,12 @@ class _FormElement(CoreElement):
         self._addAttrValue("method",method)
 
 class _InputElement(CoreElement):             
-    def __init__(self,typ="text",placeholder="Placeholder",required=False,element="input", isClosing=False,isAddAttrs=True,attributes=["class","style","type","placeholder","required"]):        
+    def __init__(self,typ="text",placeholder="Placeholder",required=False,element="input", isClosing=False,isAddAttrs=True,attributes=["class","style","type","placeholder"]):        
+        if required:
+            attributes.append("required")
         super().__init__(element,isClosing,isAddAttrs,attributes)
         self._addAttrValue("type",typ)
         self._addAttrValue("placeholder",placeholder)
-        if required:
-            self._addAttrValue("required","true")
-        else:
-            self._addAttrValue("required","false")
 class _ButtonElement(CoreElement):             
     def __init__(self,typ="",text="Button",element="button", isClosing=True,isAddAttrs=True,attributes=["class","style","type"]):
         super().__init__(element,isClosing,isAddAttrs,attributes)
@@ -118,11 +116,9 @@ class _HeaderElement(CoreElement):
         super().__init__(element,isClosing,isAddAttrs,attributes)
 
 class _InputTextElement(CoreElement):             
-    def __init__(self,placeholder="Placeholder",required=False,element="textarea", isClosing=True,isAddAttrs=True,attributes=["class","style","placeholder","required"]):
-        super().__init__(element,isClosing,isAddAttrs,attributes)
+    def __init__(self,placeholder="Placeholder",required=False,element="textarea", isClosing=True,isAddAttrs=True,attributes=["class","style","placeholder"]):
         if required:
-            self._addAttrValue("required","true")
-        else:
-            self._addAttrValue("required","false")
+            attributes.append("required")
+        super().__init__(element,isClosing,isAddAttrs,attributes)
         self._addAttrValue("placeholder",placeholder)
 _test = (_TextElement,_ParagraphElement,_MenuElement,_NavigationElement,_UnnumberedListElement,_NumberedListElement,_InListElement,_LinkElement,_ImageElement,_BlockElement,_SectionElement,_AsideElement,_FooterElement,_FormElement,_InputElement,_ButtonElement,_HeaderElement,_InputTextElement)
