@@ -38,6 +38,8 @@ class CoreMeta(type):
     def __new__(cls,name,bases,dct):
         dct["_replace"] = _replace()
         dct["_clean"] = _clean()
+        dct["_generateTrigger"] = _generateTrigger
+        dct["_generateTarget"] = _generateTarget
         return super(CoreMeta,cls).__new__(cls,name,bases,dct)
 
 class _replace:
@@ -79,7 +81,16 @@ class _clean:
         if toRm != 0:#If sth has been found
             it._template = it._template[:toRm] + it._template[toRm+3:]
 
-
+def _generateTrigger(self):
+    import datetime
+    trigger = "%s" % datetime.datetime.now()
+    trigger = trigger.split(" ")
+    trigger = trigger[0].split("-") + trigger[1].split(".")
+    trigger = trigger[0:3] + trigger[3].split(":") + trigger[4:]
+    trigger = "".join(trigger)
+    return trigger
+def _generateTarget(self,trigger):
+    return trigger+"Target"
 class WebPage(metaclass=CoreMeta):
     """
     It represents the html document with filename, title and encoding (Parametres may change)
@@ -133,6 +144,7 @@ class WebPage(metaclass=CoreMeta):
         """
         for i in content:
             try:
+                i._render()
                 self._replace(self,i._template,0)
             except AttributeError:
                 raise InvalidInsertion(INVALID_INSERTION_MESSAGE % i)
@@ -225,10 +237,13 @@ class CoreElement(metaclass=CoreMeta):
             else:#If content is some object
                 if "content" in self._indexesList:
                     try:
-                        self._replace(self,i._template,self._indexesList["content"])
+                        import copy
+                        cop = copy.deepcopy(i)
+                        cop._render()
+                        self._replace(self,cop._template,self._indexesList["content"])
                     except AttributeError:
                         raise InvalidInsertion(INVALID_INSERTION_MESSAGE % i)
-    def render(self):
+    def _render(self):
         """
         Preparing object to be used. REQURIED METHOD
         """
@@ -260,13 +275,9 @@ class CoreElement(metaclass=CoreMeta):
             raise UnlinkedElementsError("You haven't linked elements to create events between them")
     def onClick(self,toDo,targets=[],params={}):
         import datetime
-        self._trigger = "%s" % datetime.datetime.now()
-        self._trigger = self._trigger.split(" ")
-        self._trigger = self._trigger[0].split("-") + self._trigger[1].split(".")
-        self._trigger = self._trigger[0:3] + self._trigger[3].split(":") + self._trigger[4:]
-        self._trigger = "".join(self._trigger)
+        self._trigger = self._generateTrigger()
+        self._target = self._generateTarget(self._trigger)
         self._linkElements(targets)
-        self._target = self._trigger + "Target"
         self._onClickParams = params
         if toDo == "changeColor":
             self._addScript(";(function(){var changed = false;var color = $('.%s').css('color');$('.%s').click(function(){if(changed){$('.%s').css({'color':color});changed = false;}else{$('.%s').css({'color':'%s'});changed = true;}});})();"%(self._target,self._trigger,self._target,self._target,self._onClickParams["color"]))

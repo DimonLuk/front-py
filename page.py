@@ -15,10 +15,7 @@ if test:
 par = d._ParagraphElement("Trigger")
 text = d._TextElement("Target")
 par.onClick("changeColor",[par,text],{"color":"green"})
-
-
-text.render()
-par.render()
+par.addContent(text,text,text)
 
 
 page.addElement(par,text,text)
