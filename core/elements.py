@@ -1,6 +1,6 @@
 from .core import CoreElement
 """
-This module contains main elements which is used to develop frameword
+This module contains main elements which is used to develop framework
 It contains:
     <menu>:_MenuElement
     <nav>:_NavigationElement

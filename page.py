@@ -1,5 +1,5 @@
 from core.core import WebPage
-import core.elemetns as d
+import core.elements as d
 test = True
 page = WebPage("test","Test","utf-8")
 if test:
