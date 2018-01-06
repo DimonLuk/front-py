@@ -103,13 +103,15 @@ class WebPage(metaclass=CoreMeta):
             <head>
                 <title>|||</title>
                 <meta charset="|||">
-                <link rel="stylesheet" type="text/css" href="style.css">
+                <link rel="stylesheet" type="text/css" href="./../styles/bootstrap.css">
             </head>
             <body>
             <div class="global">
             |||
             </div>
-            <script src="script.js"></script>
+            <script src="./../scripts/jquery-3.2.1.min.js"></script>
+            <script src="./../scripts/bootstrap.min.js"></script>
+            <script src="./../scripts/script.js"></script>
             </body>
         </html>
         """
@@ -136,7 +138,7 @@ class WebPage(metaclass=CoreMeta):
                 self._clean(self,0)
         except AttributeError:
             raise EmptyWebPage()
-        with open("%s.html" % self.filename,"w") as file:
+        with open("pages/html/%s.html" % self.filename,"w") as file:
             file.write(self._template)
 
 class CoreElement(metaclass=CoreMeta):
