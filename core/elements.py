@@ -39,7 +39,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 class _ParagraphElement(CoreElement):
     def __init__(self,text="",element="p",isClosing=True,isAddAttrs=True,attributes=["class","style"]):
         super().__init__(element,isClosing,isAddAttrs,attributes)
-        self._replace(self,text,self._indexesList["content"])
+        self.addContent(text)
 
 class _ImageElement(CoreElement):
     def __init__(self,src="#",alt="image",element="img",isClosing=False,isAddAttrs=True,attributes=["class","style","src","alt"]):

@@ -20,8 +20,9 @@ def index(request="request"):
     par.addContent(text,text,text,"Some text")
     text.addContent("additional")
     par.addContent(text)
+    img = d._ImageElement("test.png")
 
-    page.addElement(par,text,text,inp)
+    page.addElement(par,text,text,inp,img)
     page.load()
     return page
 runApp()

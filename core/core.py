@@ -18,6 +18,11 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
+JQUERY_3_2_1_MIN_JS = "234c8514654bb7ed8a60ea905b6f98f0"
+BOOTSTRAP_MIN_JS = "13b2a30e265e18a6fd0792cc3fd7a09c"
+SCRIPT_JS = "9a9569e9d73f33740eada95275da7f30"
+BOOTSTRAP_CSS = "e3202aea761d3d587dfcfc43c6982565"
+
 INVALID_INSERTION_MESSAGE = "You can't use '%s', please try some object from the framework library"
 class InvalidInsertion(Exception):
     def __init__(self,message):
@@ -109,6 +114,7 @@ class WebPage(metaclass=CoreMeta):
         self.filename = filename
         self.title = title
         self.encoding = encoding
+        self._mimetype = "text/html"
         self._template = """
         <!--
         Copyright (C) 2018  Dima Lukashov github.com/DimonLuk
@@ -131,18 +137,19 @@ class WebPage(metaclass=CoreMeta):
             <head>
                 <title>|||</title>
                 <meta charset="|||">
-                <link rel="stylesheet" type="text/css" href="./../styles/bootstrap.css">
+                <base href="/">
+                <link rel="stylesheet" type="text/css" href="%s">
             </head>
             <body>
             <div class="global">
             |||
             </div>
-            <script src="./../scripts/jquery-3.2.1.min.js"></script>
-            <script src="./../scripts/bootstrap.min.js"></script>
-            <script src="./../scripts/script.js"></script>
+            <script src="%s"></script>
+            <script src="%s"></script>
+            <script src="%s"></script>
             </body>
         </html>
-        """
+        """ % (BOOTSTRAP_CSS,JQUERY_3_2_1_MIN_JS,BOOTSTRAP_MIN_JS,SCRIPT_JS)
         self._replace(self,self.title,0)#add title
         self._replace(self,self.encoding,1)#add encoding
         self._clean(self,0)#clean fileds to add
@@ -187,7 +194,7 @@ class CoreElement(metaclass=CoreMeta):
     Public fields:
         addContent - adds any content into element if it's possible
     """
-    def __init__(self,element,isClosing,isAddAttrs,attributes):
+    def __init__(self,element="",isClosing=True,isAddAttrs=True,attributes=[]):
         self._element = element
         self._isClosing = isClosing
         self._attributes = attributes
@@ -310,6 +317,12 @@ class CoreElement(metaclass=CoreMeta):
 """
 Server Side
 """
+JQUERY_3_2_1_MIN_JS = "234c8514654bb7ed8a60ea905b6f98f0"
+BOOTSTRAP_MIN_JS = "13b2a30e265e18a6fd0792cc3fd7a09c" 
+SCRIPT_JS = "9a9569e9d73f33740eada95275da7f30"
+BOOTSTRAP_CSS = "e3202aea761d3d587dfcfc43c6982565"
+
+AVALIABLE_FORMATS = ("jpg","png","svg","map")
 
 from http.server import HTTPServer, BaseHTTPRequestHandler
 def makeName(address):
@@ -320,18 +333,37 @@ class CoreHttpProcess(BaseHTTPRequestHandler):
     def __init__(self,a,b,c):
         super().__init__(a,b,c)
     def do_GET(self):
-        self._sendResponse()
+        self._find = self.path.split(".")
+        if self._find[-1] in AVALIABLE_FORMATS:
+            with open("pages/media%s" % self.path,"rb") as sth:
+                self._response = sth.read()
+                tmp = self.path.split(".")
+                if tmp[-1] == "map":
+                    self._sendResponse("application/json")
+                else:
+                    self._sendResponse("image/"+tmp[-1])
+                self.wfile.write(self._response)
+            return "OK"
         self.name = makeName(self.path)
+        self._response = b""
         try:
-            self.wfile.write(bytes(self.__class__.__dict__[self.name]()._template.encode("utf-8")))
+            if type(self.__class__.__dict__[self.name](self)) is tuple:
+                self._response = bytes(self.__class__.__dict__[self.name](self)[0].encode("utf-8"))
+                self._sendResponse(self.__class__.__dict__[self.name](self)[1])
+                self.wfile.write(self._response)
+            elif type(self.__class__.__dict__[self.name](self)) is WebPage:
+                self._response = bytes(self.__class__.__dict__[self.name](self)._template.encode("utf-8"))
+                self._sendResponse(self.__class__.__dict__[self.name](self)._mimetype)
+                self.wfile.write(self._response)
         except KeyError as kr:
             pass
-    def _sendResponse(self):
+    def _sendResponse(self,typ):
         self.send_response(200)
-        self._sendHeaders()
-    def _sendHeaders(self):
-        self.send_header("Content-type","text/html")
+        self._sendHeaders(typ)
+    def _sendHeaders(self,typ):
+        self.send_header("Content-type",typ)
         self.end_headers()
+
 
 def serve(address):
     def decorator(fn,address=address):
@@ -341,7 +373,35 @@ def serve(address):
         decorated()
         return decorated
     return decorator
-def runApp(server=HTTPServer,handler=CoreHttpProcess,port=8000):
-    serverAddress = ("",port)
+
+
+@serve("/%s"%BOOTSTRAP_CSS)
+def je3202aea761d3d587dfcfc43c6982565(request="request"):
+    #createResponse(request,200,"text/css")
+    with open("pages/styles/bootstrap.css","r") as bootstrap:
+        return (bootstrap.read(),"text/css")
+
+
+@serve("/%s"%JQUERY_3_2_1_MIN_JS)
+def j234c8514654bb7ed8a60ea905b6f98f0(request):
+    with open("pages/scripts/jquery-3.2.1.min.js","r") as jquery:
+        return(jquery.read(),"script/javascript")
+
+
+@serve("/%s"%BOOTSTRAP_MIN_JS)
+def j13b2a30e265e18a6fd0792cc3fd7a09c(request):
+    with open("pages/scripts/bootstrap.min.js","r") as bootstrap:
+        return(bootstrap.read(),"script/javascript")
+
+
+@serve("/%s" % SCRIPT_JS)
+def j9a9569e9d73f33740eada95275da7f30(request):
+    with open("pages/scripts/script.js","r") as script:
+        return(script.read(),"script/javascript")
+
+
+def runApp(address="localhost",server=HTTPServer,handler=CoreHttpProcess,port=8000):
+    serverAddress = (address,port)
     http = server(serverAddress,handler)
+    print("Started server at %s on port %s" % (address,port))
     http.serve_forever()
