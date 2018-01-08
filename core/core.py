@@ -18,6 +18,11 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
+JQUERY_3_2_1_MIN_JS = "234c8514654bb7ed8a60ea905b6f98f0"
+BOOTSTRAP_MIN_JS = "13b2a30e265e18a6fd0792cc3fd7a09c"
+SCRIPT_JS = "9a9569e9d73f33740eada95275da7f30"
+BOOTSTRAP_CSS = "e3202aea761d3d587dfcfc43c6982565"
+
 INVALID_INSERTION_MESSAGE = "You can't use '%s', please try some object from the framework library"
 class InvalidInsertion(Exception):
     def __init__(self,message):
@@ -131,18 +136,18 @@ class WebPage(metaclass=CoreMeta):
             <head>
                 <title>|||</title>
                 <meta charset="|||">
-                <link rel="stylesheet" type="text/css" href="./../styles/bootstrap.css">
+                <link rel="stylesheet" type="text/css" href="/%s">
             </head>
             <body>
             <div class="global">
             |||
             </div>
-            <script src="./../scripts/jquery-3.2.1.min.js"></script>
-            <script src="./../scripts/bootstrap.min.js"></script>
-            <script src="./../scripts/script.js"></script>
+            <script src="/%s"></script>
+            <script src="/%s"></script>
+            <script src="/%s"></script>
             </body>
         </html>
-        """
+        """ % (BOOTSTRAP_CSS,JQUERY_3_2_1_MIN_JS,BOOTSTRAP_MIN_JS,SCRIPT_JS)
         self._replace(self,self.title,0)#add title
         self._replace(self,self.encoding,1)#add encoding
         self._clean(self,0)#clean fileds to add
@@ -320,17 +325,23 @@ class CoreHttpProcess(BaseHTTPRequestHandler):
     def __init__(self,a,b,c):
         super().__init__(a,b,c)
     def do_GET(self):
-        self._sendResponse()
         self.name = makeName(self.path)
+        self._response = b""
         try:
-            self.wfile.write(bytes(self.__class__.__dict__[self.name]()._template.encode("utf-8")))
+            if type(self.__class__.__dict__[self.name](self)[0]) is str:
+                self._response = bytes(self.__class__.__dict__[self.name](self)[0].encode("utf-8"))
+            else:
+                self._response = bytes(self.__class__.__dict__[self.name](self)[0]._template.encode("utf-8"))
         except KeyError as kr:
             pass
-    def _sendResponse(self):
+        if self._response:
+            self._sendResponse(self.__class__.__dict__[self.name](self)[1])
+            self.wfile.write(self._response)
+    def _sendResponse(self,typ):
         self.send_response(200)
-        self._sendHeaders()
-    def _sendHeaders(self):
-        self.send_header("Content-type","text/html")
+        self._sendHeaders(typ)
+    def _sendHeaders(self,typ):
+        self.send_header("Content-type",typ)
         self.end_headers()
 
 def serve(address):
@@ -341,6 +352,27 @@ def serve(address):
         decorated()
         return decorated
     return decorator
+@serve("/%s"%BOOTSTRAP_CSS)
+def bootstrapcss(request="request"):
+    #createResponse(request,200,"text/css")
+    with open("pages/styles/bootstrap.css","r") as bootstrap:
+        return (bootstrap.read(),"text/css")
+@serve("/%s"%JQUERY_3_2_1_MIN_JS)
+def jquery(request):
+    with open("pages/scripts/jquery-3.2.1.min.js","r") as jquery:
+        return(jquery.read(),"script/javascript")
+@serve("/%s"%BOOTSTRAP_MIN_JS)
+def bootstrapjs(request):
+    with open("pages/scripts/bootstrap.min.js","r") as bootstrap:
+        return(bootstrap.read(),"script/javascript")
+@serve("/%s" % SCRIPT_JS)
+def scriptjs(request):
+    with open("pages/scripts/script.js","r") as script:
+        return(script.read(),"script/javascript")
+def createResponse(handler,code=200,typ=""):
+    handler.send_response(code)
+    handler.send_header("Content-type",typ)
+    handler.end_headers()
 def runApp(server=HTTPServer,handler=CoreHttpProcess,port=8000):
     serverAddress = ("",port)
     http = server(serverAddress,handler)
