@@ -136,15 +136,16 @@ class WebPage(metaclass=CoreMeta):
             <head>
                 <title>|||</title>
                 <meta charset="|||">
-                <link rel="stylesheet" type="text/css" href="/%s">
+                <base href="/">
+                <link rel="stylesheet" type="text/css" href="%s">
             </head>
             <body>
             <div class="global">
             |||
             </div>
-            <script src="/%s"></script>
-            <script src="/%s"></script>
-            <script src="/%s"></script>
+            <script src="%s"></script>
+            <script src="%s"></script>
+            <script src="%s"></script>
             </body>
         </html>
         """ % (BOOTSTRAP_CSS,JQUERY_3_2_1_MIN_JS,BOOTSTRAP_MIN_JS,SCRIPT_JS)
@@ -315,6 +316,10 @@ class CoreElement(metaclass=CoreMeta):
 """
 Server Side
 """
+JQUERY_3_2_1_MIN_JS = "234c8514654bb7ed8a60ea905b6f98f0"                                                                                              
+BOOTSTRAP_MIN_JS = "13b2a30e265e18a6fd0792cc3fd7a09c" 
+SCRIPT_JS = "9a9569e9d73f33740eada95275da7f30"
+BOOTSTRAP_CSS = "e3202aea761d3d587dfcfc43c6982565"
 
 from http.server import HTTPServer, BaseHTTPRequestHandler
 def makeName(address):
@@ -325,13 +330,23 @@ class CoreHttpProcess(BaseHTTPRequestHandler):
     def __init__(self,a,b,c):
         super().__init__(a,b,c)
     def do_GET(self):
+        self._find = self.path.split(".")
+        if self._find[-1]=="png" or self._find[-1]=="jpg":
+            with open("pages/media%s" % self.path,"rb") as sth:
+                self._response = sth.read()
+                tmp = self.path.split(".")
+                self._sendResponse("image/"+tmp[-1])
+                self.wfile.write(self._response)
+            return "OK"
         self.name = makeName(self.path)
         self._response = b""
         try:
-            if type(self.__class__.__dict__[self.name](self)[0]) is str:
+            if type(self.__class__.__dict__[self.name](self)[0]) is str and self.__class__.__dict__[self.name](self)[1][:5] != "image":
                 self._response = bytes(self.__class__.__dict__[self.name](self)[0].encode("utf-8"))
-            else:
+            elif self.__class__.__dict__[self.name](self)[1][:5] != "image":
                 self._response = bytes(self.__class__.__dict__[self.name](self)[0]._template.encode("utf-8"))
+            else:
+                self._response = bytes(self.__class__.__dict__[self.name](self)[0])
         except KeyError as kr:
             pass
         if self._response:
@@ -353,20 +368,20 @@ def serve(address):
         return decorated
     return decorator
 @serve("/%s"%BOOTSTRAP_CSS)
-def bootstrapcss(request="request"):
+def je3202aea761d3d587dfcfc43c6982565(request="request"):
     #createResponse(request,200,"text/css")
     with open("pages/styles/bootstrap.css","r") as bootstrap:
         return (bootstrap.read(),"text/css")
 @serve("/%s"%JQUERY_3_2_1_MIN_JS)
-def jquery(request):
+def j234c8514654bb7ed8a60ea905b6f98f0(request):
     with open("pages/scripts/jquery-3.2.1.min.js","r") as jquery:
         return(jquery.read(),"script/javascript")
 @serve("/%s"%BOOTSTRAP_MIN_JS)
-def bootstrapjs(request):
+def j13b2a30e265e18a6fd0792cc3fd7a09c(request):
     with open("pages/scripts/bootstrap.min.js","r") as bootstrap:
         return(bootstrap.read(),"script/javascript")
 @serve("/%s" % SCRIPT_JS)
-def scriptjs(request):
+def j9a9569e9d73f33740eada95275da7f30(request):
     with open("pages/scripts/script.js","r") as script:
         return(script.read(),"script/javascript")
 def createResponse(handler,code=200,typ=""):
