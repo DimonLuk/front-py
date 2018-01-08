@@ -304,3 +304,44 @@ class CoreElement(metaclass=CoreMeta):
 
 
 
+
+
+###############################################################
+"""
+Server Side
+"""
+
+from http.server import HTTPServer, BaseHTTPRequestHandler
+def makeName(address):
+    address = address.split("/")
+    address = "_aa".join(address)
+    return address
+class CoreHttpProcess(BaseHTTPRequestHandler):
+    def __init__(self,a,b,c):
+        super().__init__(a,b,c)
+    def do_GET(self):
+        self._sendResponse()
+        self.name = makeName(self.path)
+        try:
+            self.wfile.write(bytes(self.__class__.__dict__[self.name]()._template.encode("utf-8")))
+        except KeyError as kr:
+            pass
+    def _sendResponse(self):
+        self.send_response(200)
+        self._sendHeaders()
+    def _sendHeaders(self):
+        self.send_header("Content-type","text/html")
+        self.end_headers()
+
+def serve(address):
+    def decorator(fn,address=address):
+        def decorated(address=address):
+            address = makeName(address)
+            setattr(CoreHttpProcess,address,fn)
+        decorated()
+        return decorated
+    return decorator
+def runApp(server=HTTPServer,handler=CoreHttpProcess,port=8000):
+    serverAddress = ("",port)
+    http = server(serverAddress,handler)
+    http.serve_forever()
