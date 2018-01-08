@@ -10,18 +10,18 @@ if test:
         obj._addClass("MyClass","My")
         page.addElement(obj)
 
-@serve("/")
-def index(request="request"):
-    page = WebPage("test","Server","utf-8")
-    par = d._ParagraphElement("Trigger")
-    text = d._TextElement("Target")
-    inp = d._InputElement("text","Some helpful info",False)
-    par.onClick("changeColor",[text],{"color":"green"})
-    par.addContent(text,text,text,"Some text")
-    text.addContent("additional")
-    par.addContent(text)
+#@serve("/")
+#def index(request="request"):
+ #   page = WebPage("test","Server","utf-8")
+par = d._ParagraphElement("Trigger")
+text = d._TextElement("Target")
+inp = d._InputElement("text","Some helpful info",False)
+par.onClick("changeColor",[text],{"color":"green"})
+par.addContent(text,text,text,"Some text")
+text.addContent("additional")
+par.addContent(text)
 
-    page.addElement(par,text,text,inp)
-    page.load()
-    return page
-runApp()
+page.addElement(par,text,text,inp)
+page.load()
+#   return page
+#runApp()

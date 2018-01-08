@@ -187,7 +187,7 @@ class CoreElement(metaclass=CoreMeta):
     Public fields:
         addContent - adds any content into element if it's possible
     """
-    def __init__(self,element,isClosing,isAddAttrs,attributes):
+    def __init__(self,element="",isClosing=True,isAddAttrs=True,attributes=[]):
         self._element = element
         self._isClosing = isClosing
         self._attributes = attributes
