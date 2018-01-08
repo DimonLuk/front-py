@@ -114,6 +114,7 @@ class WebPage(metaclass=CoreMeta):
         self.filename = filename
         self.title = title
         self.encoding = encoding
+        self._mimetype = "text/html"
         self._template = """
         <!--
         Copyright (C) 2018  Dima Lukashov github.com/DimonLuk
@@ -316,10 +317,12 @@ class CoreElement(metaclass=CoreMeta):
 """
 Server Side
 """
-JQUERY_3_2_1_MIN_JS = "234c8514654bb7ed8a60ea905b6f98f0"                                                                                              
+JQUERY_3_2_1_MIN_JS = "234c8514654bb7ed8a60ea905b6f98f0"
 BOOTSTRAP_MIN_JS = "13b2a30e265e18a6fd0792cc3fd7a09c" 
 SCRIPT_JS = "9a9569e9d73f33740eada95275da7f30"
 BOOTSTRAP_CSS = "e3202aea761d3d587dfcfc43c6982565"
+
+AVALIABLE_FORMATS = ("jpg","png","svg","map")
 
 from http.server import HTTPServer, BaseHTTPRequestHandler
 def makeName(address):
@@ -331,33 +334,36 @@ class CoreHttpProcess(BaseHTTPRequestHandler):
         super().__init__(a,b,c)
     def do_GET(self):
         self._find = self.path.split(".")
-        if self._find[-1]=="png" or self._find[-1]=="jpg":
+        if self._find[-1] in AVALIABLE_FORMATS:
             with open("pages/media%s" % self.path,"rb") as sth:
                 self._response = sth.read()
                 tmp = self.path.split(".")
-                self._sendResponse("image/"+tmp[-1])
+                if tmp[-1] == "map":
+                    self._sendResponse("application/json")
+                else:
+                    self._sendResponse("image/"+tmp[-1])
                 self.wfile.write(self._response)
             return "OK"
         self.name = makeName(self.path)
         self._response = b""
         try:
-            if type(self.__class__.__dict__[self.name](self)[0]) is str and self.__class__.__dict__[self.name](self)[1][:5] != "image":
+            if type(self.__class__.__dict__[self.name](self)) is tuple:
                 self._response = bytes(self.__class__.__dict__[self.name](self)[0].encode("utf-8"))
-            elif self.__class__.__dict__[self.name](self)[1][:5] != "image":
-                self._response = bytes(self.__class__.__dict__[self.name](self)[0]._template.encode("utf-8"))
-            else:
-                self._response = bytes(self.__class__.__dict__[self.name](self)[0])
+                self._sendResponse(self.__class__.__dict__[self.name](self)[1])
+                self.wfile.write(self._response)
+            elif type(self.__class__.__dict__[self.name](self)) is WebPage:
+                self._response = bytes(self.__class__.__dict__[self.name](self)._template.encode("utf-8"))
+                self._sendResponse(self.__class__.__dict__[self.name](self)._mimetype)
+                self.wfile.write(self._response)
         except KeyError as kr:
             pass
-        if self._response:
-            self._sendResponse(self.__class__.__dict__[self.name](self)[1])
-            self.wfile.write(self._response)
     def _sendResponse(self,typ):
         self.send_response(200)
         self._sendHeaders(typ)
     def _sendHeaders(self,typ):
         self.send_header("Content-type",typ)
         self.end_headers()
+
 
 def serve(address):
     def decorator(fn,address=address):
@@ -367,28 +373,35 @@ def serve(address):
         decorated()
         return decorated
     return decorator
+
+
 @serve("/%s"%BOOTSTRAP_CSS)
 def je3202aea761d3d587dfcfc43c6982565(request="request"):
     #createResponse(request,200,"text/css")
     with open("pages/styles/bootstrap.css","r") as bootstrap:
         return (bootstrap.read(),"text/css")
+
+
 @serve("/%s"%JQUERY_3_2_1_MIN_JS)
 def j234c8514654bb7ed8a60ea905b6f98f0(request):
     with open("pages/scripts/jquery-3.2.1.min.js","r") as jquery:
         return(jquery.read(),"script/javascript")
+
+
 @serve("/%s"%BOOTSTRAP_MIN_JS)
 def j13b2a30e265e18a6fd0792cc3fd7a09c(request):
     with open("pages/scripts/bootstrap.min.js","r") as bootstrap:
         return(bootstrap.read(),"script/javascript")
+
+
 @serve("/%s" % SCRIPT_JS)
 def j9a9569e9d73f33740eada95275da7f30(request):
     with open("pages/scripts/script.js","r") as script:
         return(script.read(),"script/javascript")
-def createResponse(handler,code=200,typ=""):
-    handler.send_response(code)
-    handler.send_header("Content-type",typ)
-    handler.end_headers()
-def runApp(server=HTTPServer,handler=CoreHttpProcess,port=8000):
-    serverAddress = ("",port)
+
+
+def runApp(address="localhost",server=HTTPServer,handler=CoreHttpProcess,port=8000):
+    serverAddress = (address,port)
     http = server(serverAddress,handler)
+    print("Started server at %s on port %s" % (address,port))
     http.serve_forever()

@@ -1,4 +1,4 @@
-from core.core import WebPage,serve,runApp,createResponse
+from core.core import WebPage,serve,runApp
 import core.elements as d
 test = False
 page = WebPage("test","Test","utf-8")
@@ -24,5 +24,5 @@ def index(request="request"):
 
     page.addElement(par,text,text,inp,img)
     page.load()
-    return (page,"text/html")
+    return page
 runApp()
