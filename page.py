@@ -9,9 +9,8 @@ if test:
         obj._addStyle({"color":"orange"})
         obj._addClass("MyClass","My")
         page.addElement(obj)
-
 @serve("/")
-def index(request="request"):
+def index(request):
     page = WebPage("test","Server","utf-8")
     par = d._ParagraphElement("Trigger")
     text = d._TextElement("Target")
@@ -25,4 +24,21 @@ def index(request="request"):
     page.addElement(par,text,text,inp,img)
     page.load()
     return page
+
+@serve("/<any>")
+def anypage(request):
+    if request.method == "GET":
+        par = d._ParagraphElement("Page is %s" % request.path)
+        page = WebPage("serverTest",request.path[1:],"utf-8")
+        page.addElement(par)
+        page.load()
+        return page
+@serve("/<any>/page/<any>")
+def anypage(request):
+    if request.method == "GET":
+        par = d._ParagraphElement("Page is %s" % request.path)
+        page = WebPage("serverTest",request.path[1:],"utf-8")
+        page.addElement(par)
+        page.load()
+        return page
 runApp()
