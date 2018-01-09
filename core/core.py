@@ -334,6 +334,7 @@ class CoreHttpProcess(BaseHTTPRequestHandler):
         super().__init__(a,b,c)
     def do_GET(self):
         self._find = self.path.split(".")
+        self.request = _request(self.path,"GET")
         if self._find[-1] in AVALIABLE_FORMATS:
             with open("pages/media%s" % self.path,"rb") as sth:
                 self._response = sth.read()
@@ -347,16 +348,42 @@ class CoreHttpProcess(BaseHTTPRequestHandler):
         self.name = makeName(self.path)
         self._response = b""
         try:
-            if type(self.__class__.__dict__[self.name](self)) is tuple:
-                self._response = bytes(self.__class__.__dict__[self.name](self)[0].encode("utf-8"))
-                self._sendResponse(self.__class__.__dict__[self.name](self)[1])
+            self._resp = self.__class__.__dict__[self.name](self.request)
+            if type(self._resp) is tuple:
+                self._response = bytes(self._resp[0].encode("utf-8"))
+                self._sendResponse(self._resp[1])
                 self.wfile.write(self._response)
-            elif type(self.__class__.__dict__[self.name](self)) is WebPage:
-                self._response = bytes(self.__class__.__dict__[self.name](self)._template.encode("utf-8"))
-                self._sendResponse(self.__class__.__dict__[self.name](self)._mimetype)
+            elif type(self._resp) is WebPage:
+                self._response = bytes(self._resp._template.encode("utf-8"))
+                self._sendResponse(self._resp._mimetype)
                 self.wfile.write(self._response)
+            else:
+                raise UnsupportedFeature(INVALID_INSERTION_MESSAGE % self._resp)
         except KeyError as kr:
-            pass
+            self._anys = [i for i in self.__class__.__dict__ if "<any>" in i]
+            tmp1 = makeName(self.path).split("_aa")
+            for i in self._anys:
+                tmp2 = i.split("_aa")
+                specific = True
+                if len(tmp1) == len(tmp2):
+                    for j in range(0,len(tmp1)):
+                        if tmp1[j] != tmp2[j] and not "<any>" in tmp2[j]:
+                            specific = False 
+                else:
+                    specific = False
+                if specific:
+                    self._resp = self.__class__.__dict__[i](self.request)
+                    self._response = bytes(self._resp._template.encode("utf-8"))
+                    self._sendResponse(self._resp._mimetype)
+                    self.wfile.write(self._response)
+                    return "OK"
+            """
+            for i in self._anys:
+                if len(tmp1) == len(i.split("_aa")):
+                    self._resp = self.__class__.__dict__[i](self.request)
+                    self._response = bytes(self._resp._template.encode("utf-8"))
+                    self._sendResponse(self._resp._mimetype)
+                    self.wfile.write(self._response)"""
     def _sendResponse(self,typ):
         self.send_response(200)
         self._sendHeaders(typ)
@@ -364,6 +391,12 @@ class CoreHttpProcess(BaseHTTPRequestHandler):
         self.send_header("Content-type",typ)
         self.end_headers()
 
+class _request:
+    def __init__(self,path,method,headers={},body={}):
+        self.path = path
+        self.method = method
+        self.headers = headers
+        self.body = body
 
 def serve(address):
     def decorator(fn,address=address):
@@ -376,7 +409,7 @@ def serve(address):
 
 
 @serve("/%s"%BOOTSTRAP_CSS)
-def je3202aea761d3d587dfcfc43c6982565(request="request"):
+def je3202aea761d3d587dfcfc43c6982565(request):
     #createResponse(request,200,"text/css")
     with open("pages/styles/bootstrap.css","r") as bootstrap:
         return (bootstrap.read(),"text/css")
