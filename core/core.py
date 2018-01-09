@@ -317,58 +317,75 @@ class CoreElement(metaclass=CoreMeta):
 """
 Server Side
 """
-JQUERY_3_2_1_MIN_JS = "234c8514654bb7ed8a60ea905b6f98f0"
+JQUERY_3_2_1_MIN_JS = "234c8514654bb7ed8a60ea905b6f98f0"#Constants which encode filenames with required scripts
 BOOTSTRAP_MIN_JS = "13b2a30e265e18a6fd0792cc3fd7a09c" 
 SCRIPT_JS = "9a9569e9d73f33740eada95275da7f30"
 BOOTSTRAP_CSS = "e3202aea761d3d587dfcfc43c6982565"
 
-AVALIABLE_FORMATS = ("jpg","png","svg","map")
+AVALIABLE_FORMATS = ("jpg","png","svg","map") #Formats of files that can be loaded automatically from pages/media folder
 
 from http.server import HTTPServer, BaseHTTPRequestHandler
 def makeName(address):
+    """
+    Make unique name for function from request.path
+    """
     address = address.split("/")
     address = "_aa".join(address)
     return address
 class CoreHttpProcess(BaseHTTPRequestHandler):
+    """
+    Class that handles requests from the users
+    Now it can process only GET requests but of course it will process both GET and POST requests
+    addresses can be pattern like. For example /page/<any> handles any address like /page/123, /page/Dima,
+    but not /sth/page/sth and etc.
+    
+    """
     def __init__(self,a,b,c):
         super().__init__(a,b,c)
     def do_GET(self):
-        self._find = self.path.split(".")
-        self.request = _request(self.path,"GET")
+        """
+        Handles GET request.
+        At first try to download files from pages/media folder
+        Then from user hardly defined addresses(that not include <any> in argument for serve decorator)
+        Then addresses that contain <any>
+        """
+        self._find = self.path.split(".")#Files in media are sth like this name.extension
+        self.request = _request(self.path,"GET")#Create request parametr that can be used by user
         if self._find[-1] in AVALIABLE_FORMATS:
             with open("pages/media%s" % self.path,"rb") as sth:
                 self._response = sth.read()
-                tmp = self.path.split(".")
-                if tmp[-1] == "map":
+                if self._find[-1] == "map":
                     self._sendResponse("application/json")
                 else:
-                    self._sendResponse("image/"+tmp[-1])
+                    self._sendResponse("image/"+self._find[-1])
                 self.wfile.write(self._response)
             return "OK"
-        self.name = makeName(self.path)
-        self._response = b""
-        try:
-            self._resp = self.__class__.__dict__[self.name](self.request)
-            if type(self._resp) is tuple:
+        self.name = makeName(self.path)#Okey, it's not a file from media, it may be user hardly defined address
+        self._response = b""#Has to be bytes
+        try:#Check if the required function exists
+            self._resp = self.__class__.__dict__[self.name](self.request)#Call it
+            if type(self._resp) is tuple:#If core defined function has been called, it's tuple 0 - file itself, 1 - mimetype
                 self._response = bytes(self._resp[0].encode("utf-8"))
                 self._sendResponse(self._resp[1])
                 self.wfile.write(self._response)
-            elif type(self._resp) is WebPage:
+            elif type(self._resp) is WebPage:#If it's user defined function, than its type is WebPage
                 self._response = bytes(self._resp._template.encode("utf-8"))
                 self._sendResponse(self._resp._mimetype)
                 self.wfile.write(self._response)
             else:
                 raise UnsupportedFeature(INVALID_INSERTION_MESSAGE % self._resp)
         except KeyError as kr:
-            self._anys = [i for i in self.__class__.__dict__ if "<any>" in i]
-            tmp1 = makeName(self.path).split("_aa")
+            self._anys = [i for i in self.__class__.__dict__ if "<any>" in i]#Find all fuctions that contains <any>
+            tmp1 = makeName(self.path).split("_aa")#And make name from path
             for i in self._anys:
                 tmp2 = i.split("_aa")
                 specific = True
-                if len(tmp1) == len(tmp2):
+                #Let's take for example self.path = /page/123 and i = /page/<any>
+                #so tmp1 = ["_aapage","_aa123"] tmp2=["_aapage","_aa<any>"]
+                if len(tmp1) == len(tmp2):#So lengths are equals
                     for j in range(0,len(tmp1)):
-                        if tmp1[j] != tmp2[j] and not "<any>" in tmp2[j]:
-                            specific = False 
+                        if tmp1[j] != tmp2[j] and not "<any>" in tmp2[j]:#If arguments are not equals but not in places where tmp2 is "_aa<any>"
+                            specific = False#We don't have to process such request 
                 else:
                     specific = False
                 if specific:
@@ -377,21 +394,18 @@ class CoreHttpProcess(BaseHTTPRequestHandler):
                     self._sendResponse(self._resp._mimetype)
                     self.wfile.write(self._response)
                     return "OK"
-            """
-            for i in self._anys:
-                if len(tmp1) == len(i.split("_aa")):
-                    self._resp = self.__class__.__dict__[i](self.request)
-                    self._response = bytes(self._resp._template.encode("utf-8"))
-                    self._sendResponse(self._resp._mimetype)
-                    self.wfile.write(self._response)"""
     def _sendResponse(self,typ):
-        self.send_response(200)
+        self.send_response(200)#Nothing interesting here
         self._sendHeaders(typ)
     def _sendHeaders(self,typ):
         self.send_header("Content-type",typ)
         self.end_headers()
 
 class _request:
+    """
+    To incapsulate request
+    Nothing interestig right now
+    """
     def __init__(self,path,method,headers={},body={}):
         self.path = path
         self.method = method
@@ -399,6 +413,9 @@ class _request:
         self.body = body
 
 def serve(address):
+    """
+    Function is used to put user definded function to the request handler
+    """
     def decorator(fn,address=address):
         def decorated(address=address):
             address = makeName(address)
@@ -407,7 +424,7 @@ def serve(address):
         return decorated
     return decorator
 
-
+#This functions is used to load special scripts
 @serve("/%s"%BOOTSTRAP_CSS)
 def je3202aea761d3d587dfcfc43c6982565(request):
     #createResponse(request,200,"text/css")
