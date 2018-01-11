@@ -121,4 +121,4 @@ class _InputTextElement(CoreElement):
             attributes.append("required")
         super().__init__(element,isClosing,isAddAttrs,attributes)
         self._addAttrValue("placeholder",placeholder)
-_test = (_TextElement,_ParagraphElement,_MenuElement,_NavigationElement,_UnnumberedListElement,_NumberedListElement,_InListElement,_LinkElement,_ImageElement,_BlockElement,_SectionElement,_AsideElement,_FooterElement,_FormElement,_InputElement,_ButtonElement,_HeaderElement,_InputTextElement)
+_TEST = (_TextElement,_ParagraphElement,_MenuElement,_NavigationElement,_UnnumberedListElement,_NumberedListElement,_InListElement,_LinkElement,_ImageElement,_BlockElement,_SectionElement,_AsideElement,_FooterElement,_FormElement,_InputElement,_ButtonElement,_HeaderElement,_InputTextElement)

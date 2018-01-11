@@ -3,7 +3,7 @@ import core.elements as d
 test = False
 page = WebPage("test","Test","utf-8")
 if test:
-    for i in d._test:
+    for i in d._TEST:
         obj = i()
         obj.addContent(obj._element)
         obj._addStyle({"color":"orange"})
