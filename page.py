@@ -1,44 +1,22 @@
-from core.core import WebPage,serve,runApp
-import core.elements as d
-test = False
-page = WebPage("test","Test","utf-8")
-if test:
-    for i in d._TEST:
-        obj = i()
-        obj.addContent(obj._element)
-        obj._addStyle({"color":"orange"})
-        obj._addClass("MyClass","My")
-        page.addElement(obj)
+from frontpy.frontpy import *
+menu = InlineMenu({"background":"black"},{"Home":"/", "Quick guide":"/quickGuide"},"#ffffff",BrandText("Front-py","#00ee00"))
+
 @serve("/")
 def index(request):
-    page = WebPage("test","Server","utf-8")
-    par = d._ParagraphElement("Trigger")
-    text = d._TextElement("Target")
-    inp = d._InputElement("text","Some helpful info",False)
-    par.onClick("changeColor",[text],{"color":"green"})
-    par.addContent(text,text,text,"Some text")
-    text.addContent("additional")
-    par.addContent(text)
-    img = d._ImageElement("test.png")
+    page = Page("Sample","utf-8")
+    page.addElement(menu)
+    return page
 
-    page.addElement(par,text,text,inp,img)
-    page.load()
+@serve("/quickGuide")
+def quickGuide(request):
+    page = Page("QuickGuide","utf-8")
+    page.addElement(menu)
     return page
 
 @serve("/<any>")
-def anypage(request):
-    if request.method == "GET":
-        par = d._ParagraphElement("Page is %s" % request.path)
-        page = WebPage("serverTest",request.path[1:],"utf-8")
-        page.addElement(par)
-        page.load()
-        return page
-@serve("/<any>/page/<any>")
-def anypage(request):
-    if request.method == "GET":
-        par = d._ParagraphElement("Page is %s" % request.path)
-        page = WebPage("serverTest",request.path[1:],"utf-8")
-        page.addElement(par)
-        page.load()
-        return page
+def test(request):
+    page = Page("Test","utf-8")
+    page.addElement(menu)
+    return page
+
 runApp()

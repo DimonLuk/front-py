@@ -1,4 +1,4 @@
-from .core import CoreElement
+from core.core import CoreElement
 """
 This module contains main elements which is used to develop framework
 It contains:
