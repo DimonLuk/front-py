@@ -141,7 +141,7 @@ class WebPage(metaclass=CoreMeta):
                 <link rel="stylesheet" type="text/css" href="%s">
             </head>
             <body>
-            <div class="global">
+            <div class="global" style="margin-top:-16px;">
             |||
             </div>
             <script src="%s"></script>
