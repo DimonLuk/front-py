@@ -1,11 +1,10 @@
 import sys
 sys.path.append(sys.path[0]+"/frontpy")
 sys.path.append(sys.path[0]+"/frontpy/core")
-print(sys.path)
 import elements as e
-from core.core import CoreElement,serve,runApp,WebPage
+from core.core import CoreElement,serve,runApp,Page
 class InlineMenu(CoreElement):
-    def __init__(self, background, links, linksColor,brand="brand"):
+    def __init__(self, background, links, linksColor,brand):
         super().__init__("header",True,True,["class","style"])
         self.background = background
         self.links = links
@@ -50,3 +49,20 @@ class InlineMenu(CoreElement):
         self.menu._addClass("row")
         self.addContent(self.menu)
 menu = InlineMenu({"background":"black"},{"Home":"/","Quick guide":"/quickGuide"},"#ffffff", "brand")
+
+class BrandText(e._LinkElement):
+    def __init__(self,text="",color="#ffffff"):
+        super().__init__(href="")
+        self.color = color
+        self.text = text
+        self._addClass("navbar-brand")
+        self._addStyle({"color":self.color})
+        self._addAttrValue("href","#")
+        self.addContent(self.text)
+
+class BrandImage(BrandText):
+    def __init__(self,imageName,alt):
+        super().__init__()
+        self.img = e._ImageElement(imageName,alt)
+        self.addContent(self.img)
+        

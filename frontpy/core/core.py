@@ -106,76 +106,7 @@ def _generateTarget(self,trigger):
     Generates classname for html element which will be changed during the event
     """
     return trigger+"Target"
-class WebPage(metaclass=CoreMeta):
-    """
-    It represents the html document with filename, title and encoding (Parametres may change)
-    """
-    def __init__(self,filename,title,encoding):
-        self.filename = filename
-        self.title = title
-        self.encoding = encoding
-        self._mimetype = "text/html"
-        self._template = """
-        <!--
-        Copyright (C) 2018  Dima Lukashov github.com/DimonLuk
-            
-        This program is free software: you can redistribute it and/or modify
-        it under the terms of the GNU General Public License as published by
-        the Free Software Foundation, either version 3 of the License, or
-        (at your option) any later version.
-                  
-        This program is distributed in the hope that it will be useful,
-        but WITHOUT ANY WARRANTY; without even the implied warranty of
-        MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-        GNU General Public License for more details.
-                    
-        You should have received a copy of the GNU General Public License
-        along with this program.  If not, see <https://www.gnu.org/licenses/>.
-        -->
-        <!DOCTYPE html>
-        <html>
-            <head>
-                <title>|||</title>
-                <meta charset="|||">
-                <base href="/">
-                <link rel="stylesheet" type="text/css" href="%s">
-            </head>
-            <body>
-            <div class="global" style="margin-top:-16px;">
-            |||
-            </div>
-            <script src="%s"></script>
-            <script src="%s"></script>
-            <script src="%s"></script>
-            </body>
-        </html>
-        """ % (BOOTSTRAP_CSS,JQUERY_3_2_1_MIN_JS,BOOTSTRAP_MIN_JS,SCRIPT_JS)
-        self._replace(self,self.title,0)#add title
-        self._replace(self,self.encoding,1)#add encoding
-        self._clean(self,0)#clean fileds to add
-        self._clean(self,0)#clean filed to add
-    def addElement(self,*content):
-        self._content = content
-        """
-        Add any additional objects to body
-        """
-        for i in content:
-            try:
-                i._render() #remove replacement expression
-                self._replace(self,i._template,0)
-            except AttributeError:
-                raise InvalidInsertion(INVALID_INSERTION_MESSAGE % i)
-    def load(self):
-        """
-        Creats html file
-        """
-        try:
-            for i in range(len(self._content)):
-                self._clean(self,0)
-        except AttributeError:
-            raise EmptyWebPage()
-        with open("pages/html/%s.html" % self.filename,"w") as file:
-            file.write(self._template)
+
 
 class CoreElement(metaclass=CoreMeta):
     """
@@ -309,7 +240,52 @@ class CoreElement(metaclass=CoreMeta):
             raise UnsupportedFeature("'%s' event for click is unsupported, please write to author lds4ever2000@gmail.com" % toDo)
 
 
-
+class Page(CoreElement):
+    def __init__(self,title,encoding):
+        self._mimetype = "text/html"
+        self.title = title
+        self.encoding = encoding
+        super().__init__("div",True,True,["class","style"])
+        self._addClass("global")
+        self._addStyle({"margin-top":"-16px"})
+        self._tmp = """
+<!DOCTYPE html>
+<!--
+Copyright (C) 2018  Dima Lukashov github.com/DimonLuk
+                    
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+                                                                      
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/>.
+-->
+<html>
+        <head>             
+        <title>%s</title>
+        <meta charset="%s">
+        <base href="/">
+        <link rel="stylesheet" type="text/css" href="%s">
+    </head>            
+    <body>             
+        %s
+        <script src="%s"></script>
+        <script src="%s"></script>
+        <script src="%s"></script>
+    </body>
+</html>
+        """
+    def addElement(self,*content):
+        for i in content:
+            self.addContent(i)
+    def _render(self):
+        self._template = self._tmp % (self.title,self.encoding,BOOTSTRAP_CSS,self._template,JQUERY_3_2_1_MIN_JS,BOOTSTRAP_MIN_JS,SCRIPT_JS)
+        super()._render()
 
 
 
@@ -368,7 +344,8 @@ class CoreHttpProcess(BaseHTTPRequestHandler):
                 self._response = bytes(self._resp[0].encode("utf-8"))
                 self._sendResponse(self._resp[1])
                 self.wfile.write(self._response)
-            elif type(self._resp) is WebPage:#If it's user defined function, than its type is WebPage
+            elif type(self._resp) is Page:#If it's user defined function, than its type is WebPage
+                self._resp._render()
                 self._response = bytes(self._resp._template.encode("utf-8"))
                 self._sendResponse(self._resp._mimetype)
                 self.wfile.write(self._response)
@@ -390,6 +367,7 @@ class CoreHttpProcess(BaseHTTPRequestHandler):
                     specific = False
                 if specific:
                     self._resp = self.__class__.__dict__[i](self.request)
+                    self._resp._render()
                     self._response = bytes(self._resp._template.encode("utf-8"))
                     self._sendResponse(self._resp._mimetype)
                     self.wfile.write(self._response)
@@ -453,5 +431,10 @@ def j9a9569e9d73f33740eada95275da7f30(request):
 def runApp(address="localhost",server=HTTPServer,handler=CoreHttpProcess,port=8000):
     serverAddress = (address,port)
     http = server(serverAddress,handler)
+    print("""
+Front-py  Copyright (C) 2018  Dima Lukashov <lds4ever2000@gmail.com>
+This program comes with ABSOLUTELY NO WARRANTY; for details see LICENSE.md.
+This is free software, and you are welcome to redistribute it
+under certain conditions; For details see LICENSE.md.\n""")
     print("Started server at %s on port %s" % (address,port))
     http.serve_forever()
