@@ -3,52 +3,74 @@ sys.path.append(sys.path[0]+"/frontpy")
 sys.path.append(sys.path[0]+"/frontpy/core")
 import elements as e
 from core.core import CoreElement,serve,runApp,Page
+
+
+class RowContainer(e._BlockElement):
+    def __init__(self):
+        super().__init__()
+        self._addClass("row")
+
+    def _render(self):
+        self._template = """<div class="container">%s</div>""" % self._template
+        super()._render()
+
+
 class InlineMenu(CoreElement):
     def __init__(self, background, links, linksColor,brand):
-        super().__init__("header",True,True,["class","style"])
         self.background = background
         self.links = links
-        self.brand = brand
         self.linksColor = linksColor
+        self.brand = brand
+        super().__init__("header",True,True,["class","style"])
+        
         self._addClass("container")
         self._addStyle(self.background)
-        self.navigation = e._NavigationElement()
-        self.navigation._addClass("navbar","navbar-toggleable-md","navbar-light","bg-faded","col-12","mx-auto")
-        self.navigation._addStyle(background)
+        
+        self.menu = e._MenuElement()
+        self.menu._addClass("row")
 
-        self.collapseButton = e._ButtonElement("button","",attributes=["class","style","type","data-toggle","data-target","aria-controls","aria-expanded","aria-label"])
-        self.togglerIcon = e._TextElement()
-        self.togglerIcon._addClass("navbar-toggler-icon")
-        self.collapseButton.addContent(self.togglerIcon)
-        self.collapseButton._addClass("navbar-toggler navbar-toggler-rigth")
+        self.navigation = e._NavigationElement()
+        self.navigation._addClass("navbar","navbar-toggleable-md","navbar-inverse","bg-faded","col-12","mx-auto")
+        self.navigation._addStyle(self.background)
+
+        self.collapseButton = e._ButtonElement(text="",attributes=["class","style","type","data-toggle","data-target","aria-controls","aria-expanded","aria-label"])
+        self.collapseButton._addClass("navbar-toggler","navbar-toggler-right")
+        self.collapseButton._addAttrValue("type","button")
         self.collapseButton._addAttrValue("data-toggle","collapse")
-        self.collapseButton._addAttrValue("data-target",".navbarSupportedContent")
-        self.collapseButton._addAttrValue("aria-controls","navbarSupportedContent")
+        self.collapseButton._addAttrValue("data-target",".toggleTarget")
+        self.collapseButton._addAttrValue("aria-controls","toggleTarget")
         self.collapseButton._addAttrValue("aria-expanded","false")
         self.collapseButton._addAttrValue("aria-label","Toggle navigation")
-        
 
-        self.list = e._UnnumberedListElement()
-        self.list._addClass("navbar-nav", "mr-left")
+        self.toggleIcon = e._TextElement()
+        self.toggleIcon._addClass("navbar-toggler-icon")
+        self._addStyle({"color":"white"})
+        self.collapseButton.addContent(self.toggleIcon)
+        
+        self.navBlock = e._BlockElement()
+        self.navBlock._addClass("collapse","navbar-collapse","toggleTarget")
+
+        self.linksList = e._UnnumberedListElement()
+        self.linksList._addClass("navbar-nav","mr-left")
 
         for i in self.links:
             li = e._InListElement()
-            li._addClass("nav-item active")
-            link = e._LinkElement(self.links[i])
-            link._addClass("nav-link")
-            link._addStyle({"color":self.linksColor})
-            link.addContent(i)
-            li.addContent(link)
-            self.list.addContent(li)
-        self.block = e._BlockElement()
-        self.block._addClass("collapse", "navbar-collapse", "navbarSupportedContent")
-        self.block.addContent(self.list)
-        self.navigation.addContent(self.collapseButton,self.brand,self.block)
-        self.menu = e._MenuElement()
+            li._addClass("nav-item","active")
+
+            href = e._LinkElement(self.links[i])
+            href.addContent(i)
+            href._addClass("nav-link")
+            href._addStyle({"color":self.linksColor})
+
+            li.addContent(href)
+
+            self.linksList.addContent(li)
+        self.navBlock.addContent(self.linksList)
+        self.navigation.addContent(self.collapseButton,self.brand,self.navBlock)
         self.menu.addContent(self.navigation)
-        self.menu._addClass("row")
         self.addContent(self.menu)
-menu = InlineMenu({"background":"black"},{"Home":"/","Quick guide":"/quickGuide"},"#ffffff", "brand")
+
+
 
 class BrandText(e._LinkElement):
     def __init__(self,text="",color="#ffffff"):
@@ -65,4 +87,3 @@ class BrandImage(BrandText):
         super().__init__()
         self.img = e._ImageElement(imageName,alt)
         self.addContent(self.img)
-        

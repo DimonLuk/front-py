@@ -241,13 +241,15 @@ class CoreElement(metaclass=CoreMeta):
 
 
 class Page(CoreElement):
-    def __init__(self,title,encoding):
+    def __init__(self,title,encoding,background={}):
         self._mimetype = "text/html"
         self.title = title
         self.encoding = encoding
         super().__init__("div",True,True,["class","style"])
         self._addClass("global")
         self._addStyle({"margin-top":"-16px"})
+        if background:
+            self._addStyle(background)
         self._tmp = """
 <!DOCTYPE html>
 <!--
@@ -283,6 +285,10 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
     def addElement(self,*content):
         for i in content:
             self.addContent(i)
+    def setTitle(self,title):
+        self.title = title
+    def setBackground(self,background):
+        self._addStyle(background)
     def _render(self):
         self._template = self._tmp % (self.title,self.encoding,BOOTSTRAP_CSS,self._template,JQUERY_3_2_1_MIN_JS,BOOTSTRAP_MIN_JS,SCRIPT_JS)
         super()._render()
