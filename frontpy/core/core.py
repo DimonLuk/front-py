@@ -273,12 +273,10 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
         <base href="/">
         <link rel="stylesheet" type="text/css" href="%s">
     </head>            
-    <body>             
-        %s
+    %s
         <script src="%s"></script>
         <script src="%s"></script>
         <script src="%s"></script>
-    </body>
 </html>
         """
     def addElement(self,*content):
