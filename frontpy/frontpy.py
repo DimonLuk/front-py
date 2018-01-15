@@ -1,3 +1,23 @@
+"""
+This module is the main part of the framework where everything is connected.
+Soon, it'll be split up on some modules like containers and etc
+
+
+Copyright (C) 2018  Dima Lukashov github.com/DimonLuk
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/>.
+"""
 import sys
 sys.path.append(sys.path[0]+"/frontpy")
 sys.path.append(sys.path[0]+"/frontpy/core")
@@ -5,6 +25,18 @@ import elements as e
 from core.core import CoreElement,serve,runApp,Page
 
 class Text(e._TextElement):
+    """
+    Simple text
+    The first argument of constructor is text which will be shown it's nit required
+    
+    It can be used as wrapper, you can define some simple styles and use it to wrap text
+    For example:
+    greenText = Text()
+    greenText.color = "green" or greenText.addStyle({"color":"green"})
+    p = Paragraph("Some %s text" % greenText("green"))
+    
+    Or you can use this class in usual way
+    """
     def __init__(self,text=""):
         super().__init__(text=text)
     def __str__(self):
@@ -16,11 +48,16 @@ class Text(e._TextElement):
         if name == "color":
             self._addStyle({"color":value})
         elif name == "position" and value == "center":
-            self._addClass("mx-auto")
-            self._addStyle({"text-align":value})
+            self._addClass("mx-auto")#To place in center in .container > .row
+            self._addStyle({"text-align":value})#Sometimes it's useful
         else:
             self.__dict__[name] = value
+    def addStyle(self,style):
+        self._addStyle(self,style)
     def __call__(self,value):
+        """
+        Implemenation of wrapping syntax
+        """
         import copy
         cop = copy.deepcopy(self)
         cop.addContent(value)
@@ -28,10 +65,17 @@ class Text(e._TextElement):
         return cop._template
 
 class Paragraph(e._ParagraphElement):
-    def __init__(self,text):
+    """
+    Simple paragraph
+    The first argument is text which is not required
+    """
+    def __init__(self,text=""):
         super().__init__(text=text)
 
 class Image(e._ImageElement):
+    """
+    Simple responsive image
+    """
     def __init__(self,href,alt="picture"):
         super().__init__(href,alt=alt)
         self._addClass("img-fluid")
@@ -42,21 +86,33 @@ class Image(e._ImageElement):
         return cop._template
 
 class BlockContainer(e._BlockElement):
+    """
+    Is used to build complex structures, sometimes can be useful for user, so no '_' in the begining of name
+    """
     def __init__(self):
         super().__init__()
         self._addClass("container")
 
 class SectionContainer(e._SectionElement):
+    """
+    The same as block but section, only semantic difference
+    """
     def __init__(self):
         super().__init__()
         self._addClass("container")
 
 class BlockRow(e._BlockElement):
+    """
+    Simple row
+    """
     def __init__(self):
         super().__init__()
         self._addClass("row")
 
 class ContainerRow(BlockContainer):
+    """
+    Creates row inside a BlockContainer
+    """
     def __init__(self):
         super().__init__()
         self.row = BlockRow()
@@ -67,6 +123,9 @@ class ContainerRow(BlockContainer):
         super()._render()
 
 class SectionRow(SectionContainer):
+    """
+    Creates a row inside SectionContainer
+    """
     def __init__(self):
         super().__init__()
         self.row = BlockRow()
@@ -79,7 +138,20 @@ class SectionRow(SectionContainer):
 
 
 class InlineMenu(e._BlockElement):
+    """
+    Simple inline bootstrap menu
+
+    The first argument is json represantion of background like {"background":"<some color here>"}
+    The second is json like links {"Home":"/","Any page":"/any"}
+    The third is color of links
+    The fourth is BrandText or BrandImage object
+    """
     def __init__(self, background, links, linksColor,brand):
+        """
+        It has been used a lot of bootstrap features here
+        Nothing to describe.
+        Just create required element and configure according to bootstrap
+        """
         self.background = background
         self.links = links
         self.linksColor = linksColor
@@ -141,6 +213,12 @@ class InlineMenu(e._BlockElement):
 
 
 class BrandText(e._LinkElement):
+    """
+    Company name or other brand short and nice info
+
+    The first argument is text
+    The second is color
+    """
     def __init__(self,text="",color="#ffffff"):
         super().__init__(href="")
         self.color = color
@@ -151,12 +229,25 @@ class BrandText(e._LinkElement):
         self.addContent(self.text)
 
 class BrandImage(BrandText):
+    """
+    Company logo
+    The firts arg is name of the picture which is inside the media folder of the project
+    The second is text to be displayed if picture can't be loaded
+    """
     def __init__(self,imageName,alt):
         super().__init__()
         self.img = e._ImageElement(imageName,alt)
         self.addContent(self.img)
 
 class RowArticles(SectionRow):
+    """
+    Creates a lot of articles. Each article in one single row
+    
+    The first argument is title of all articles| not required
+    The second is position, now only center or nothing allowed| not required
+
+    Use 'config' method to set your preferences for all articles
+    """
     def __init__(self,sectionTitle="",position="center"):
         super().__init__()
         if sectionTitle:
@@ -169,6 +260,9 @@ class RowArticles(SectionRow):
             self.addContent(header)
     
     def config(self,horizontalDistance="", horizontalLine=False, headersLevel=2):
+        """
+        Sets preferences which will be used to display all articles
+        """
         self.horizontalLine = horizontalLine
         self.headersLevel = headersLevel
         if horizontalDistance:
