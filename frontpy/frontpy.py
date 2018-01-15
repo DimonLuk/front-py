@@ -250,6 +250,7 @@ class RowArticles(SectionRow):
     """
     def __init__(self,sectionTitle="",position="center"):
         super().__init__()
+        self.articles = [] #Array with all articles
         if sectionTitle:
             self.sectionTitle = sectionTitle
             header = e._HeaderElement()
@@ -258,7 +259,7 @@ class RowArticles(SectionRow):
             h = e._HeaderTextElement(1,self.sectionTitle)
             header.addContent(h)
             self.addContent(header)
-    
+      
     def config(self,horizontalDistance="", horizontalLine=False, headersLevel=2):
         """
         Sets preferences which will be used to display all articles
@@ -267,7 +268,11 @@ class RowArticles(SectionRow):
         self.headersLevel = headersLevel
         if horizontalDistance:
             self.horizontalDistance = horizontalDistance
+        self._index = 0
     def addArticle(self,headerText="",text="",footer=""):
+        """
+        Adds single artile with header, text, and footer. All arguments are not required and can be objects
+        """
         article = e._ArticleElement()
         article._addClass("col-12")
         header = {}
@@ -285,26 +290,36 @@ class RowArticles(SectionRow):
             article.addContent(paragraph)
         
         if footer:
-            #TODO
-            pass
+            article.addContent(footer)
         
         if self.horizontalLine:
             article.addContent(e._HorizontalLine())
+        
         if self.horizontalDistance:
             article._addStyle({"margin-top":self.horizontalDistance})
+        
+        self.articles.append(article)
         self.addContent(article)
-
+    
+    def __iter__(self):
+        for i in self.articles:
+            yield i
 
 class Footer(e._FooterElement):
-    def __init__(self,content="",width=30):
+    """
+    Cretes footer
+    The first argument is content to be displayed
+    The second is height of the footer
+    """
+    def __init__(self,content="",height=30):
         super().__init__()
         self._addClass("footer")
         self.row = ContainerRow()
 
         if content:
             self.row.addContent(content)
-        self.width = width
-        self._addStyle({"padding-top":"%spx"% (width/2),"padding-bottom":"%spx"% (width/2)})
+        self.height = height
+        self._addStyle({"padding-top":"%spx"% (self.height/2),"padding-bottom":"%spx"% (self.height/2)})
 
     def addContent(self,content):
         self.row.addContent(content)
@@ -312,7 +327,7 @@ class Footer(e._FooterElement):
         super().addContent(self.row)
         super()._render()
     def __setattr__(self,name,value):
-        if name == "BackgroundColor":
+        if name == "backgroundColor":
             self._addStyle({"background":value})
         else:
             self.__dict__[name] = value

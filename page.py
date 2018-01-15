@@ -18,7 +18,7 @@ def index(request):
         foot.position = "center"
         foot.color = "white"
         footer = Footer(foot)
-        footer.BackgroundColor = "black"
+        footer.backgroundColor = "black"
     
         page = Page("Sample","utf-8",{"background":myGrey})
         page.addElement(menu,articles,footer)
