@@ -4,7 +4,6 @@ myGrey = "#dddddd"
 myGreen = "#00cc00"
 @serve("/")
 def index(request):
-    
     greenText = Text()
     greenText.color = myGreen
     
