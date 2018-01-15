@@ -259,6 +259,38 @@ class BrandImage(BrandText):
         self.img = e._ImageElement(imageName,alt)
         self.addContent(self.img)
 
+class Article(e._ArticleElement):
+    def __init__(self,headerText="",headersLevel=1,paragraph="",footer="",columnNum=3,responsive=True):
+        super().__init__()
+        self.paragraph = e._ParagraphElement()
+        self.text = paragraph
+        self.headerText = headerText
+        self.footer = footer
+        self.columnNum = columnNum
+        self.responsive = responsive
+        if self.responsive:
+            self._addClass("col-12")
+        if self.headerText:
+            self.header = e._HeaderElement()
+
+            self.h = e._HeaderTextElement(headersLevel)
+            self.h.addContent(headerText)
+
+            self.header.addContent(self.h)
+        if self.text:
+            self.paragraph.addContent(paragraph)
+    def addContent(self,*content):
+        self.checker = True
+        self.paragraph.addContent(*content)
+    def _render(self):
+        if self.headerText:
+            super().addContent(self.header)
+        if self.text or self.checker:
+            super().addContent(self.paragraph)
+        if self.footer:
+            super().addContent(self.footer)
+        super()._render()
+
 class RowArticles(SectionRow):
     """
     Creates a lot of articles. Each article in one single row
@@ -268,7 +300,7 @@ class RowArticles(SectionRow):
 
     Use 'config' method to set your preferences for all articles
     """
-    def __init__(self,sectionTitle="",position="center"):
+    def __init__(self,sectionTitle="",position="center",horizontalDistance="",horizontalLine=False,headersLevel=2):
         super().__init__()
         self.articles = [] #Array with all articles
         if sectionTitle:
@@ -279,39 +311,14 @@ class RowArticles(SectionRow):
             h = e._HeaderTextElement(1,self.sectionTitle)
             header.addContent(h)
             self.addContent(header)
-      
-    def config(self,horizontalDistance="", horizontalLine=False, headersLevel=2):
-        """
-        Sets preferences which will be used to display all articles
-        """
         self.horizontalLine = horizontalLine
+        self.horizontalDistance = horizontalDistance
         self.headersLevel = headersLevel
-        if horizontalDistance:
-            self.horizontalDistance = horizontalDistance
-        self._index = 0
     def addArticle(self,headerText="",text="",footer=""):
         """
         Adds single artile with header, text, and footer. All arguments are not required and can be objects
         """
-        article = e._ArticleElement()
-        article._addClass("col-12")
-        header = {}
-        paragraph = {}
-        foot = {}
-        if headerText:
-            header = e._HeaderElement()
-            h = e._HeaderTextElement(self.headersLevel,headerText)
-            
-            header.addContent(h)
-            article.addContent(header)
-        
-        if text:
-            paragraph = e._ParagraphElement(text)
-            article.addContent(paragraph)
-        
-        if footer:
-            article.addContent(footer)
-        
+        article = Article(headerText=headerText,paragraph=text,footer=footer,headersLevel=self.headersLevel,columnNum=12)
         if self.horizontalLine:
             article.addContent(e._HorizontalLine())
         
@@ -319,8 +326,12 @@ class RowArticles(SectionRow):
             article._addStyle({"margin-top":self.horizontalDistance})
         
         self.articles.append(article)
-        self.addContent(article)
-    
+    def _render(self):
+        self.addContent(*self.articles)
+        super()._render()
+    def __call__(self,headerText="",text="",footer=""):
+        self.addArticle(headerText,text,footer)
+        return self
     def __iter__(self):
         for i in self.articles:
             yield i
