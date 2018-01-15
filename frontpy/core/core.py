@@ -245,8 +245,7 @@ class Page(CoreElement):
         self._mimetype = "text/html"
         self.title = title
         self.encoding = encoding
-        super().__init__("div",True,True,["class","style"])
-        self._addClass("global")
+        super().__init__("body",True,True,["class","style"])
         self._addStyle({"margin-top":"-16px"})
         if background:
             self._addStyle(background)

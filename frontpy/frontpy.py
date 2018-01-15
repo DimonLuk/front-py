@@ -4,27 +4,90 @@ sys.path.append(sys.path[0]+"/frontpy/core")
 import elements as e
 from core.core import CoreElement,serve,runApp,Page
 
+class Text(e._TextElement):
+    def __init__(self,text=""):
+        super().__init__(text=text)
+    def __str__(self):
+        import copy
+        cop = copy.deepcopy(self)
+        cop._render()
+        return cop._template
+    def __setattr__(self,name,value):
+        if name == "color":
+            self._addStyle({"color":value})
+        else:
+            self.__dict__[name] = value
+    def __call__(self,value):
+        import copy
+        cop = copy.deepcopy(self)
+        cop.addContent(value)
+        cop._render()
+        return cop._template
 
-class RowContainer(e._BlockElement):
+class Paragraph(e._ParagraphElement):
+    def __init__(self,text):
+        super().__init__(text=text)
+
+class Image(e._ImageElement):
+    def __init__(self,href,alt="picture"):
+        super().__init__(href,alt=alt)
+        self._addClass("img-fluid")
+    def __str__(self):
+        import copy
+        cop = copy.deepcopy(self)
+        cop._render()
+        return cop._template
+
+class BlockContainer(e._BlockElement):
+    def __init__(self):
+        super().__init__()
+        self._addClass("container")
+
+class SectionContainer(e._SectionElement):
+    def __init__(self):
+        super().__init__()
+        self._addClass("container")
+
+class BlockRow(e._BlockElement):
     def __init__(self):
         super().__init__()
         self._addClass("row")
 
+class ContainerRow(BlockContainer):
+    def __init__(self):
+        super().__init__()
+        self.row = BlockRow()
+    def addContent(self,content):
+        self.row.addContent(content)
     def _render(self):
-        self._template = """<div class="container">%s</div>""" % self._template
+        super().addContent(self.row)
+        super()._render()
+
+class SectionRow(SectionContainer):
+    def __init__(self):
+        super().__init__()
+        self.row = BlockRow()
+    def addContent(self,content):
+        self.row.addContent(content)
+    def _render(self):
+        super().addContent(self.row)
         super()._render()
 
 
-class InlineMenu(CoreElement):
+
+class InlineMenu(e._BlockElement):
     def __init__(self, background, links, linksColor,brand):
         self.background = background
         self.links = links
         self.linksColor = linksColor
         self.brand = brand
-        super().__init__("header",True,True,["class","style"])
+        super().__init__()
+        self._addStyle(background)
+
+        self.header = e._HeaderElement()
+        self.header._addClass("container")
+        self.header._addStyle(self.background)
         
-        self._addClass("container")
-        self._addStyle(self.background)
         
         self.menu = e._MenuElement()
         self.menu._addClass("row")
@@ -68,7 +131,9 @@ class InlineMenu(CoreElement):
         self.navBlock.addContent(self.linksList)
         self.navigation.addContent(self.collapseButton,self.brand,self.navBlock)
         self.menu.addContent(self.navigation)
-        self.addContent(self.menu)
+        self.header.addContent(self.menu)
+        self.addContent(self.header)
+
 
 
 
@@ -87,3 +152,64 @@ class BrandImage(BrandText):
         super().__init__()
         self.img = e._ImageElement(imageName,alt)
         self.addContent(self.img)
+
+class RowArticles(SectionRow):
+    def __init__(self,sectionTitle="",position="center"):
+        super().__init__()
+        if sectionTitle:
+            self.sectionTitle = sectionTitle
+            header = e._HeaderElement()
+            if position == "center":
+                header._addClass("mx-auto")
+            h = e._HeaderTextElement(1,self.sectionTitle)
+            header.addContent(h)
+            self.addContent(header)
+    
+    def config(self,horizontalDistance="", horizontalLine=False, headersLevel=2):
+        self.horizontalLine = horizontalLine
+        self.headersLevel = headersLevel
+        if horizontalDistance:
+            self.horizontalDistance = horizontalDistance
+    def addArticle(self,headerText="",text="",footer=""):
+        article = e._ArticleElement()
+        article._addClass("col-12")
+        header = {}
+        paragraph = {}
+        foot = {}
+        if headerText:
+            header = e._HeaderElement()
+            h = e._HeaderTextElement(self.headersLevel,headerText)
+            
+            header.addContent(h)
+            article.addContent(header)
+        
+        if text:
+            paragraph = e._ParagraphElement(text)
+            article.addContent(paragraph)
+        
+        if footer:
+            #TODO
+            pass
+        
+        if self.horizontalLine:
+            article.addContent(e._HorizontalLine())
+        if self.horizontalDistance:
+            article._addStyle({"margin-top":self.horizontalDistance})
+        self.addContent(article)
+
+
+class Footer(e._FooterElement):
+    def __init__(self,content="",width="50px"):
+        super().__init__()
+        self._addClass("footer")
+        self.row = ContainerRow()
+
+        if content:
+            self.row.addContent(content)
+        self.width = width
+
+    def addContent(self,content):
+        self.row.addContent(content)
+    def _render(self):
+        super().addContent(self.row)
+        super()._render()
