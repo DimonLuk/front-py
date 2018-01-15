@@ -148,6 +148,19 @@ class CoreElement(metaclass=CoreMeta):
             self._clean(self,self._index)#If no attributes just clean replacement expression for attributes
             if self._isClosing:
                 self._indexesList["content"] = self._index#If tag has to be closed then save index for _replace method
+    def __str__(self):
+        import copy
+        cop = copy.deepcopy(self)
+        cop._render()
+        return cop._template
+
+    def __call__(self,*content):
+        import copy
+        cop = copy.deepcopy(self)
+        cop.addContent(*content)
+        cop._render()
+        return cop._template
+    
     def _addStyle(self,styles):
         """
         Add style to html element

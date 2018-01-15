@@ -18,6 +18,11 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
+#########################################################################################
+#WARNING WARNING WARNING!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+#THIS MODULE HAS TO BE TESTED
+#NO EXCEPTIONS ARE HANDLED HERE FOR NOW
+#########################################################################################
 import sys
 sys.path.append(sys.path[0]+"/frontpy")
 sys.path.append(sys.path[0]+"/frontpy/core")
@@ -39,11 +44,7 @@ class Text(e._TextElement):
     """
     def __init__(self,text=""):
         super().__init__(text=text)
-    def __str__(self):
-        import copy
-        cop = copy.deepcopy(self)
-        cop._render()
-        return cop._template
+    
     def __setattr__(self,name,value):
         if name == "color":
             self._addStyle({"color":value})
@@ -54,15 +55,6 @@ class Text(e._TextElement):
             self.__dict__[name] = value
     def addStyle(self,style):
         self._addStyle(self,style)
-    def __call__(self,value):
-        """
-        Implemenation of wrapping syntax
-        """
-        import copy
-        cop = copy.deepcopy(self)
-        cop.addContent(value)
-        cop._render()
-        return cop._template
 
 class Paragraph(e._ParagraphElement):
     """
@@ -76,9 +68,9 @@ class Image(e._ImageElement):
     """
     Simple responsive image
     """
-    def __init__(self,href,alt="picture"):
+    def __init__(self,href,alt="picture",size=50):
         super().__init__(href,alt=alt)
-        self._addClass("img-fluid")
+        self._addStyle({"width":"%s"%str(size)+"%","height":"%s"%str(size)+"%"})
     def __str__(self):
         import copy
         cop = copy.deepcopy(self)
@@ -113,11 +105,13 @@ class ContainerRow(BlockContainer):
     """
     Creates row inside a BlockContainer
     """
-    def __init__(self):
+    def __init__(self,*content):
         super().__init__()
         self.row = BlockRow()
-    def addContent(self,content):
-        self.row.addContent(content)
+        if content:
+            self.addContent(*content)
+    def addContent(self,*content):
+        self.row.addContent(*content)
     def _render(self):
         super().addContent(self.row)
         super()._render()
@@ -129,8 +123,8 @@ class SectionRow(SectionContainer):
     def __init__(self):
         super().__init__()
         self.row = BlockRow()
-    def addContent(self,content):
-        self.row.addContent(content)
+    def addContent(self,*content):
+        self.row.addContent(*content)
     def _render(self):
         super().addContent(self.row)
         super()._render()
@@ -145,6 +139,8 @@ class InlineMenu(e._BlockElement):
     The second is json like links {"Home":"/","Any page":"/any"}
     The third is color of links
     The fourth is BrandText or BrandImage object
+
+    If you call this object you'll get deepcopy of it
     """
     def __init__(self, background, links, linksColor,brand):
         """
@@ -203,15 +199,39 @@ class InlineMenu(e._BlockElement):
             li.addContent(href)
 
             self.linksList.addContent(li)
+    def _render(self):
         self.navBlock.addContent(self.linksList)
         self.navigation.addContent(self.collapseButton,self.brand,self.navBlock)
         self.menu.addContent(self.navigation)
         self.header.addContent(self.menu)
         self.addContent(self.header)
+        super()._render()
+    
+    def _addLink(self,links,color=""):
+        for link in links:
+            li = e._InListElement()
+            li._addClass("nav-item","active")
 
-
-
-
+            href = e._LinkElement(links[link])
+            href.addContent(link)
+            href._addClass("nav-link")
+            if color:
+                href._addStyle({"color":color})
+            else:
+                href._addStyle({"color":self.linksColor})
+            
+            li.addContent(href)
+            self.linksList.addContent(li)
+    def __call__(self,links={},color=""):
+        import copy
+        cop = copy.deepcopy(self)
+        if links:
+            cop._addLink(links,color)
+        return cop
+    
+    def addLinks(self,links,color=""):
+        return self(links,color)
+        
 class BrandText(e._LinkElement):
     """
     Company name or other brand short and nice info
@@ -321,8 +341,8 @@ class Footer(e._FooterElement):
         self.height = height
         self._addStyle({"padding-top":"%spx"% (self.height/2),"padding-bottom":"%spx"% (self.height/2)})
 
-    def addContent(self,content):
-        self.row.addContent(content)
+    def addContent(self,*content):
+        self.row.addContent(*content)
     def _render(self):
         super().addContent(self.row)
         super()._render()
