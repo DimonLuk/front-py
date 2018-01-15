@@ -15,6 +15,9 @@ class Text(e._TextElement):
     def __setattr__(self,name,value):
         if name == "color":
             self._addStyle({"color":value})
+        elif name == "position" and value == "center":
+            self._addClass("mx-auto")
+            self._addStyle({"text-align":value})
         else:
             self.__dict__[name] = value
     def __call__(self,value):
@@ -199,7 +202,7 @@ class RowArticles(SectionRow):
 
 
 class Footer(e._FooterElement):
-    def __init__(self,content="",width="50px"):
+    def __init__(self,content="",width=30):
         super().__init__()
         self._addClass("footer")
         self.row = ContainerRow()
@@ -207,9 +210,15 @@ class Footer(e._FooterElement):
         if content:
             self.row.addContent(content)
         self.width = width
+        self._addStyle({"padding-top":"%spx"% (width/2),"padding-bottom":"%spx"% (width/2)})
 
     def addContent(self,content):
         self.row.addContent(content)
     def _render(self):
         super().addContent(self.row)
         super()._render()
+    def __setattr__(self,name,value):
+        if name == "BackgroundColor":
+            self._addStyle({"background":value})
+        else:
+            self.__dict__[name] = value
