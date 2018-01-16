@@ -148,6 +148,19 @@ class CoreElement(metaclass=CoreMeta):
             self._clean(self,self._index)#If no attributes just clean replacement expression for attributes
             if self._isClosing:
                 self._indexesList["content"] = self._index#If tag has to be closed then save index for _replace method
+    def __str__(self):
+        import copy
+        cop = copy.deepcopy(self)
+        cop._render()
+        return cop._template
+
+    def __call__(self,*content):
+        import copy
+        cop = copy.deepcopy(self)
+        cop.addContent(*content)
+        cop._render()
+        return cop._template
+    
     def _addStyle(self,styles):
         """
         Add style to html element
@@ -245,8 +258,8 @@ class Page(CoreElement):
         self._mimetype = "text/html"
         self.title = title
         self.encoding = encoding
-        super().__init__("body",True,True,["class","style"])
-        self._addStyle({"margin-top":"-16px"})
+        super().__init__("div",True,True,["class","style"])
+        self._addClass("global")
         if background:
             self._addStyle(background)
         self._tmp = """
@@ -273,8 +286,8 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
         <base href="/">
         <link rel="stylesheet" type="text/css" href="%s">
     </head>            
-    <body>             
-        %s
+    <body style="margin-top:-16px;">
+            %s
         <script src="%s"></script>
         <script src="%s"></script>
         <script src="%s"></script>
