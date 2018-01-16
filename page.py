@@ -3,6 +3,8 @@ from frontpy.frontpy import *
 #This block is used to create one theme for all pages
 backgroundColor = "#dddddd"
 brandColor = "red" 
+brandText = Text()
+brandText.color = brandColor
 pageParams = tuple(["utf-8",{"background":backgroundColor}])
 menu = InlineMenu({"background":"black"},{"Home":"/", "Objectives":"/objectives","User guide":"/userGuide","Tester guide":"/testerGuide","Developer guide":"/developerGuide"},"white",BrandText("Front-py",brandColor))
 foot = Text("&copy DimonLuk")
@@ -14,12 +16,9 @@ footer.backgroundColor = "black"
 @serve("/")
 def index(request):
     if request.method == "GET":
-        greenText = Text()
-        greenText.color = brandColor #Don't you find it funny ?)
-    
-        articles = RowArticles("Three facts about %s 0.0.1(pre-alpha)" % greenText("Front-py"),horizontalLine=True,headersLevel=2,horizontalDistance="50px")
-        articles.addArticle("The first fact","This framework is attemp to combine the best ideas from Django, Flask, Angular and other frameworks but %s complicated application architecture" % greenText("without creating"))
-        articles.addArticle("The second fact","You have to use only %s 3.x to write %s front and back-end" % (greenText("python"),greenText("both")))
+        articles = RowArticles("Three facts about %s 0.0.1(pre-alpha)" % brandText("Front-py"),horizontalLine=True,headersLevel=2,horizontalDistance="50px")
+        articles.addArticle("The first fact","This framework is attemp to combine the best ideas from Django, Flask, Angular and other frameworks but %s complicated application architecture" % brandText("without creating"))
+        articles.addArticle("The second fact","You have to use only %s 3.x to write %s front and back-end" % (brandText("python"),brandText("both")))
         articles.addArticle("The third fact","Just compare:%s" % ContainerRow(Image("test.png","Code",50),Image("test.png","Code",50)))
     
         page = Page("Home",*pageParams)
@@ -36,8 +35,16 @@ def index(request):
 
 @serve("/objectives")
 def objectives(request):
+    articles = Article(headersLevel=2)
+    
+    frontEnd = articles("Front-end",NumberedList({},"A lot of tests","Custom Forms","Reorgonaising folders"))
+    backEnd = articles("Back-end",NumberedList({},"Task","Simple","Test"))
+    experience = articles("User experience",NumberedList({"background":"red"},"SimpleTask"))
+    
+    articleSection = ColumnArticles("%s pre-alpha objectives" % brandText("Front-py"),"",1,"center","50px",True,frontEnd,backEnd,experience)
+
     page = Page("Objectives",*pageParams)
-    page.addElement(menu,Text("Some text"),footer)
+    page.addElement(menu,articleSection,footer)
     return page
 
 @serve("/userGuide")

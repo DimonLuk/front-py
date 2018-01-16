@@ -71,11 +71,18 @@ class Image(e._ImageElement):
     def __init__(self,href,alt="picture",size=50):
         super().__init__(href,alt=alt)
         self._addStyle({"width":"%s"%str(size)+"%","height":"%s"%str(size)+"%"})
-    def __str__(self):
-        import copy
-        cop = copy.deepcopy(self)
-        cop._render()
-        return cop._template
+class HeaderText(e._HeaderTextElement):
+    def __init__(self,level=1,text=""):
+        super().__init__(level=level,text=text)
+
+class Header(e._HeaderElement):
+    def __init__(self,level=1,text=""):
+        super().__init__()
+        self.h = HeaderText(level,text)
+    def _render(self):
+        self.addContent(self.h)
+        super()._render()
+        
 
 class BlockContainer(e._BlockElement):
     """
@@ -97,9 +104,10 @@ class BlockRow(e._BlockElement):
     """
     Simple row
     """
-    def __init__(self):
+    def __init__(self,*content):
         super().__init__()
         self._addClass("row")
+        self.addContent(*content)
 
 class ContainerRow(BlockContainer):
     """
@@ -259,8 +267,13 @@ class BrandImage(BrandText):
         self.img = e._ImageElement(imageName,alt)
         self.addContent(self.img)
 
+        
+###########################################################################################
+#THE BLOCK BELOW HAS BEEN CREATED TOO FAST SO IT'S A LITLE RANDOM
+###########################################################################################
+
 class Article(e._ArticleElement):
-    def __init__(self,headerText="",headersLevel=1,paragraph="",footer="",columnNum=3,responsive=True):
+    def __init__(self,headerText="",headersLevel=1,paragraph="",footer="",columnNum=4,responsive=True):
         super().__init__()
         self.paragraph = e._ParagraphElement()
         self.text = paragraph
@@ -268,6 +281,8 @@ class Article(e._ArticleElement):
         self.footer = footer
         self.columnNum = columnNum
         self.responsive = responsive
+        self.headersLevel = headersLevel
+        self._addClass("col-lg-%s" % str(columnNum))
         if self.responsive:
             self._addClass("col-12")
         if self.headerText:
@@ -290,6 +305,9 @@ class Article(e._ArticleElement):
         if self.footer:
             super().addContent(self.footer)
         super()._render()
+    def __call__(self,headerText="",text="",footer=""):
+        obj = Article(headerText=headerText,headersLevel=self.headersLevel,paragraph=text,footer=footer,columnNum=self.columnNum,responsive=self.responsive)
+        return obj
 
 class RowArticles(SectionRow):
     """
@@ -362,3 +380,49 @@ class Footer(e._FooterElement):
             self._addStyle({"background":value})
         else:
             self.__dict__[name] = value
+
+
+class NumberedList(e._NumberedListElement):
+    def __init__(self,contentStyle={},*content):
+        super().__init__()
+        self.li = e._InListElement()
+        self.li._addStyle(contentStyle)
+        if content:
+            for i in content:
+                self.addContent(self.li(i))
+    def addElements(self,*elements):
+        for i in elements:
+            self.addContent(self.li(i))
+
+class ColumnArticles(SectionContainer):
+    def __init__(self,header="",footer="",headersLevel=1,position="",verticalDistance="30px",horizontalLine=False,*articles):
+        super().__init__()
+        self.header = header
+        self.headersLevel = headersLevel
+        self.line = horizontalLine
+        self.footer = footer
+        self.rowHeader = BlockRow()
+        
+        self.head = Header(self.headersLevel,header)
+        if position == "center":
+            self.head._addClass("mx-auto")
+        self.rowHeader.addContent(self.head)
+        if verticalDistance:
+            self.rowHeader._addStyle({"margin-bottom":verticalDistance})
+        super().addContent(self.rowHeader)
+        
+        self.rowArticles = BlockRow()
+        if articles:
+            self.rowArticles.addContent(*articles)
+    def addContent(self,*content):
+        self.rowArticles.addContent(*content)
+    def _render(self):
+            super().addContent(self.rowArticles)
+            if self.footer:
+                super().addContent(self.footer)
+            if self.line:
+                super().addContent(e._HorizontalLine())
+            super()._render()
+    def __call__(self,*articles):
+        self.rowArticles.addContent(*articles)
+        return self
