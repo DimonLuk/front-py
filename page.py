@@ -37,9 +37,9 @@ def index(request):
 def objectives(request):
     articles = Article(headersLevel=2)
     
-    frontEnd = articles("Front-end",NumberedList({},"A lot of tests","Custom Forms","Reorgonaising folders"))
-    backEnd = articles("Back-end",NumberedList({},"Task","Simple","Test"))
-    experience = articles("User experience",NumberedList({"background":"red"},"SimpleTask"))
+    frontEnd = articles("Front-end",NumberedList({},"Reorgonaising folders","A lot of tests","Unnumbered list","Gallery","Forms","Tests","Customizing existing classes","Tests"))
+    backEnd = articles("Back-end",NumberedList({},"Handling POST request","Grand tests of framework","Creating API to database","Tests"))
+    experience = articles("Experience",NumberedList({},"Writing documentation","Create complete guides for users, developers and testers","Work with %s on github" % Link("https://github.com/DimonLuk/front-py/wiki","wiki")))
     
     articleSection = ColumnArticles("%s pre-alpha objectives" % brandText("Front-py"),"",1,"center","50px",True,frontEnd,backEnd,experience)
 

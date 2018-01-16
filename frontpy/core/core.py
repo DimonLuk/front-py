@@ -258,8 +258,8 @@ class Page(CoreElement):
         self._mimetype = "text/html"
         self.title = title
         self.encoding = encoding
-        super().__init__("body",True,True,["class","style"])
-        self._addStyle({"margin-top":"-16px"})
+        super().__init__("div",True,True,["class","style"])
+        self._addClass("global")
         if background:
             self._addStyle(background)
         self._tmp = """
@@ -286,10 +286,12 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
         <base href="/">
         <link rel="stylesheet" type="text/css" href="%s">
     </head>            
-    %s
+    <body style="margin-top:-16px;">
+            %s
         <script src="%s"></script>
         <script src="%s"></script>
         <script src="%s"></script>
+    </body>
 </html>
         """
     def addElement(self,*content):

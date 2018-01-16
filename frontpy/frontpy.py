@@ -137,7 +137,10 @@ class SectionRow(SectionContainer):
         super().addContent(self.row)
         super()._render()
 
-
+class Link(e._LinkElement):
+    def __init__(self,href,text):
+        super().__init__(href=href)
+        self.addContent(text)
 
 class InlineMenu(e._BlockElement):
     """
