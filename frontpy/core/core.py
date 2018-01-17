@@ -284,6 +284,8 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
         <title>%s</title>
         <meta charset="%s">
         <base href="/">
+        <link rel="icon" href="favicon.ico" type="image/x-icon"/>
+        <link rel="shortcut icon" href="favicon.ico" type="image/x-icon"/>
         <link rel="stylesheet" type="text/css" href="%s">
     </head>            
     <body style="margin-top:-16px;">
@@ -316,7 +318,7 @@ BOOTSTRAP_MIN_JS = "13b2a30e265e18a6fd0792cc3fd7a09c"
 SCRIPT_JS = "9a9569e9d73f33740eada95275da7f30"
 BOOTSTRAP_CSS = "e3202aea761d3d587dfcfc43c6982565"
 
-AVALIABLE_FORMATS = ("jpg","png","svg","map") #Formats of files that can be loaded automatically from pages/media folder
+AVALIABLE_FORMATS = ("jpg","png","svg","map","ico","js","css") #Formats of files that can be loaded automatically from pages/media folder
 
 from http.server import HTTPServer, BaseHTTPRequestHandler
 def makeName(address):
@@ -351,7 +353,10 @@ class CoreHttpProcess(BaseHTTPRequestHandler):
                 if self._find[-1] == "map":
                     self._sendResponse("application/json")
                 else:
-                    self._sendResponse("image/"+self._find[-1])
+                    if self._find[-1] == "ico":
+                        self._sendResponse("image/x-icon")
+                    else:
+                        self._sendResponse("image/"+self._find[-1])
                 self.wfile.write(self._response)
             return "OK"
         self.name = makeName(self.path)#Okey, it's not a file from media, it may be user hardly defined address
