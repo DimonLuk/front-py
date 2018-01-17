@@ -278,6 +278,7 @@ class BrandImage(BrandText):
 class Article(e._ArticleElement):
     def __init__(self,headerText="",headersLevel=1,paragraph="",footer="",columnNum=4,responsive=True):
         super().__init__()
+        self.checker = False
         self.paragraph = e._ParagraphElement()
         self.text = paragraph
         self.headerText = headerText
@@ -396,6 +397,12 @@ class NumberedList(e._NumberedListElement):
     def addElements(self,*elements):
         for i in elements:
             self.addContent(self.li(i))
+    def __call__(self,*elements):
+        import copy
+        cop = copy.deepcopy(self)
+        cop.addElements(*elements)
+        cop._render()
+        return cop._template
 
 class ColumnArticles(SectionContainer):
     def __init__(self,header="",footer="",headersLevel=1,position="",verticalDistance="30px",horizontalLine=False,*articles):
@@ -427,5 +434,5 @@ class ColumnArticles(SectionContainer):
                 super().addContent(e._HorizontalLine())
             super()._render()
     def __call__(self,*articles):
-        self.rowArticles.addContent(*articles)
-        return self
+        for i in articles:
+            self.addContent(i)

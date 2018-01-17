@@ -36,15 +36,31 @@ def index(request):
 @serve("/objectives")
 def objectives(request):
     articles = Article(headersLevel=2)
-    
+    myList = NumberedList() 
     frontEnd = articles("Front-end",NumberedList({},"Reorgonaising folders","A lot of tests","Unnumbered list","Gallery","Forms","Tests","Customizing existing classes","Tests"))
     backEnd = articles("Back-end",NumberedList({},"Handling POST request","Grand tests of framework","Creating API to database","Tests"))
     experience = articles("Experience",NumberedList({},"Writing documentation","Create complete guides for users, developers and testers","Work with %s on github" % Link("https://github.com/DimonLuk/front-py/wiki","wiki")))
     
-    articleSection = ColumnArticles("%s pre-alpha objectives" % brandText("Front-py"),"",1,"center","50px",True,frontEnd,backEnd,experience)
+    preAlphaObjectives = ColumnArticles("%s pre-alpha objectives" % brandText("Front-py"),"",1,"center","50px",True,frontEnd,backEnd,experience)
+    
+    alphaObjectives = ColumnArticles("%s alpha objectives" % brandText("Front-py"),headersLevel=1,position="center",verticalDistance="50px",horizontalLine=True)
+    
+    frontEnd = articles("Front-end",myList("Galleries","Carousels","Registartion","Log in","Permission system","Admin panel"))
+    backEnd = articles("Back-end",myList("Registration","Log In","Permission system","Admin panel","Optional: write own server"))
+    experience = articles("Experience",myList("Improve internal framework architecture","Improve API for users","Improve documentation and make complite guides for future beta version where API won't be changing"))
+    
+    alphaObjectives(frontEnd,backEnd,experience)
+    
+    betaObjectives = ColumnArticles("%s beta objectives" % brandText("Front-py"),headersLevel=1,position="center",verticalDistance="50px",horizontalLine=True)
+
+    frontEnd = articles("Front-end",myList("Test and improve"))
+    backEnd = articles("Back-end",myList("Test and improve"))
+    experience = articles("Experience",myList("Test and improve"))
+    
+    betaObjectives(frontEnd,backEnd,experience)
 
     page = Page("Objectives",*pageParams)
-    page.addElement(menu,articleSection,footer)
+    page.addElement(menu,preAlphaObjectives,alphaObjectives,betaObjectives,footer)
     return page
 
 @serve("/userGuide")
