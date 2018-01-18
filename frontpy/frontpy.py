@@ -322,7 +322,7 @@ class RowArticles(SectionRow):
 
     Use 'config' method to set your preferences for all articles
     """
-    def __init__(self,sectionTitle="",position="center",horizontalDistance="",horizontalLine=False,headersLevel=2):
+    def __init__(self,sectionTitle="",position="center",horizontalDistance="",horizontalLine=False,headersLevel=2,*articles):
         super().__init__()
         self.articles = [] #Array with all articles
         if sectionTitle:
@@ -336,6 +336,9 @@ class RowArticles(SectionRow):
         self.horizontalLine = horizontalLine
         self.horizontalDistance = horizontalDistance
         self.headersLevel = headersLevel
+        if articles:
+            for i in articles:
+                self.articles.append(i)
     def addArticle(self,headerText="",text="",footer=""):
         """
         Adds single artile with header, text, and footer. All arguments are not required and can be objects
