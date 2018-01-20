@@ -64,13 +64,16 @@ class Paragraph(e._ParagraphElement):
     def __init__(self,text=""):
         super().__init__(text=text)
 
-class Image(e._ImageElement):
+class Image(e._LinkElement):
     """
     Simple responsive image
     """
-    def __init__(self,href,alt="picture",size=50):
-        super().__init__(href,alt=alt)
-        self._addStyle({"width":"%s"%str(size)+"%","height":"%s"%str(size)+"%"})
+    def __init__(self,href,alt="picture",columns=6):
+        super().__init__(href)
+        self.image = e._ImageElement(src=href,alt=alt)
+        self.image._addStyle({"width":"100%"})
+        self._addClass("col-%s"%str(columns))
+        self.addContent(self.image)
 class HeaderText(e._HeaderTextElement):
     def __init__(self,level=1,text=""):
         super().__init__(level=level,text=text)
