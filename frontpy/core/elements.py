@@ -22,6 +22,8 @@ It contains:
     <textarea>:_InputTextElement
     <h1-6>:_HeaderTextElement
     <hr>:_HorizontalLine
+    <pre>:_FormatedTextElement
+    <code>:_CodeElement
 
 Copyright (C) 2018  Dima Lukashov github.com/DimonLuk
 
@@ -138,4 +140,13 @@ class _HorizontalLine(CoreElement):
 class _ArticleElement(CoreElement):
     def __init__(self,element="article",isClosing=True,isAddAttrs=True,attributes=["class","style"]):
         super().__init__(element,isClosing,isAddAttrs,attributes)
-_TEST = (_TextElement,_ParagraphElement,_MenuElement,_NavigationElement,_UnnumberedListElement,_NumberedListElement,_InListElement,_LinkElement,_ImageElement,_BlockElement,_SectionElement,_AsideElement,_FooterElement,_FormElement,_InputElement,_ButtonElement,_HeaderElement,_InputTextElement, _HeaderTextElement,_HorizontalLine)
+
+class _FormatedTextElement(CoreElement):
+    def __init__(self,element="pre",isClosing=True,isAddAttrs=True,attributes=["class","style"]):
+        super().__init__(element,isClosing,isAddAttrs,attributes)
+class _CodeElement(CoreElement):
+    def __init__(self,element="code",isClosing=True,isAddAttrs=True,attributes=["class","style"]):
+        super().__init__(element,isClosing,isAddAttrs,attributes)
+
+
+_TEST = (_TextElement,_ParagraphElement,_MenuElement,_NavigationElement,_UnnumberedListElement,_NumberedListElement,_InListElement,_LinkElement,_ImageElement,_BlockElement,_SectionElement,_AsideElement,_FooterElement,_FormElement,_InputElement,_ButtonElement,_HeaderElement,_InputTextElement, _HeaderTextElement,_HorizontalLine,_FormatedTextElement,_CodeElement)

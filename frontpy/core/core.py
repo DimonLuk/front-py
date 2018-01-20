@@ -293,6 +293,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
         <script src="%s"></script>
         <script src="%s"></script>
         <script src="%s"></script>
+        <script>hljs.initHighlightingOnLoad();</script>
     </body>
 </html>
         """
