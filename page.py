@@ -170,23 +170,29 @@ runApp()#Then you can run app. By the default it will be on localhost:8000/
     return page
 @serve("/testerGuide")
 def testerGuide(request):
-    page = Page("Tester Guide",*pageParams)
-    page.addElement(menu,footer)
-    return page
+    if request.method == "GET":
+        guide = RowArticles()
+        guide(text="I don't think that this project is so big to write very big instruction here. Just send to me screenshot where I can see the error or fix it by yourself. My address is %s" % Link("mailto:lds4ever2000@gmail.com","lds4ever2000@gmail.com"))
+        page = Page("Tester Guide",*pageParams)
+        page.addElement(menu,guide,footer)
+        return page
 
 @serve("/developerGuide")
 def testerGuide(request):
-    page = Page("Developer Guide",*pageParams)
-    page.addElement(menu,footer)
-    return page
+    if request.method == "GET":
+        guide = RowArticles()
+        guide("Developer codex :)",NumberedList({},"No matter how it's difficult to create class, the only matter is how simple in use this class","Each class has to balance between simplicity and customizability","Each class has to redefine (if necessary) wrapping syntax","Almost every argument of any constructor or any method has to be predefined by author","But none of these rules are not aimed to reduce your creativity)))"))
+        page = Page("Developer Guide",*pageParams)
+        page.addElement(menu,guide,footer)
+        return page
 
 @serve("/<any>")#This is very interesting part. If user send some request that hasn't been defined explicity you can handle it here. Patterns can be different "/<any>/page/<any>" "/123/<any>/Front-pyTheBest/<any>"
 def anypage(request):
     page = Page("%s" % request.path[1:],*pageParams)
-    page.addElement(menu,Text("ANY"),footer)
+    page.addElement(menu,footer)
     return page
 
-runApp()#Then you can run app. By the default it will be on localhost:8000/
+runApp(address="192.168.31.95")#Then you can run app. By the default it will be on localhost:8000/
 #You can change addres in port by writing runApp(address=192.3.3.245,port=2000) for example
 #To tun the app, you have to open the terminal in the folder where sample.py is stored and type in your terminal:
 #python sample.py 
