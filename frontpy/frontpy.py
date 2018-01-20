@@ -276,10 +276,18 @@ class BrandImage(BrandText):
 ###########################################################################################
 
 class Article(e._ArticleElement):
-    def __init__(self,headerText="",headersLevel=1,paragraph="",footer="",columnNum=4,responsive=True):
+    def __init__(self,headerText="",headersLevel=1,paragraph="",footer="",columnNum=4,responsive=True,saveFormat=False,isCode=False,lang="",background={}):
         super().__init__()
         self.checker = False
-        self.paragraph = e._ParagraphElement()
+        self.saveFormat = saveFormat
+        self.isCode = isCode
+        if self.saveFormat and self.isCode:
+            self.paragraph = e._CodeElement()
+            self.paragraph._addClass(lang)
+        else:
+            self.paragraph = e._ParagraphElement()
+        if background:
+            self.paragraph._addStyle(background)
         self.text = paragraph
         self.headerText = headerText
         self.footer = footer
@@ -302,6 +310,10 @@ class Article(e._ArticleElement):
         self.checker = True
         self.paragraph.addContent(*content)
     def _render(self):
+        if self.saveFormat and self.isCode:
+            tmp = e._FormatedTextElement()
+            tmp.addContent(self.paragraph)
+            self.paragraph = tmp
         if self.headerText:
             super().addContent(self.header)
         if self.text or self.checker:
@@ -322,8 +334,11 @@ class RowArticles(SectionRow):
 
     Use 'config' method to set your preferences for all articles
     """
-    def __init__(self,sectionTitle="",position="center",horizontalDistance="",horizontalLine=False,headersLevel=2,*articles):
+    def __init__(self,sectionTitle="",position="center",horizontalDistance="",horizontalLine=False,headersLevel=2,saveFormat=False,isCode=False,lang="",articlesBackground={},*articles):
         super().__init__()
+        self.saveFormat = saveFormat
+        self.isCode = isCode
+        self.articlesBackground = articlesBackground
         self.articles = [] #Array with all articles
         if sectionTitle:
             self.sectionTitle = sectionTitle
@@ -339,11 +354,11 @@ class RowArticles(SectionRow):
         if articles:
             for i in articles:
                 self.articles.append(i)
-    def addArticle(self,headerText="",text="",footer=""):
+    def addArticle(self,headerText="",text="",footer="",saveFormat=False,isCode=False,lang="",background={}):
         """
         Adds single artile with header, text, and footer. All arguments are not required and can be objects
         """
-        article = Article(headerText=headerText,paragraph=text,footer=footer,headersLevel=self.headersLevel,columnNum=12)
+        article = Article(headerText=headerText,paragraph=text,footer=footer,headersLevel=self.headersLevel,columnNum=12,saveFormat=saveFormat,isCode=isCode,lang=lang,background=background)
         if self.horizontalLine:
             article.addContent(e._HorizontalLine())
         
@@ -355,7 +370,7 @@ class RowArticles(SectionRow):
         self.addContent(*self.articles)
         super()._render()
     def __call__(self,headerText="",text="",footer=""):
-        self.addArticle(headerText,text,footer)
+        self.addArticle(headerText=headerText,text=text,footer=footer,saveFormat=self.saveFormat,isCode=self.isCode,background=self.articlesBackground)
         return self
     def __iter__(self):
         for i in self.articles:
