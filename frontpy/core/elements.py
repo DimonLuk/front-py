@@ -1,29 +1,30 @@
-from core.core import CoreElement
+from core.core import Core_element
 """
 This module contains main elements which is used to develop framework
 It contains:
-    <menu>:_MenuElement
-    <nav>:_NavigationElement
-    <ul>:_UnnumberedListElement
-    <ol>:_NumberedListElement
-    <li>:_InListElement
-    <a>:_LinkElement
-    <p>:_ParagraphElement
-    <img>:_ImageElement
-    <div>:_BlockElement
-    <section>:_SectionElement
-    <aside>:_AsideElement
-    <span>:_TextElement
-    <footer>:_FooterElement
-    <form>:_FormElement
-    <input>(all types):_InputElement
-    <button>:_ButtonElement
-    <header>:_HeaderElement
-    <textarea>:_InputTextElement
-    <h1-6>:_HeaderTextElement
-    <hr>:_HorizontalLine
-    <pre>:_FormatedTextElement
-    <code>:_CodeElement
+    <menu>:_Menu_element
+    <nav>:_Navigation_element
+    <ul>:_Unnumbered_list_element
+    <ol>:_Numbered_list_element
+    <li>:_In_list_element
+    <a>:_Link_element
+    <p>:_Paragraph_element
+    <img>:_Image_element
+    <div>:_Block_element
+    <section>:_Section_element
+    <aside>:_Aside_element
+    <span>:_Text_element
+    <footer>:_Footer_element
+    <form>:_Form_element
+    <input>(all types):_Input_element
+    <button>:_Button_element
+    <header>:_Header_element
+    <textarea>:_Input_text_area
+    <h1-6>:_Header_text_element
+    <hr>:_Horizontal_line_element
+    <pre>:_Formated_text_element
+    <code>:_Code_element
+    <article>:_Article_element
 
 Copyright (C) 2018  Dima Lukashov github.com/DimonLuk
 
@@ -40,113 +41,113 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
-class _ParagraphElement(CoreElement):
-    def __init__(self,text="",element="p",isClosing=True,isAddAttrs=True,attributes=["class","style"]):
-        super().__init__(element,isClosing,isAddAttrs,attributes)
-        self.addContent(text)
+class _Paragraph_element(Core_element):
+    def __init__(self,text="",element="p",is_closing=True,is_add_attrs=True,attributes=["class","style"]):
+        super().__init__(element,is_closing,is_add_attrs,attributes)
+        self.add_content(text)
 
-class _ImageElement(CoreElement):
-    def __init__(self,src="#",alt="image",element="img",isClosing=False,isAddAttrs=True,attributes=["class","style","src","alt"]):
-        super().__init__(element,isClosing,isAddAttrs,attributes)
-        self._addAttrValue("src",src)
-        self._addAttrValue("alt",alt)
-class _MenuElement(CoreElement):
-    def __init__(self,element="menu", isClosing=True,isAddAttrs=True,attributes=["class","style"]):
-        super().__init__(element,isClosing,isAddAttrs,attributes)
+class _Image_element(Core_element):
+    def __init__(self,src="#",alt="image",element="img",is_closing=False,is_add_attrs=True,attributes=["class","style","src","alt"]):
+        super().__init__(element,is_closing,is_add_attrs,attributes)
+        self._add_attr_value("src",src)
+        self._add_attr_value("alt",alt)
+class _Menu_element(Core_element):
+    def __init__(self,element="menu", is_closing=True,is_add_attrs=True,attributes=["class","style"]):
+        super().__init__(element,is_closing,is_add_attrs,attributes)
 
-class _NavigationElement(CoreElement):             
-    def __init__(self,element="nav", isClosing=True,isAddAttrs=True,attributes=["class","style"]):
-        super().__init__(element,isClosing,isAddAttrs,attributes)
+class _Navigation_element(Core_element):             
+    def __init__(self,element="nav", is_closing=True,is_add_attrs=True,attributes=["class","style"]):
+        super().__init__(element,is_closing,is_add_attrs,attributes)
 
-class _UnnumberedListElement(CoreElement):             
-    def __init__(self,element="ul", isClosing=True,isAddAttrs=True,attributes=["class","style"]):
-        super().__init__(element,isClosing,isAddAttrs,attributes)
+class _Unnumbered_list_element(Core_element):             
+    def __init__(self,element="ul", is_closing=True,is_add_attrs=True,attributes=["class","style"]):
+        super().__init__(element,is_closing,is_add_attrs,attributes)
 
-class _NumberedListElement(CoreElement):             
-    def __init__(self,element="ol", isClosing=True,isAddAttrs=True,attributes=["class","style"]):
-        super().__init__(element,isClosing,isAddAttrs,attributes)
+class _Numbered_list_element(Core_element):             
+    def __init__(self,element="ol", is_closing=True,is_add_attrs=True,attributes=["class","style"]):
+        super().__init__(element,is_closing,is_add_attrs,attributes)
 
-class _InListElement(CoreElement):             
-    def __init__(self,element="li", isClosing=True,isAddAttrs=True,attributes=["class","style"]):
-        super().__init__(element,isClosing,isAddAttrs,attributes)
+class _In_list_element(Core_element):             
+    def __init__(self,element="li", is_closing=True,is_add_attrs=True,attributes=["class","style"]):
+        super().__init__(element,is_closing,is_add_attrs,attributes)
 
-class _LinkElement(CoreElement):             
-    def __init__(self,href="#",element="a", isClosing=True,isAddAttrs=True,attributes=["class","style","href"]):
-        super().__init__(element,isClosing,isAddAttrs,attributes)
-        self._addAttrValue("href",href)
+class _Link_element(Core_element):             
+    def __init__(self,href="#",element="a", is_closing=True,is_add_attrs=True,attributes=["class","style","href"]):
+        super().__init__(element,is_closing,is_add_attrs,attributes)
+        self._add_attr_value("href",href)
 
-class _BlockElement(CoreElement):             
-    def __init__(self,element="div", isClosing=True,isAddAttrs=True,attributes=["class","style"]):
-        super().__init__(element,isClosing,isAddAttrs,attributes)
+class _Block_element(Core_element):             
+    def __init__(self,element="div", is_closing=True,is_add_attrs=True,attributes=["class","style"]):
+        super().__init__(element,is_closing,is_add_attrs,attributes)
 
-class _SectionElement(CoreElement):             
-    def __init__(self,element="section", isClosing=True,isAddAttrs=True,attributes=["class","style"]):
-        super().__init__(element,isClosing,isAddAttrs,attributes)
+class _Section_element(Core_element):             
+    def __init__(self,element="section", is_closing=True,is_add_attrs=True,attributes=["class","style"]):
+        super().__init__(element,is_closing,is_add_attrs,attributes)
 
-class _AsideElement(CoreElement):             
-    def __init__(self,element="aside", isClosing=True,isAddAttrs=True,attributes=["class","style"]):
-        super().__init__(element,isClosing,isAddAttrs,attributes)
+class _Aside_element(Core_element):             
+    def __init__(self,element="aside", is_closing=True,is_add_attrs=True,attributes=["class","style"]):
+        super().__init__(element,is_closing,is_add_attrs,attributes)
 
-class _TextElement(CoreElement):             
-    def __init__(self,text="",element="span", isClosing=True,isAddAttrs=True,attributes=["class","style"]):
-        super().__init__(element,isClosing,isAddAttrs,attributes)
-        self.addContent(text)
+class _Text_element(Core_element):             
+    def __init__(self,text="",element="span", is_closing=True,is_add_attrs=True,attributes=["class","style"]):
+        super().__init__(element,is_closing,is_add_attrs,attributes)
+        self.add_content(text)
 
-class _FooterElement(CoreElement):             
-    def __init__(self,element="footer", isClosing=True,isAddAttrs=True,attributes=["class","style"]):
-        super().__init__(element,isClosing,isAddAttrs,attributes)
+class _Footer_element(Core_element):             
+    def __init__(self,element="footer", is_closing=True,is_add_attrs=True,attributes=["class","style"]):
+        super().__init__(element,is_closing,is_add_attrs,attributes)
 
-class _FormElement(CoreElement):             
-    def __init__(self,name="",method="POST",element="form", isClosing=True,isAddAttrs=True,attributes=["class","style","method","name"]):
-        super().__init__(element,isClosing,isAddAttrs,attributes)
-        self._addAttrValue("name",name)
-        self._addAttrValue("method",method)
+class _Form_element(Core_element):             
+    def __init__(self,name="",method="POST",element="form", is_closing=True,is_add_attrs=True,attributes=["class","style","method","name"]):
+        super().__init__(element,is_closing,is_add_attrs,attributes)
+        self._add_attr_value("name",name)
+        self._add_attr_value("method",method)
 
-class _InputElement(CoreElement):             
-    def __init__(self,typ="text",placeholder="Placeholder",required=False,element="input", isClosing=False,isAddAttrs=True,attributes=["class","style","type","placeholder"]):        
+class _Input_element(Core_element):             
+    def __init__(self,typ="text",placeholder="Placeholder",required=False,element="input", is_closing=False,is_add_attrs=True,attributes=["class","style","type","placeholder"]):        
         if required:
             attributes.append("required")
-        super().__init__(element,isClosing,isAddAttrs,attributes)
-        self._addAttrValue("type",typ)
-        self._addAttrValue("placeholder",placeholder)
-class _ButtonElement(CoreElement):             
-    def __init__(self,typ="",text="Button",element="button", isClosing=True,isAddAttrs=True,attributes=["class","style","type"]):
-        super().__init__(element,isClosing,isAddAttrs,attributes)
-        self._addAttrValue("type",typ)
-        self.addContent(text)
+        super().__init__(element,is_closing,is_add_attrs,attributes)
+        self._add_attr_value("type",typ)
+        self._add_attr_value("placeholder",placeholder)
+class _Button_element(Core_element):             
+    def __init__(self,typ="",text="Button",element="button", is_closing=True,is_add_attrs=True,attributes=["class","style","type"]):
+        super().__init__(element,is_closing,is_add_attrs,attributes)
+        self._add_attr_value("type",typ)
+        self.add_content(text)
 
-class _HeaderElement(CoreElement):             
-    def __init__(self,element="header", isClosing=True,isAddAttrs=True,attributes=["class","style"]):
-        super().__init__(element,isClosing,isAddAttrs,attributes)
+class _Header_element(Core_element):             
+    def __init__(self,element="header", is_closing=True,is_add_attrs=True,attributes=["class","style"]):
+        super().__init__(element,is_closing,is_add_attrs,attributes)
 
-class _InputTextElement(CoreElement):             
-    def __init__(self,placeholder="Placeholder",required=False,element="textarea", isClosing=True,isAddAttrs=True,attributes=["class","style","placeholder"]):
+class _Input_text_area(Core_element):             
+    def __init__(self,placeholder="Placeholder",required=False,element="textarea", is_closing=True,is_add_attrs=True,attributes=["class","style","placeholder"]):
         if required:
             attributes.append("required")
-        super().__init__(element,isClosing,isAddAttrs,attributes)
-        self._addAttrValue("placeholder",placeholder)
-class _HeaderTextElement(CoreElement):
-    def __init__(self,level=1,text="", element="h",isClosing=True,isAddAttrs=True,attributes=["class","style"]):
+        super().__init__(element,is_closing,is_add_attrs,attributes)
+        self._add_attr_value("placeholder",placeholder)
+class _Header_text_element(Core_element):
+    def __init__(self,level=1,text="", element="h",is_closing=True,is_add_attrs=True,attributes=["class","style"]):
         element = element+str(level)
-        super().__init__(element,isClosing,isAddAttrs,attributes)
+        super().__init__(element,is_closing,is_add_attrs,attributes)
         if text:
             self.text = text
-            self.addContent(self.text)
+            self.add_content(self.text)
 
-class _HorizontalLine(CoreElement):
-    def __init__(self,element="hr",isClosing=False,isAddAttrs=False,attributes=[]):
-        super().__init__(element,isClosing,isAddAttrs,attributes)
+class _Horizontal_line_element(Core_element):
+    def __init__(self,element="hr",is_closing=False,is_add_attrs=False,attributes=[]):
+        super().__init__(element,is_closing,is_add_attrs,attributes)
 
-class _ArticleElement(CoreElement):
-    def __init__(self,element="article",isClosing=True,isAddAttrs=True,attributes=["class","style"]):
-        super().__init__(element,isClosing,isAddAttrs,attributes)
+class _Article_element(Core_element):
+    def __init__(self,element="article",is_closing=True,is_add_attrs=True,attributes=["class","style"]):
+        super().__init__(element,is_closing,is_add_attrs,attributes)
 
-class _FormatedTextElement(CoreElement):
-    def __init__(self,element="pre",isClosing=True,isAddAttrs=True,attributes=["class","style"]):
-        super().__init__(element,isClosing,isAddAttrs,attributes)
-class _CodeElement(CoreElement):
-    def __init__(self,element="code",isClosing=True,isAddAttrs=True,attributes=["class","style"]):
-        super().__init__(element,isClosing,isAddAttrs,attributes)
+class _Formated_text_element(Core_element):
+    def __init__(self,element="pre",is_closing=True,is_add_attrs=True,attributes=["class","style"]):
+        super().__init__(element,is_closing,is_add_attrs,attributes)
+class _Code_element(Core_element):
+    def __init__(self,element="code",is_closing=True,is_add_attrs=True,attributes=["class","style"]):
+        super().__init__(element,is_closing,is_add_attrs,attributes)
 
 
-_TEST = (_TextElement,_ParagraphElement,_MenuElement,_NavigationElement,_UnnumberedListElement,_NumberedListElement,_InListElement,_LinkElement,_ImageElement,_BlockElement,_SectionElement,_AsideElement,_FooterElement,_FormElement,_InputElement,_ButtonElement,_HeaderElement,_InputTextElement, _HeaderTextElement,_HorizontalLine,_FormatedTextElement,_CodeElement)
+_TEST = (_Text_element,_Paragraph_element,_Menu_element,_Navigation_element,_Unnumbered_list_element,_Numbered_list_element,_In_list_element,_Link_element,_Image_element,_Block_element,_Section_element,_Aside_element,_Footer_element,_Form_element,_Input_element,_Button_element,_Header_element,_Input_text_area, _Header_text_element,_Horizontal_line_element,_Formated_text_element,_Code_element,_Article_element)
