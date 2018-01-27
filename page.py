@@ -150,7 +150,7 @@ def objectives(request):
         page.add_element(menu,pre_alpha_objectives,alpha_objectives,beta_objectives,footer)#add elements on it
         return page#And return to user
         
-@serve("/<any>")#This is very interesting part. If user send some request that hasn't been defined explicity you can handle it here. Patterns can be different "/<any>/page/<any>" "/123/<any>/Front-pyTheBest/<any>"
+@serve("/&ltany&gt")#This is very interesting part. If user send some request that hasn't been defined explicity you can handle it here. Patterns can be different "/<any>/page/<any>" "/123/<any>/Front-pyTheBest/<any>"
     def anypage(request):
         if request.method == "GET":
             page = Page("%s" % request.path[1:],*page_params) 
@@ -195,8 +195,8 @@ def anypage(request):
 
 run_app()#Then you can run app. By the default it will be on localhost:8000/
 #You can change addres in port by writing run_app(address=192.3.3.245,port=2000) for example
-#To tun the app, you have to open the terminal in the folder where sample.py is stored and type in your terminal:
-#python sample.py 
+#To tun the app, you have to open the terminal in the folder where page.py is stored and type in your terminal:
+#python page.py 
 #and you'll launch the copy of the webiste if you haven't changed anything
 #Very important to create your own files ONLY where sample.py is stored
 #If it'll be necessary I can make video guides :)

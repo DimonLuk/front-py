@@ -45,50 +45,43 @@ class Core_meta(type):
     It's because simple '%s' usage is not comfortable
     """
     def __new__(cls,name,bases,dct):
-        dct["_replace"] = _replace()
-        dct["_clean"] = _clean()
+        dct["_replace"] = _replace
+        dct["_clean"] = _clean
         dct["_generate_trigger"] = _generate_trigger
         dct["_generate_target"] = _generate_target
         return super(Core_meta,cls).__new__(cls,name,bases,dct)
 
-class _replace:
+def _replace(self,it,content,index):
     """
-    This class presents special replacing method which is something like '%s' but more specific
+    'it' object that contains 'template' field where 'content' will be inserted in place of replacement expression which index is equals to 'index'
     """
-    def __call__(self,it,content,index):
-        """
-        'it' object that contains 'template' field where 'content' will be inserted in place of replacement expression which index is equals to 'index'
-        """
-        toRm = 0 #Position where the content to be inserted
-        count = 0 #Shows which replacement expression has been found
-        for i in range(len(it._template)):
-            if it._template[i-2]=="|" and it._template[i-1] == "|" and it._template[i]=="|":#Finding replacment expr
-                toRm = i-2
-                if count == index:#If it's the required expression stop
-                    break
-                else:
-                    count = count + 1
-        if toRm != 0:#If we found sth
-            it._template = it._template[:toRm] + content + "|||" + it._template[toRm+3:]
-class _clean:
+    toRm = 0 #Position where the content to be inserted
+    count = 0 #Shows which replacement expression has been found
+    for i in range(len(it._template)):
+        if it._template[i-2]=="|" and it._template[i-1] == "|" and it._template[i]=="|":#Finding replacment expr
+            toRm = i-2
+            if count == index:#If it's the required expression stop
+                break
+            else:
+                count = count + 1
+    if toRm != 0:#If we found sth
+        it._template = it._template[:toRm] + content + "|||" + it._template[toRm+3:]
+
+def _clean(self,it,index):
     """
-    This class presents special cleaning method because replacement method leaves junk which is '|||'.
+    'it' is object that contains 'template' field and 'index' is the index of replacement expression to be removed
     """
-    def __call__(self,it,index):
-        """
-        'it' is object that contains 'template' field and 'index' is the index of replacement expression to be removed
-        """
-        toRm = 0#Position in the 'template' where the replacement expremession to be removed
-        count = 0#Shows current expression
-        for i in range(len(it._template)): 
-            if it._template[i-2] == "|" and it._template[i-1] == "|" and it._template[i]=="|":#Found some expression
-                toRm = i-2#Remeber its position
-                if count == index:#If it's the one is required
-                    break
-                else:
-                    count = count +1
-        if toRm != 0:#If sth has been found
-            it._template = it._template[:toRm] + it._template[toRm+3:]
+    toRm = 0#Position in the 'template' where the replacement expremession to be removed
+    count = 0#Shows current expression
+    for i in range(len(it._template)): 
+        if it._template[i-2] == "|" and it._template[i-1] == "|" and it._template[i]=="|":#Found some expression
+            toRm = i-2#Remeber its position
+            if count == index:#If it's the one is required
+                break
+            else:
+                count = count +1
+    if toRm != 0:#If sth has been found
+        it._template = it._template[:toRm] + it._template[toRm+3:]
 
 def _generate_trigger(self):
     """
