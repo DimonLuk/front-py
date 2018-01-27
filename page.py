@@ -17,7 +17,7 @@ brandText = Text() #Wrapping object that will be used below
 brandText.color = brandColor #Some objects can be cinfigured in this way. To be honest all objects will have opportunity to be configured in such way but a bit later
 pageParams = tuple(["utf-8",{"background":backgroundColor}]) #Some meta information about page. Encoding and background color.
 #But you can set any background settings you want, using css properties
-menu = InlineMenu({"background":"black"},[{"Home":"/"}, {"Objectives":"/objectives"},{"User guide":"/userGuide"},{"Tester guide":"/testerGuide"},{"Developer guide":"/developerGuide"}],"white",BrandText("Front-py",brandColor)) #This is menu.
+menu = InlineMenu({"background":"black"},[{"Home":"/"},{"Git":"https://github.com/DimonLuk/front-py"},{"Documentation":"https://github.com/DimonLuk/front-py/wiki"}, {"Objectives":"/objectives"},{"User guide":"/userGuide"},{"Tester guide":"/testerGuide"},{"Developer guide":"/developerGuide"}],"white",BrandText("Front-py",brandColor)) #This is menu.
 foot = Text("&copy DimonLuk") #Content you want to be displayed can be passed as the last argument of the constructor
 foot.position = "center"#Another settings
 foot.color = "white"
@@ -172,7 +172,7 @@ runApp()#Then you can run app. By the default it will be on localhost:8000/
 def testerGuide(request):
     if request.method == "GET":
         guide = RowArticles()
-        guide(text="I don't think that this project is so big to write very big instruction here. Just send to me screenshot where I can see the error or fix it by yourself. My address is %s" % Link("mailto:lds4ever2000@gmail.com","lds4ever2000@gmail.com"))
+        guide(text="I don't think that this project is so big to write very big instruction here. But I can give some advices. Try to create your own website with classes are presented in frontpy module. If you have any troubles, make screenshot of error, write some description and send this to me or try to fix it by yourself but at first read %s. My address is %s. Also you can try to create your own user-friendly classes but it's about Developer guide." % (Link("/developerGuide", "this guide"),Link("mailto:lds4ever2000@gmail.com","lds4ever2000@gmail.com")))
         page = Page("Tester Guide",*pageParams)
         page.addElement(menu,guide,footer)
         return page
@@ -182,6 +182,7 @@ def testerGuide(request):
     if request.method == "GET":
         guide = RowArticles()
         guide("Developer codex :)",NumberedList({},"No matter how it's difficult to create class, the only matter is how simple in use this class","Each class has to balance between simplicity and customizability","Each class has to redefine (if necessary) wrapping syntax","Almost every argument of any constructor or any method has to be predefined by author","But none of these rules are not aimed to reduce your creativity)))"))
+        guide(text="More information you can find %s" % Link("https://github.com/DimonLuk/front-py/wiki","here"))
         page = Page("Developer Guide",*pageParams)
         page.addElement(menu,guide,footer)
         return page
