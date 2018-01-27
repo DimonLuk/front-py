@@ -204,13 +204,12 @@ class InlineMenu(e._BlockElement):
         for i in self.links:
             li = e._InListElement()
             li._addClass("nav-item","active")
-
-            href = e._LinkElement(self.links[i])
-            href.addContent(i)
-            href._addClass("nav-link")
-            href._addStyle({"color":self.linksColor})
-
-            li.addContent(href)
+            for j in i:
+                href = e._LinkElement(i[j])
+                href.addContent(j)
+                href._addClass("nav-link")
+                href._addStyle({"color":self.linksColor})
+                li.addContent(href)
 
             self.linksList.addContent(li)
     def _render(self):
@@ -308,7 +307,7 @@ class Article(e._ArticleElement):
 
             self.header.addContent(self.h)
         if self.text:
-            self.paragraph.addContent(paragraph)
+            self.paragraph.addContent(self.text)
     def addContent(self,*content):
         self.checker = True
         self.paragraph.addContent(*content)
@@ -372,6 +371,7 @@ class RowArticles(SectionRow):
     def _render(self):
         self.addContent(*self.articles)
         super()._render()
+        print(self._template)
     def __call__(self,headerText="",text="",footer=""):
         self.addArticle(headerText=headerText,text=text,footer=footer,saveFormat=self.saveFormat,isCode=self.isCode,background=self.articlesBackground)
         return self

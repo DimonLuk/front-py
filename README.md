@@ -1,1 +1,1 @@
-To read about Front-py please visit https://github.com
+To read about Front-py please visit http://front-py.ga
