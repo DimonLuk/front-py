@@ -195,8 +195,8 @@ def anypage(request):
 
 run_app()#Then you can run app. By the default it will be on localhost:8000/
 #You can change addres in port by writing run_app(address=192.3.3.245,port=2000) for example
-#To tun the app, you have to open the terminal in the folder where sample.py is stored and type in your terminal:
-#python sample.py 
+#To tun the app, you have to open the terminal in the folder where page.py is stored and type in your terminal:
+#python page.py 
 #and you'll launch the copy of the webiste if you haven't changed anything
 #Very important to create your own files ONLY where sample.py is stored
 #If it'll be necessary I can make video guides :)
