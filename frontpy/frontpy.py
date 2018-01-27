@@ -27,9 +27,9 @@ import sys
 sys.path.append(sys.path[0]+"/frontpy")
 sys.path.append(sys.path[0]+"/frontpy/core")
 import elements as e
-from core.core import CoreElement,serve,runApp,Page
+from core.core import Core_element,serve,run_app,Page
 
-class Text(e._TextElement):
+class Text(e._Text_element):
     """
     Simple text
     The first argument of constructor is text which will be shown it's nit required
@@ -47,16 +47,16 @@ class Text(e._TextElement):
     
     def __setattr__(self,name,value):
         if name == "color":
-            self._addStyle({"color":value})
+            self._add_style({"color":value})
         elif name == "position" and value == "center":
-            self._addClass("mx-auto")#To place in center in .container > .row
-            self._addStyle({"text-align":value})#Sometimes it's useful
+            self._add_class("mx-auto")#To place in center in .container > .row
+            self._add_style({"text-align":value})#Sometimes it's useful
         else:
             self.__dict__[name] = value
     def addStyle(self,style):
-        self._addStyle(self,style)
+        self._add_style(self,style)
 
-class Paragraph(e._ParagraphElement):
+class Paragraph(e._Paragraph_element):
     """
     Simple paragraph
     The first argument is text which is not required
@@ -64,99 +64,99 @@ class Paragraph(e._ParagraphElement):
     def __init__(self,text=""):
         super().__init__(text=text)
 
-class Image(e._LinkElement):
+class Image(e._Link_element):
     """
     Simple responsive image
     """
     def __init__(self,href,alt="picture",columns=6):
         super().__init__(href)
-        self.image = e._ImageElement(src=href,alt=alt)
-        self.image._addStyle({"width":"100%"})
-        self._addClass("col-%s"%str(columns))
-        self.addContent(self.image)
-class HeaderText(e._HeaderTextElement):
+        self.image = e._Image_element(src=href,alt=alt)
+        self.image._add_style({"width":"100%"})
+        self._add_class("col-%s"%str(columns))
+        self.add_content(self.image)
+class Header_text(e._Header_text_element):
     def __init__(self,level=1,text=""):
         super().__init__(level=level,text=text)
 
-class Header(e._HeaderElement):
+class Header(e._Header_element):
     def __init__(self,level=1,text=""):
         super().__init__()
-        self.h = HeaderText(level,text)
+        self.h = Header_text(level,text)
     def _render(self):
-        self.addContent(self.h)
+        self.add_content(self.h)
         super()._render()
         
 
-class BlockContainer(e._BlockElement):
+class Block_container(e._Block_element):
     """
     Is used to build complex structures, sometimes can be useful for user, so no '_' in the begining of name
     """
     def __init__(self):
         super().__init__()
-        self._addClass("container")
+        self._add_class("container")
 
-class SectionContainer(e._SectionElement):
+class Section_container(e._Section_element):
     """
     The same as block but section, only semantic difference
     """
     def __init__(self):
         super().__init__()
-        self._addClass("container")
+        self._add_class("container")
 
-class BlockRow(e._BlockElement):
+class Block_row(e._Block_element):
     """
     Simple row
     """
     def __init__(self,*content):
         super().__init__()
-        self._addClass("row")
-        self.addContent(*content)
+        self._add_class("row")
+        self.add_content(*content)
 
-class ContainerRow(BlockContainer):
+class Container_row(Block_container):
     """
-    Creates row inside a BlockContainer
+    Creates row inside a Block_container
     """
     def __init__(self,*content):
         super().__init__()
-        self.row = BlockRow()
+        self.row = Block_row()
         if content:
-            self.addContent(*content)
-    def addContent(self,*content):
-        self.row.addContent(*content)
+            self.add_content(*content)
+    def add_content(self,*content):
+        self.row.add_content(*content)
     def _render(self):
-        super().addContent(self.row)
+        super().add_content(self.row)
         super()._render()
 
-class SectionRow(SectionContainer):
+class Section_row(Section_container):
     """
-    Creates a row inside SectionContainer
+    Creates a row inside Section_container
     """
     def __init__(self):
         super().__init__()
-        self.row = BlockRow()
-    def addContent(self,*content):
-        self.row.addContent(*content)
+        self.row = Block_row()
+    def add_content(self,*content):
+        self.row.add_content(*content)
     def _render(self):
-        super().addContent(self.row)
+        super().add_content(self.row)
         super()._render()
 
-class Link(e._LinkElement):
+class Link(e._Link_element):
     def __init__(self,href,text):
         super().__init__(href=href)
-        self.addContent(text)
+        self.add_content(text)
 
-class InlineMenu(e._BlockElement):
+class Inline_menu(e._Block_element):
     """
     Simple inline bootstrap menu
 
     The first argument is json represantion of background like {"background":"<some color here>"}
     The second is json like links {"Home":"/","Any page":"/any"}
     The third is color of links
-    The fourth is BrandText or BrandImage object
+    The fourth is Brand_text or Brand_image object
 
     If you call this object you'll get deepcopy of it
     """
-    def __init__(self, background, links, linksColor,brand):
+    def __init__(self, background, links, links_color,brand):
         """
         It has been used a lot of bootstrap features here
         Nothing to describe.
@@ -164,88 +164,88 @@ class InlineMenu(e._BlockElement):
         """
         self.background = background
         self.links = links
-        self.linksColor = linksColor
+        self.links_color = links_color
         self.brand = brand
         super().__init__()
-        self._addStyle(background)
+        self._add_style(background)
 
-        self.header = e._HeaderElement()
-        self.header._addClass("container")
-        self.header._addStyle(self.background)
+        self.header = e._Header_element()
+        self.header._add_class("container")
+        self.header._add_style(self.background)
         
         
-        self.menu = e._MenuElement()
-        self.menu._addClass("row")
+        self.menu = e._Menu_element()
+        self.menu._add_class("row")
 
-        self.navigation = e._NavigationElement()
-        self.navigation._addClass("navbar","navbar-toggleable-md","navbar-inverse","bg-faded","col-12","mx-auto")
-        self.navigation._addStyle(self.background)
+        self.navigation = e._Navigation_element()
+        self.navigation._add_class("navbar","navbar-toggleable-md","navbar-inverse","bg-faded","col-12","mx-auto")
+        self.navigation._add_style(self.background)
 
-        self.collapseButton = e._ButtonElement(text="",attributes=["class","style","type","data-toggle","data-target","aria-controls","aria-expanded","aria-label"])
-        self.collapseButton._addClass("navbar-toggler","navbar-toggler-right")
-        self.collapseButton._addAttrValue("type","button")
-        self.collapseButton._addAttrValue("data-toggle","collapse")
-        self.collapseButton._addAttrValue("data-target",".toggleTarget")
-        self.collapseButton._addAttrValue("aria-controls","toggleTarget")
-        self.collapseButton._addAttrValue("aria-expanded","false")
-        self.collapseButton._addAttrValue("aria-label","Toggle navigation")
+        self.collapse_button = e._Button_element(text="",attributes=["class","style","type","data-toggle","data-target","aria-controls","aria-expanded","aria-label"])
+        self.collapse_button._add_class("navbar-toggler","navbar-toggler-right")
+        self.collapse_button._add_attr_value("type","button")
+        self.collapse_button._add_attr_value("data-toggle","collapse")
+        self.collapse_button._add_attr_value("data-target",".toggleTarget")
+        self.collapse_button._add_attr_value("aria-controls","toggleTarget")
+        self.collapse_button._add_attr_value("aria-expanded","false")
+        self.collapse_button._add_attr_value("aria-label","Toggle navigation")
 
-        self.toggleIcon = e._TextElement()
-        self.toggleIcon._addClass("navbar-toggler-icon")
-        self._addStyle({"color":"white"})
-        self.collapseButton.addContent(self.toggleIcon)
+        self.toggle_icon = e._Text_element()
+        self.toggle_icon._add_class("navbar-toggler-icon")
+        self._add_style({"color":"white"})
+        self.collapse_button.add_content(self.toggle_icon)
         
-        self.navBlock = e._BlockElement()
-        self.navBlock._addClass("collapse","navbar-collapse","toggleTarget")
+        self.nav_block = e._Block_element()
+        self.nav_block._add_class("collapse","navbar-collapse","toggleTarget")
 
-        self.linksList = e._UnnumberedListElement()
-        self.linksList._addClass("navbar-nav","mr-left")
+        self.links_list = e._Unnumbered_list_element()
+        self.links_list._add_class("navbar-nav","mr-left")
 
         for i in self.links:
-            li = e._InListElement()
-            li._addClass("nav-item","active")
+            li = e._In_list_element()
+            li._add_class("nav-item","active")
             for j in i:
-                href = e._LinkElement(i[j])
-                href.addContent(j)
-                href._addClass("nav-link")
-                href._addStyle({"color":self.linksColor})
-                li.addContent(href)
+                href = e._Link_element(i[j])
+                href.add_content(j)
+                href._add_class("nav-link")
+                href._add_style({"color":self.links_color})
+                li.add_content(href)
 
-            self.linksList.addContent(li)
+            self.links_list.add_content(li)
     def _render(self):
-        self.navBlock.addContent(self.linksList)
-        self.navigation.addContent(self.collapseButton,self.brand,self.navBlock)
-        self.menu.addContent(self.navigation)
-        self.header.addContent(self.menu)
-        self.addContent(self.header)
+        self.nav_block.add_content(self.links_list)
+        self.navigation.add_content(self.collapse_button,self.brand,self.nav_block)
+        self.menu.add_content(self.navigation)
+        self.header.add_content(self.menu)
+        self.add_content(self.header)
         super()._render()
     
-    def _addLink(self,links,color=""):
+    def _add_link(self,links,color=""):
         for link in links:
-            li = e._InListElement()
-            li._addClass("nav-item","active")
+            li = e._In_list_element()
+            li._add_class("nav-item","active")
 
-            href = e._LinkElement(links[link])
-            href.addContent(link)
-            href._addClass("nav-link")
+            href = e._Link_element(links[link])
+            href.add_content(link)
+            href._add_class("nav-link")
             if color:
-                href._addStyle({"color":color})
+                href._add_style({"color":color})
             else:
-                href._addStyle({"color":self.linksColor})
+                href._add_style({"color":self.links_color})
             
-            li.addContent(href)
-            self.linksList.addContent(li)
+            li.add_content(href)
+            self.links_list.add_content(li)
     def __call__(self,links={},color=""):
         import copy
         cop = copy.deepcopy(self)
         if links:
-            cop._addLink(links,color)
+            cop._add_link(links,color)
         return cop
     
-    def addLinks(self,links,color=""):
+    def add_links(self,links,color=""):
         return self(links,color)
         
-class BrandText(e._LinkElement):
+class Brand_text(e._Link_element):
     """
     Company name or other brand short and nice info
 
@@ -256,12 +256,12 @@ class BrandText(e._LinkElement):
         super().__init__(href="")
         self.color = color
         self.text = text
-        self._addClass("navbar-brand")
-        self._addStyle({"color":self.color})
-        self._addAttrValue("href","#")
-        self.addContent(self.text)
+        self._add_class("navbar-brand")
+        self._add_style({"color":self.color})
+        self._add_attr_value("href","#")
+        self.add_content(self.text)
 
-class BrandImage(BrandText):
+class Brand_image(Brand_text):
     """
     Company logo
     The firts arg is name of the picture which is inside the media folder of the project
@@ -269,65 +269,65 @@ class BrandImage(BrandText):
     """
     def __init__(self,imageName,alt):
         super().__init__()
-        self.img = e._ImageElement(imageName,alt)
-        self.addContent(self.img)
+        self.img = e._Image_element(imageName,alt)
+        self.add_content(self.img)
 
         
 ###########################################################################################
 #THE BLOCK BELOW HAS BEEN CREATED TOO FAST SO IT'S A LITLE RANDOM
-###########################################################################################
+##########################################################################################
 
-class Article(e._ArticleElement):
-    def __init__(self,headerText="",headersLevel=1,paragraph="",footer="",columnNum=4,responsive=True,saveFormat=False,isCode=False,lang="",background={}):
+class Article(e._Article_element):
+    def __init__(self,header_text="",headers_level=1,paragraph="",footer="",column_num=4,responsive=True,save_format=False,is_code=False,lang="",background={}):
         super().__init__()
         self.checker = False
-        self.saveFormat = saveFormat
-        self.isCode = isCode
-        if self.saveFormat and self.isCode:
-            self.paragraph = e._CodeElement()
-            self.paragraph._addClass(lang)
+        self.save_format = save_format
+        self.is_code = is_code
+        if self.save_format and self.is_code:
+            self.paragraph = e._Code_element()
+            self.paragraph._add_class(lang)
         else:
-            self.paragraph = e._ParagraphElement()
+            self.paragraph = e._Paragraph_element()
         if background:
-            self.paragraph._addStyle(background)
+            self.paragraph._add_style(background)
         self.text = paragraph
-        self.headerText = headerText
+        self.header_text = header_text
         self.footer = footer
-        self.columnNum = columnNum
+        self.column_num = column_num
         self.responsive = responsive
-        self.headersLevel = headersLevel
-        self._addClass("col-lg-%s" % str(columnNum))
+        self.headers_level = headers_level
+        self._add_class("col-lg-%s" % str(column_num))
         if self.responsive:
-            self._addClass("col-12")
-        if self.headerText:
-            self.header = e._HeaderElement()
+            self._add_class("col-12")
+        if self.header_text:
+            self.header = e._Header_element()
 
-            self.h = e._HeaderTextElement(headersLevel)
-            self.h.addContent(headerText)
+            self.h = e._Header_text_element(headers_level)
+            self.h.add_content(header_text)
 
-            self.header.addContent(self.h)
+            self.header.add_content(self.h)
         if self.text:
-            self.paragraph.addContent(self.text)
-    def addContent(self,*content):
+            self.paragraph.add_content(self.text)
+    def add_content(self,*content):
         self.checker = True
-        self.paragraph.addContent(*content)
+        self.paragraph.add_content(*content)
     def _render(self):
-        if self.saveFormat and self.isCode:
-            tmp = e._FormatedTextElement()
-            tmp.addContent(self.paragraph)
+        if self.save_format and self.is_code:
+            tmp = e._Formated_text_element()
+            tmp.add_content(self.paragraph)
             self.paragraph = tmp
-        if self.headerText:
-            super().addContent(self.header)
+        if self.header_text:
+            super().add_content(self.header)
         if self.text or self.checker:
-            super().addContent(self.paragraph)
+            super().add_content(self.paragraph)
         if self.footer:
-            super().addContent(self.footer)
+            super().add_content(self.footer)
         super()._render()
-    def __call__(self,headerText="",text="",footer=""):
-        obj = Article(headerText=headerText,headersLevel=self.headersLevel,paragraph=text,footer=footer,columnNum=self.columnNum,responsive=self.responsive)
+    def __call__(self,header_text="",text="",footer=""):
+        obj = Article(header_text=header_text,headers_level=self.headers_level,paragraph=text,footer=footer,column_num=self.column_num,responsive=self.responsive)
         return obj
 
-class RowArticles(SectionRow):
+class Row_articles(Section_row):
     """
     Creates a lot of articles. Each article in one single row
     
@@ -336,50 +336,49 @@ class RowArticles(SectionRow):
 
     Use 'config' method to set your preferences for all articles
     """
-    def __init__(self,sectionTitle="",position="center",horizontalDistance="",horizontalLine=False,headersLevel=2,saveFormat=False,isCode=False,lang="",articlesBackground={},*articles):
+    def __init__(self,section_title="",position="center",horizontal_distance="",horizontal_line=False,headers_level=2,save_format=False,is_code=False,lang="",articles_background={},*articles):
         super().__init__()
-        self.saveFormat = saveFormat
-        self.isCode = isCode
-        self.articlesBackground = articlesBackground
+        self.save_format = save_format
+        self.is_code = is_code
+        self.articles_background = articles_background
         self.articles = [] #Array with all articles
-        if sectionTitle:
-            self.sectionTitle = sectionTitle
-            header = e._HeaderElement()
+        if section_title:
+            self.section_title = section_title
+            header = e._Header_element()
             if position == "center":
-                header._addClass("mx-auto")
-            h = e._HeaderTextElement(1,self.sectionTitle)
-            header.addContent(h)
-            self.addContent(header)
-        self.horizontalLine = horizontalLine
-        self.horizontalDistance = horizontalDistance
-        self.headersLevel = headersLevel
+                header._add_class("mx-auto")
+            h = e._Header_text_element(1,self.section_title)
+            header.add_content(h)
+            self.add_content(header)
+        self.horizontal_line = horizontal_line
+        self.horizontal_distance = horizontal_distance
+        self.headers_level = headers_level
         if articles:
             for i in articles:
                 self.articles.append(i)
-    def addArticle(self,headerText="",text="",footer="",saveFormat=False,isCode=False,lang="",background={}):
+    def add_article(self,header_text="",text="",footer="",save_format=False,is_code=False,lang="",background={}):
         """
         Adds single artile with header, text, and footer. All arguments are not required and can be objects
         """
-        article = Article(headerText=headerText,paragraph=text,footer=footer,headersLevel=self.headersLevel,columnNum=12,saveFormat=saveFormat,isCode=isCode,lang=lang,background=background)
-        if self.horizontalLine:
-            article.addContent(e._HorizontalLine())
+        article = Article(header_text=header_text,paragraph=text,footer=footer,headers_level=self.headers_level,column_num=12,save_format=save_format,is_code=is_code,lang=lang,background=background)
+        if self.horizontal_line:
+            article.add_content(e._Horizontal_line_element())
         
-        if self.horizontalDistance:
-            article._addStyle({"margin-top":self.horizontalDistance})
+        if self.horizontal_distance:
+            article._add_style({"margin-top":self.horizontal_distance})
         
         self.articles.append(article)
     def _render(self):
-        self.addContent(*self.articles)
+        self.add_content(*self.articles)
         super()._render()
-        print(self._template)
-    def __call__(self,headerText="",text="",footer=""):
-        self.addArticle(headerText=headerText,text=text,footer=footer,saveFormat=self.saveFormat,isCode=self.isCode,background=self.articlesBackground)
+    def __call__(self,header_text="",text="",footer=""):
+        self.add_article(header_text=header_text,text=text,footer=footer,save_format=self.save_format,is_code=self.is_code,background=self.articles_background)
         return self
     def __iter__(self):
         for i in self.articles:
             yield i
 
-class Footer(e._FooterElement):
+class Footer(e._Footer_element):
     """
     Cretes footer
     The first argument is content to be displayed
@@ -387,73 +386,73 @@ class Footer(e._FooterElement):
     """
     def __init__(self,content="",height=30):
         super().__init__()
-        self._addClass("footer")
-        self.row = ContainerRow()
+        self._add_class("footer")
+        self.row = Container_row()
 
         if content:
-            self.row.addContent(content)
+            self.row.add_content(content)
         self.height = height
-        self._addStyle({"padding-top":"%spx"% (self.height/2),"padding-bottom":"%spx"% (self.height/2)})
+        self._add_style({"padding-top":"%spx"% (self.height/2),"padding-bottom":"%spx"% (self.height/2)})
 
-    def addContent(self,*content):
-        self.row.addContent(*content)
+    def add_content(self,*content):
+        self.row.add_content(*content)
     def _render(self):
-        super().addContent(self.row)
+        super().add_content(self.row)
         super()._render()
     def __setattr__(self,name,value):
-        if name == "backgroundColor":
-            self._addStyle({"background":value})
+        if name == "background_color":
+            self._add_style({"background":value})
         else:
             self.__dict__[name] = value
 
 
-class NumberedList(e._NumberedListElement):
-    def __init__(self,contentStyle={},*content):
+class Numbered_list(e._Numbered_list_element):
+    def __init__(self,content_style={},*content):
         super().__init__()
-        self.li = e._InListElement()
-        self.li._addStyle(contentStyle)
+        self.li = e._In_list_element()
+        self.li._add_style(content_style)
         if content:
             for i in content:
-                self.addContent(self.li(i))
-    def addElements(self,*elements):
+                self.add_content(self.li(i))
+    def add_elements(self,*elements):
         for i in elements:
-            self.addContent(self.li(i))
+            self.add_content(self.li(i))
     def __call__(self,*elements):
         import copy
         cop = copy.deepcopy(self)
-        cop.addElements(*elements)
+        cop.add_elements(*elements)
         cop._render()
         return cop._template
 
-class ColumnArticles(SectionContainer):
-    def __init__(self,header="",footer="",headersLevel=1,position="",verticalDistance="30px",horizontalLine=False,*articles):
+class Column_articles(Section_container):
+    def __init__(self,header="",footer="",headers_level=1,position="",vertical_distance="30px",horizontal_line=False,*articles):
         super().__init__()
         self.header = header
-        self.headersLevel = headersLevel
-        self.line = horizontalLine
+        self.headers_level = headers_level
+        self.line = horizontal_line
         self.footer = footer
-        self.rowHeader = BlockRow()
+        self.row_header = Block_row()
         
-        self.head = Header(self.headersLevel,header)
+        self.head = Header(self.headers_level,header)
         if position == "center":
-            self.head._addClass("mx-auto")
-        self.rowHeader.addContent(self.head)
-        if verticalDistance:
-            self.rowHeader._addStyle({"margin-bottom":verticalDistance})
-        super().addContent(self.rowHeader)
+            self.head._add_class("mx-auto")
+        self.row_header.add_content(self.head)
+        if vertical_distance:
+            self.row_header._add_style({"margin-bottom":vertical_distance})
+        super().add_content(self.row_header)
         
-        self.rowArticles = BlockRow()
+        self.rowArticles = Block_row()
         if articles:
-            self.rowArticles.addContent(*articles)
-    def addContent(self,*content):
-        self.rowArticles.addContent(*content)
+            self.rowArticles.add_content(*articles)
+    def add_content(self,*content):
+        self.rowArticles.add_content(*content)
     def _render(self):
-            super().addContent(self.rowArticles)
+            super().add_content(self.rowArticles)
             if self.footer:
-                super().addContent(self.footer)
+                super().add_content(self.footer)
             if self.line:
-                super().addContent(e._HorizontalLine())
+                super().add_content(e._Horizontal_line_element())
             super()._render()
     def __call__(self,*articles):
         for i in articles:
-            self.addContent(i)
+            self.add_content(i)
