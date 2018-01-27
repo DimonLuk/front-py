@@ -17,7 +17,7 @@ brandText = Text() #Wrapping object that will be used below
 brandText.color = brandColor #Some objects can be cinfigured in this way. To be honest all objects will have opportunity to be configured in such way but a bit later
 pageParams = tuple(["utf-8",{"background":backgroundColor}]) #Some meta information about page. Encoding and background color.
 #But you can set any background settings you want, using css properties
-menu = InlineMenu({"background":"black"},{"Home":"/", "Objectives":"/objectives","User guide":"/userGuide","Tester guide":"/testerGuide","Developer guide":"/developerGuide"},"white",BrandText("Front-py",brandColor)) #This is menu.
+menu = InlineMenu({"background":"black"},[{"Home":"/"}, {"Objectives":"/objectives"},{"User guide":"/userGuide"},{"Tester guide":"/testerGuide"},{"Developer guide":"/developerGuide"}],"white",BrandText("Front-py",brandColor)) #This is menu.
 foot = Text("&copy DimonLuk") #Content you want to be displayed can be passed as the last argument of the constructor
 foot.position = "center"#Another settings
 foot.color = "white"
@@ -192,7 +192,7 @@ def anypage(request):
     page.addElement(menu,footer)
     return page
 
-runApp(address="192.168.31.95")#Then you can run app. By the default it will be on localhost:8000/
+runApp()#Then you can run app. By the default it will be on localhost:8000/
 #You can change addres in port by writing runApp(address=192.3.3.245,port=2000) for example
 #To tun the app, you have to open the terminal in the folder where sample.py is stored and type in your terminal:
 #python sample.py 

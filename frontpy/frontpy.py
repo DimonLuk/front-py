@@ -204,13 +204,12 @@ class InlineMenu(e._BlockElement):
         for i in self.links:
             li = e._InListElement()
             li._addClass("nav-item","active")
-
-            href = e._LinkElement(self.links[i])
-            href.addContent(i)
-            href._addClass("nav-link")
-            href._addStyle({"color":self.linksColor})
-
-            li.addContent(href)
+            for j in i:
+                href = e._LinkElement(i[j])
+                href.addContent(j)
+                href._addClass("nav-link")
+                href._addStyle({"color":self.linksColor})
+                li.addContent(href)
 
             self.linksList.addContent(li)
     def _render(self):
