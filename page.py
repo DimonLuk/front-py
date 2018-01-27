@@ -150,7 +150,7 @@ def objectives(request):
         page.add_element(menu,pre_alpha_objectives,alpha_objectives,beta_objectives,footer)#add elements on it
         return page#And return to user
         
-@serve("/<any>")#This is very interesting part. If user send some request that hasn't been defined explicity you can handle it here. Patterns can be different "/<any>/page/<any>" "/123/<any>/Front-pyTheBest/<any>"
+@serve("/&ltany&gt")#This is very interesting part. If user send some request that hasn't been defined explicity you can handle it here. Patterns can be different "/<any>/page/<any>" "/123/<any>/Front-pyTheBest/<any>"
     def anypage(request):
         if request.method == "GET":
             page = Page("%s" % request.path[1:],*page_params) 
