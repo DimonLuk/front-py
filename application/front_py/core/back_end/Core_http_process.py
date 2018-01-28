@@ -50,7 +50,7 @@ class Core_http_process(BaseHTTPRequestHandler):
         self._find = self.path.split(".")#Files in media are sth like this name.extension
         self.request = _request(self.path,"GET")#Create request parametr that can be used by user
         if self._find[-1] in AVALIABLE_FORMATS:
-            with open("static/media%s" % self.path,"rb") as sth:
+            with open("application/static/media%s" % self.path,"rb") as sth:
                 self._response = sth.read()
                 if self._find[-1] == "map":
                     self._send_response("application/json")

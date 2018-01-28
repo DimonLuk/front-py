@@ -52,23 +52,23 @@ under certain conditions; For details see LICENSE.md.\n""")
 @serve("/%s"%BOOTSTRAP_CSS)
 def je3202aea761d3d587dfcfc43c6982565(request):
     #createResponse(request,200,"text/css")
-    with open("static/styles/bootstrap.css","r") as bootstrap:
+    with open("application/static/styles/bootstrap.css","r") as bootstrap:
         return (bootstrap.read(),"text/css")
 
 
 @serve("/%s"%JQUERY_3_2_1_MIN_JS)
 def j234c8514654bb7ed8a60ea905b6f98f0(request):
-    with open("static/scripts/jquery-3.2.1.min.js","r") as jquery:
+    with open("application/static/scripts/jquery-3.2.1.min.js","r") as jquery:
         return(jquery.read(),"script/javascript")
 
 
 @serve("/%s"%BOOTSTRAP_MIN_JS)
 def j13b2a30e265e18a6fd0792cc3fd7a09c(request):
-    with open("static/scripts/bootstrap.min.js","r") as bootstrap:
+    with open("application/static/scripts/bootstrap.min.js","r") as bootstrap:
         return(bootstrap.read(),"script/javascript")
 
 
 @serve("/%s" % SCRIPT_JS)
 def j9a9569e9d73f33740eada95275da7f30(request):
-    with open("static/scripts/script.js","r") as script:
+    with open("application/static/scripts/script.js","r") as script:
         return(script.read(),"script/javascript")
