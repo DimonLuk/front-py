@@ -14,11 +14,5 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
-
-class Section_container(e._Section_element):
-    """
-    The same as block but section, only semantic difference
-    """
-    def __init__(self):
-        super().__init__()
-        self._add_class("container")
+from Block_container import Block_container
+from Section_container import Section_container

@@ -14,7 +14,6 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
-
-from __custom_import__ import prepare_import
-prepare_import()
-
+from Article import Article
+from Column_articles import Column_articles
+from Row_articles import Row_articles

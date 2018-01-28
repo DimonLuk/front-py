@@ -16,6 +16,19 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
 
 from http.server import BaseHTTPRequestHandler
+from constants import *
+from front_end import Page
+def make_name(address):
+    """
+    Make unique name for function from request.path
+    """
+    address = address.split("/")
+    address = "_aa".join(address)
+    return address
+
+
+
+
 
 class Core_http_process(BaseHTTPRequestHandler):
     """

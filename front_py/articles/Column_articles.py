@@ -14,7 +14,10 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
-
+from core import elements as e
+from containers import Section_container
+from rows import Block_row
+from defaults import Header
 class Column_articles(Section_container):
     def __init__(self,header="",footer="",headers_level=1,position="",vertical_distance="30px",horizontal_line=False,*articles):
         super().__init__()

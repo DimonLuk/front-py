@@ -1,8 +1,4 @@
 """
-This is core module of application. It contains all exceptions types, Core_meta and Core_element which is the main feature of the framework
-which makes it possible to build html tags in python objects.
-
-
 Copyright (C) 2018  Dima Lukashov github.com/DimonLuk
     
 This program is free software: you can redistribute it and/or modify

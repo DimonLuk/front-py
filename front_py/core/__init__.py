@@ -15,8 +15,6 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
 import sys
-from __custom_import__ import prepare_import
-prepare_import("front_end","back_end")
 from back_end import *
 from front_end import *
 from exceptions import *

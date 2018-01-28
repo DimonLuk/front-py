@@ -14,6 +14,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
+from core import elements as e
 
 class Article(e._Article_element):
     def __init__(self,header_text="",headers_level=1,paragraph="",footer="",column_num=4,responsive=True,save_format=False,is_code=False,lang="",background={}):

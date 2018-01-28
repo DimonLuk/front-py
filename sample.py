@@ -7,7 +7,7 @@ So, let's start
 It'll be a lot, A LOT of text here :))))))
 """
 #To add your favicon.ico just put it in pages/media/ folder
-from frontpy.frontpy import * #All necessary imports are here, you can watch this file if it's interesting to you to know how it works
+from front_py import * #All necessary imports are here, you can watch this file if it's interesting to you to know how it works
 
 #This block is used to create one theme for all pages
 #It's easier to store this values in variables because changing one thing here will change everything in the website
@@ -89,7 +89,7 @@ So, let's start
 It'll be a lot, A LOT of text here :))))))
 \"\"\"
 #To add your favicon.ico just put it in pages/media/ folder
-from frontpy.frontpy import * #All necessary imports are here, you can watch this file if it's interesting to you to know how it works
+from front_py import * #All necessary imports are here, you can watch this file if it's interesting to you to know how it works
 
 #This block is used to create one theme for all pages
 #It's easier to store this values in variables because changing one thing here will change everything in the website

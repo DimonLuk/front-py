@@ -14,7 +14,8 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
-
+from containers import Section_container
+from Block_row import Block_row
 class Section_row(Section_container):
     """
     Creates a row inside Section_container

@@ -14,3 +14,6 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
+from Block_row import Block_row
+from Container_row import Container_row
+from Section_row import Section_row

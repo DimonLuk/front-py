@@ -14,6 +14,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
+from core import elements as e
 
 class Numbered_list(e._Numbered_list_element):
     def __init__(self,content_style={},*content):

@@ -15,6 +15,8 @@ if __name__ == "__main__":
         import importlib
         app = importlib.import_module(params["source_file"])
         app.run_app(address=params["address"],port=params["port"])
+        #test = importlib.import_module("front_py")
+        #print(test)
     elif sys.argv[1] == "config" and len(sys.argv) == 2:
         import json
         params = {}
