@@ -18,9 +18,16 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
-import sys
-from __custom_import__ import prepare_import
-prepare_import("front_end","back_end")
-from back_end import *
-from front_end import *
-from exceptions import *
+
+debug = False
+def prepare_import():
+    import sys
+    import __custom_import__ as cm
+    cur_dir = (lambda x:"/".join([i for i in x[:-1]]))(cm.__file__.split("/"))
+    up_dir = (lambda x:"/".join([i for i in x[:-1]]))(cur_dir.split("/"))
+    sys.path.append(cur_dir)
+    sys.path.append(up_dir)
+    if debug:
+        print(sys.path)
+if __name__ == "__main__":
+    prepare_import()

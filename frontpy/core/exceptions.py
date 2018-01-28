@@ -18,9 +18,19 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
-import sys
-from __custom_import__ import prepare_import
-prepare_import("front_end","back_end")
-from back_end import *
-from front_end import *
-from exceptions import *
+
+class Invalid_insertion(Exception):
+    def __init__(self,message):
+        super().__init__(message)
+class Empty_web_page(Exception):
+    def __init__(self):
+        super().__init__("You can't leave page empty, try to add some content with add_element method")
+class Unlinked_elements_error(Exception):
+    def __init__(self,message):
+        super().__init__(message)
+class Missing_parameter_error(Exception):
+    def __init__(self,message):
+        super().__init__(message)
+class Unsupported_feature(Exception):
+    def __init__(self,message):
+        super().__init__(message)
