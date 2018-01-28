@@ -18,3 +18,11 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
+class Paragraph(e._Paragraph_element):
+    """
+    Simple paragraph
+    The first argument is text which is not required
+    """
+    def __init__(self,text=""):
+        super().__init__(text=text)
+

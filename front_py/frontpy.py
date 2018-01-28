@@ -29,62 +29,11 @@ sys.path.append(sys.path[0]+"/frontpy/core")
 import elements as e
 from core.core import Core_element,serve,run_app,Page
 
-class Text(e._Text_element):
-    """
-    Simple text
-    The first argument of constructor is text which will be shown it's nit required
-    
-    It can be used as wrapper, you can define some simple styles and use it to wrap text
-    For example:
-    greenText = Text()
-    greenText.color = "green" or greenText.addStyle({"color":"green"})
-    p = Paragraph("Some %s text" % greenText("green"))
-    
-    Or you can use this class in usual way
-    """
-    def __init__(self,text=""):
-        super().__init__(text=text)
-    
-    def __setattr__(self,name,value):
-        if name == "color":
-            self._add_style({"color":value})
-        elif name == "position" and value == "center":
-            self._add_class("mx-auto")#To place in center in .container > .row
-            self._add_style({"text-align":value})#Sometimes it's useful
-        else:
-            self.__dict__[name] = value
-    def addStyle(self,style):
-        self._add_style(self,style)
 
-class Paragraph(e._Paragraph_element):
-    """
-    Simple paragraph
-    The first argument is text which is not required
-    """
-    def __init__(self,text=""):
-        super().__init__(text=text)
 
-class Image(e._Link_element):
-    """
-    Simple responsive image
-    """
-    def __init__(self,href,alt="picture",columns=6):
-        super().__init__(href)
-        self.image = e._Image_element(src=href,alt=alt)
-        self.image._add_style({"width":"100%"})
-        self._add_class("col-%s"%str(columns))
-        self.add_content(self.image)
-class Header_text(e._Header_text_element):
-    def __init__(self,level=1,text=""):
-        super().__init__(level=level,text=text)
 
-class Header(e._Header_element):
-    def __init__(self,level=1,text=""):
-        super().__init__()
-        self.h = Header_text(level,text)
-    def _render(self):
-        self.add_content(self.h)
-        super()._render()
+
+
         
 
 class Block_container(e._Block_element):
@@ -140,10 +89,7 @@ class Section_row(Section_container):
         super().add_content(self.row)
         super()._render()
 
-class Link(e._Link_element):
-    def __init__(self,href,text):
-        super().__init__(href=href)
-        self.add_content(text)
+
 
 class Inline_menu(e._Block_element):
     """

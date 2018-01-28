@@ -18,3 +18,15 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
+
+class Header_text(e._Header_text_element):
+    def __init__(self,level=1,text=""):
+        super().__init__(level=level,text=text)
+
+class Header(e._Header_element):
+    def __init__(self,level=1,text=""):
+        super().__init__()
+        self.h = Header_text(level,text)
+    def _render(self):
+        self.add_content(self.h)
+        super()._render()
