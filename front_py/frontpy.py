@@ -1,8 +1,4 @@
 """
-This module is the main part of the framework where everything is connected.
-Soon, it'll be split up on some modules like containers and etc
-
-
 Copyright (C) 2018  Dima Lukashov github.com/DimonLuk
 
 This program is free software: you can redistribute it and/or modify
