@@ -38,6 +38,8 @@ class Text(e._Text_element):
         elif name == "position" and value == "center":
             self._add_class("mx-auto")#To place in center in .container > .row
             self._add_style({"text-align":value})#Sometimes it's useful
+        elif name == "decor" and value == "crossed":
+            self._add_style({"text-decoration":"line-through"})
         else:
             self.__dict__[name] = value
     def addStyle(self,style):

@@ -15,6 +15,8 @@ background_color = "#dddddd" #Grey color of the pages
 brand_color = "red" #Nice red color of some text
 brand_text = Text() #Wrapping object that will be used below
 brand_text.color = brand_color #Some objects can be cinfigured in this way. To be honest all objects will have opportunity to be configured in such way but a bit later
+crossed_text = Text()
+crossed_text.decor = "crossed"
 page_params = tuple(["utf-8",{"background":background_color}]) #Some meta information about page. Encoding and background color.
 #But you can set any background settings you want, using css properties
 menu = Inline_menu({"background":"black"},[{"Home":"/"},{"Git":"https://github.com/DimonLuk/front-py"},{"Documentation":"https://github.com/DimonLuk/front-py/wiki"}, {"Objectives":"/objectives"},{"User guide":"/userGuide"},{"Tester guide":"/testerGuide"},{"Developer guide":"/developerGuide"}],"white",Brand_text("Front-py",brand_color)) #This is menu.
@@ -50,7 +52,7 @@ def objectives(request):
     if request.method == "GET":
         articles = Article(headers_level=2)#Here you can find wrapping ideas. We just created object and configured it but it'll be used later as wrapper
         myList = Numbered_list() #The same thing but you can add no configuration almost everything is predefined
-        front_end = articles("Front-end",Numbered_list({},"Reorgonaising folders","A lot of tests","Unnumbered list","Gallery","Forms","Tests","Customizing existing classes","Tests"))#Then it has been created three articles, using one wrap
+        front_end = articles("Front-end",Numbered_list({},"%s" % crossed_text("Reorganising packages"),"Unit tests","Unnumbered list","Gallery","Forms","Tests","Customizing existing classes","Tests"))#Then it has been created three articles, using one wrap
         back_end = articles("Back-end",Numbered_list({},"Handling POST request","Grand tests of framework","Creating API to database","Tests"))
         experience = articles("Experience",Numbered_list({},"Writing documentation","Create complete guides for users, developers and testers","Work with %s on github" % Link("https://github.com/DimonLuk/front-py/wiki","wiki")))
     
@@ -97,6 +99,8 @@ background_color = "#dddddd" #Grey color of the pages
 brand_color = "red" #Nice red color of some text
 brand_text = Text() #Wrapping object that will be used below
 brand_text.color = brand_color #Some objects can be cinfigured in this way. To be honest all objects will have opportunity to be configured in such way but a bit later
+crossed_text = Text()          
+crossed_text.decor == "crossed"
 page_params = tuple(["utf-8",{"background":background_color}]) #Some meta information about page. Encoding and background color.
 #But you can set any background settings you want, using css properties
 menu = Inline_menu({"background":"black"},{"Home":"/", "Objectives":"/objectives","User guide":"/userGuide","Tester guide":"/testerGuide","Developer guide":"/developerGuide"},"white",Brand_text("Front-py",brand_color)) #This is menu.
@@ -124,7 +128,7 @@ def objectives(request):
     if request.method == "GET":
         articles = Article(headers_level=2)#Here you can find wrapping ideas. We just created object and configured it but it'll be used later as wrapper
         myList = Numbered_list() #The same thing but you can add no configuration almost everything is predefined
-        front_end = articles("Front-end",Numbered_list({},"Reorgonaising folders","A lot of tests","Unnumbered list","Gallery","Forms","Tests","Customizing existing classes","Tests"))#Then it has been created three articles, using one wrap
+        front_end = articles("Front-end",Numbered_list({},"%s" % crossed_text("Reorganising packages"),"Unit tests","Unnumbered list","Gallery","Forms","Tests","Customizing existing classes","Tests"))#Then it has been created three articles, using one wrap
         back_end = articles("Back-end",Numbered_list({},"Handling POST request","Grand tests of framework","Creating API to database","Tests"))
         experience = articles("Experience",Numbered_list({},"Writing documentation","Create complete guides for users, developers and testers","Work with %s on github" % Link("https://github.com/DimonLuk/front-py/wiki","wiki")))
     
