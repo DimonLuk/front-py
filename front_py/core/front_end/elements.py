@@ -1,4 +1,3 @@
-from core.core import Core_element
 """
 This module contains main elements which is used to develop framework
 It contains:
@@ -41,6 +40,9 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
+from Core_element import Core_element
+
+
 class _Paragraph_element(Core_element):
     def __init__(self,text="",element="p",is_closing=True,is_add_attrs=True,attributes=["class","style"]):
         super().__init__(element,is_closing,is_add_attrs,attributes)
