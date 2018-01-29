@@ -18,7 +18,7 @@ from constants import *
 from exceptions import *
 from Core_meta import Core_meta
 
-class Core_element(metaclass=Core_meta):
+class Core_element(metaclass = Core_meta):
     """
     This class presents is used to build core elements which is simple html tags
     Private methods (user mustn't use this methods):
@@ -35,7 +35,9 @@ class Core_element(metaclass=Core_meta):
     Public fields:
         add_content - adds any content into element if it's possible
     """
-    def __init__(self,element="",is_closing=True,is_add_attrs=True,attributes=[]):
+    def __init__(
+            self, element="", is_closing=True,
+            is_add_attrs=True, attributes=[]):
         self._element = element
         self._is_closing = is_closing
         self._attributes = attributes
@@ -64,14 +66,14 @@ class Core_element(metaclass=Core_meta):
         cop._render()
         return cop._template
 
-    def __call__(self,*content):
+    def __call__(self, *content):
         import copy
         cop = copy.deepcopy(self)
         cop.add_content(*content)
         cop._render()
         return cop._template
     
-    def _add_style(self,styles):
+    def _add_style(self, styles):
         """
         Add style to html element
         styles - JSON like object which contains css properties like {"name":"value"}
@@ -79,8 +81,8 @@ class Core_element(metaclass=Core_meta):
         self._styles = styles
         if "style" in self._indexes_list:
             for i in self._styles:
-                self._replace(self,"%s:%s; " % (i,self._styles[i]),self._indexes_list["style"])
-    def _add_class(self,*cls):
+                self._replace(self, "%s:%s; " % (i, self._styles[i]), self._indexes_list["style"])
+    def _add_class(self, *cls):
         """
         Add classes
         *cls - tuple of classes to be added
@@ -88,13 +90,13 @@ class Core_element(metaclass=Core_meta):
         self._cls = cls#represents classes of html tag
         if "class" in self._indexes_list:
             for i in self._cls:
-                self._replace(self,"%s " % i,self._indexes_list["class"])
+                self._replace(self, "%s " % i, self._indexes_list["class"])
     def _add_attr_value(self,attr,value):
         if attr in self._indexes_list:
-            self._replace(self,value,self._indexes_list[attr])
+            self._replace(self, value, self._indexes_list[attr])
 
                     
-    def add_content(self,*content):
+    def add_content(self, *content):
         """
         Add content which is str or any object that contains _template field
         """
@@ -102,14 +104,14 @@ class Core_element(metaclass=Core_meta):
         for i in self._content:
             if type(i) is str:#If content is str
                 if "content" in self._indexes_list:#and it's field to add content
-                    self._replace(self,i,self._indexes_list["content"])
+                    self._replace(self, i, self._indexes_list["content"])
             else:#If content is some object
                 if "content" in self._indexes_list:
                     try:
                         import copy
                         cop = copy.deepcopy(i)#Deep copy because original object can be chenged later
                         cop._render()
-                        self._replace(self,cop._template,self._indexes_list["content"])
+                        self._replace(self, cop._template, self._indexes_list["content"])
                     except AttributeError:
                         raise Invalid_insertion(INVALID_INSERTION_MESSAGE % i)
     def _render(self):
@@ -117,8 +119,8 @@ class Core_element(metaclass=Core_meta):
         Preparing object to be used. REQURIED METHOD
         """
         for i in self._indexes_list:#Clean all replacement expressions
-            self._clean(self,0)
-    def _link_elements(self,targets=[]):
+            self._clean(self, 0)
+    def _link_elements(self, targets=[]):
         """
         Links number of elemnts to make them avaliable to add event. self is a trigger, other elements are targets
         """
@@ -128,7 +130,7 @@ class Core_element(metaclass=Core_meta):
             for i in targets:
                 try:#If sth not from framework has been passed
                     if "class" in i._indexes_list:
-                        i._replace(i, "%s " % self._target,i._indexes_list["class"])
+                        i._replace(i, "%s " % self._target, i._indexes_list["class"])
                     else:
                         raise Missing_parameter_error("Add attribute 'class' for html element %s" % i)
                 except AttributeError:
@@ -137,7 +139,7 @@ class Core_element(metaclass=Core_meta):
             raise Unlinked_elements_error("You haven't linked any elements to create events between them")
         if "class" in self._indexes_list:
             try:#Just for safety
-                self._replace(self,"%s " % self._trigger,self._indexes_list["class"])
+                self._replace(self, "%s " % self._trigger,self._indexes_list["class"])
             except AttributeError:
                 raise Invalid_insertion(INVALID_INSERTION_MESSAGE % self)
         else:
@@ -146,9 +148,9 @@ class Core_element(metaclass=Core_meta):
         """
         Creates jquery interpritation of event for browsers
         """
-        with open("./pages/scripts/script.js","a") as script:
+        with open("./pages/scripts/script.js", "a") as script:
             script.write(toDo)
-    def on_click(self,toDo,targets=[],params={}):
+    def on_click(self, toDo, targets=[], params={}):
         """
         Args:
         the first - some predefined word
@@ -161,3 +163,33 @@ class Core_element(metaclass=Core_meta):
             self._add_script(";(function(){var changed = false;var color = $('.%s').css('color');$('.%s').click(function(event){event.stopPropagation();if(changed){$('.%s').css({'color':color});changed = false;}else{$('.%s').css({'color':'%s'});changed = true;}});})();"%(self._target,self._trigger,self._target,self._target,self._on_clickParams["color"]))
         else:
             raise Unsupported_feature("'%s' event for click is unsupported, please write to author lds4ever2000@gmail.com" % toDo)
+
+
+
+
+import unittest
+class Test_core_element(unittest.TestCase):
+    def __init__(self,a):
+        super().__init__(a)
+        self.test = Core_element(
+                element="p", is_closing=True,
+                is_add_attrs=True, attributes=["class","style","someattr"])
+    
+    def test_constructor(self):
+        self.assertEqual('<p class="" style="" someattr=""></p>', self.test.__str__())
+
+    def test_add_class(self):
+        self.test._add_class("Test")
+        self.assertEqual('<p class="Test " style="" someattr=""></p>', self.test.__str__())
+    
+    def test_add_style(self):
+        self.test._add_style({"color":"black","test":25})
+        self.assertEqual('<p class="" style="color:black; test:25; " someattr=""></p>', self.test.__str__())
+
+    def test_add_attr_value(self):
+        self.test._add_attr_value("someattr", "test")
+        self.assertEqual('<p class="" style="" someattr="test"></p>', self.test.__str__())
+
+    def test_add_content(self):
+        self.test.add_content("Some test"," another test")
+        self.assertEqual('<p class="" style="" someattr="">Some test another test</p>', self.test.__str__())

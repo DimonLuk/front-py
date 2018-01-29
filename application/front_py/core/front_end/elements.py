@@ -153,3 +153,9 @@ class _Code_element(Core_element):
 
 
 _TEST = (_Text_element,_Paragraph_element,_Menu_element,_Navigation_element,_Unnumbered_list_element,_Numbered_list_element,_In_list_element,_Link_element,_Image_element,_Block_element,_Section_element,_Aside_element,_Footer_element,_Form_element,_Input_element,_Button_element,_Header_element,_Input_text_area, _Header_text_element,_Horizontal_line_element,_Formated_text_element,_Code_element,_Article_element)
+
+import unittest
+class Test(unittest.TestCase):
+    def test(self):
+        for i in _TEST:
+            print(i())

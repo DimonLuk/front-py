@@ -1,24 +1,24 @@
 import os
 import sys
+import json
+import importlib
+PATH = "application"
+def prepare_import():
+    framework = os.path.join(os.getcwd(),PATH)
+    sys.path.append(framework)      
+    for dirs,subdirs,files in os.walk(framework):
+        if not "__pycache__" in dirs:   
+            sys.path.append(dirs)
 
 if __name__ == "__main__":
     if sys.argv[1] == "start" and len(sys.argv) == 2:
-        framework = os.path.join(os.getcwd(),"front_py")
-        sys.path.append(framework)
-        for dirs,subdirs,files in os.walk(framework):
-            if not "__pycache__" in dirs:
-                sys.path.append(dirs)
-        import json
+        prepare_import()
         params = {}
-        with open("config.json","r") as file:
+        with open(os.path.join(PATH,"config.json"),"r") as file:
             params = json.load(file)
-        import importlib
         app = importlib.import_module(params["source_file"])
         app.run_app(address=params["address"],port=params["port"])
-        #test = importlib.import_module("front_py")
-        #print(test)
     elif sys.argv[1] == "config" and len(sys.argv) == 2:
-        import json
         params = {}
         source_file = input("Enter the filename where you application is (for example sample): ")
         if not source_file:
@@ -31,8 +31,12 @@ if __name__ == "__main__":
             port = int(port)
         elif not port:
             port = 8000
-        with open("config.json","w") as file:
+        with open(os.path.join(PATH,"config.json"),"w") as file:
             json.dump({"source_file":source_file,"address":address,"port":port},file)
+    elif sys.argv[1] == "test" and len(sys.argv) == 2:
+        prepare_import()
+        test = importlib.import_module("Page")
+        test.unittest.main()
     else:
         print("""
 Avaliable commands:
