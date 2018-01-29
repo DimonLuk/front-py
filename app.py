@@ -3,13 +3,16 @@ import sys
 import json
 import importlib
 PATH = "application"
+def prepare_import():
+    framework = os.path.join(os.getcwd(),PATH)
+    sys.path.append(framework)      
+    for dirs,subdirs,files in os.walk(framework):
+        if not "__pycache__" in dirs:   
+            sys.path.append(dirs)
+
 if __name__ == "__main__":
     if sys.argv[1] == "start" and len(sys.argv) == 2:
-        framework = os.path.join(os.getcwd(),PATH)
-        sys.path.append(framework)
-        for dirs,subdirs,files in os.walk(framework):
-            if not "__pycache__" in dirs:
-                sys.path.append(dirs)
+        prepare_import()
         params = {}
         with open(os.path.join(PATH,"config.json"),"r") as file:
             params = json.load(file)
@@ -30,6 +33,10 @@ if __name__ == "__main__":
             port = 8000
         with open(os.path.join(PATH,"config.json"),"w") as file:
             json.dump({"source_file":source_file,"address":address,"port":port},file)
+    elif sys.argv[1] == "test" and len(sys.argv) == 2:
+        prepare_import()
+        test = importlib.import_module("Page")
+        test.unittest.main()
     else:
         print("""
 Avaliable commands:

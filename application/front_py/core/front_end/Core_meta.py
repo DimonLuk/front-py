@@ -15,7 +15,7 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
 
-def _replace(self,it,content,index):
+def _replace(self, it, content, index):
     """
     'it' object that contains 'template' field where 'content' will be inserted in place of replacement expression which index is equals to 'index'
     """
@@ -31,7 +31,7 @@ def _replace(self,it,content,index):
     if toRm != 0:#If we found sth
         it._template = it._template[:toRm] + content + "|||" + it._template[toRm+3:]
 
-def _clean(self,it,index):
+def _clean(self, it, index):
     """
     'it' is object that contains 'template' field and 'index' is the index of replacement expression to be removed
     """
@@ -59,7 +59,7 @@ def _generate_trigger(self):
     trigger = "".join(trigger) #All operations just remove all signs which is not numbers and creates one unique string
     return trigger
 
-def _generate_target(self,trigger):
+def _generate_target(self, trigger):
     """
     Generates classname for html element which will be changed during the event
     """
@@ -71,9 +71,9 @@ class Core_meta(type):
     This metaclass add special methods of replacing and cleaning after replacing elements.
     It's because simple '%s' usage is not comfortable
     """
-    def __new__(cls,name,bases,dct):
+    def __new__(cls, name, bases, dct):
         dct["_replace"] = _replace
         dct["_clean"] = _clean
         dct["_generate_trigger"] = _generate_trigger
         dct["_generate_target"] = _generate_target
-        return super(Core_meta,cls).__new__(cls,name,bases,dct)
+        return super(Core_meta, cls).__new__(cls, name, bases, dct)
