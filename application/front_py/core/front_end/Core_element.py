@@ -20,20 +20,13 @@ from Core_meta import Core_meta
 
 class Core_element(metaclass = Core_meta):
     """
-    This class presents is used to build core elements which is simple html tags
-    Private methods (user mustn't use this methods):
-        _add_style - to add css style to html element
-        _add_class - to add class to html element
-        _render - removes all replacement expression
-        This list may be extended
-    Private fields (user mustn't use this variables):
-        _element - shows which html element to be created
-        _is_closing - shows if the element has closing tag or not. True - has
-        _is_add_attrs - shows if the method has to have attributes. True - has to
-        _attributes - list or tuple of attributes that has to be added to the element
-        _template - DOM representation of the object
-    Public fields:
-        add_content - adds any content into element if it's possible
+    It's the main class which aim is creating python representation of html elements. 
+    Its metaclass is Core_meta. 
+    Constructor arguments: self, element, is_closing, is_add_attrs, attributes. 
+    element - shows which html element represents current object, but you should pass for example "p", "img" and etc. 
+    is_closing - shows if the html element has to be closed(for example <p\></p>) or not(<img ...attrs />). 
+    is_add_attrs - shows if some attributes has to be placed into html element. 
+    attributes - array of strings with names of attributes to be added, for example ["style","class","id","myattr"] to element "p" will result as <p style="" class="" myattr=""></p>. If you haven't added attributes when the object has been created you won't be able to add values and attributes later
     """
     def __init__(
             self, element="", is_closing=True,
@@ -61,12 +54,22 @@ class Core_element(metaclass = Core_meta):
             if self._is_closing:
                 self._indexes_list["content"] = self._index#If tag has to be closed then save index for _replace method
     def __str__(self):
+        """
+        Creates deepcopy of object, renders it with _render and returns _template of object which is html representation of object. 
+        Arguments: self.
+        """
         import copy
         cop = copy.deepcopy(self)
         cop._render()
         return cop._template
 
     def __call__(self, *content):
+        """
+        Creates deepcopy of object, put content into copy and return rendered _template. 
+        It's an implementation of wrapping syntax. 
+        Arguments: self, *content. 
+        *content - content to be placed into the object
+        """
         import copy
         cop = copy.deepcopy(self)
         cop.add_content(*content)
@@ -75,8 +78,9 @@ class Core_element(metaclass = Core_meta):
     
     def _add_style(self, styles):
         """
-        Add style to html element
-        styles - JSON like object which contains css properties like {"name":"value"}
+        Adds value to html attribute style if the object has it. 
+        Arguments: self, styles. 
+        styles - JSON object with css3 style notation, for example {"text-align":"center","color":"#ff003b"}
         """
         self._styles = styles
         if "style" in self._indexes_list:
@@ -84,8 +88,9 @@ class Core_element(metaclass = Core_meta):
                 self._replace(self, "%s:%s; " % (i, self._styles[i]), self._indexes_list["style"])
     def _add_class(self, *cls):
         """
-        Add classes
-        *cls - tuple of classes to be added
+        Adds value to html attribute class if the object has it. 
+        Arguments: self, *cls. 
+        *cls - classnames to be added, for example some_object._add_class("col-lg-12","MyClass")
         """
         self._cls = cls#represents classes of html tag
         if "class" in self._indexes_list:
@@ -98,7 +103,9 @@ class Core_element(metaclass = Core_meta):
                     
     def add_content(self, *content):
         """
-        Add content which is str or any object that contains _template field
+        Adds content to html element if it can be added, content can't be changed after it has been put to object. 
+        Arguments: self, *content. 
+        *content - content to be put into object, can be both objects derived from Core_element and strings.
         """
         self._content = content#Represents content to be added to 'self' object
         for i in self._content:
@@ -116,13 +123,17 @@ class Core_element(metaclass = Core_meta):
                         raise Invalid_insertion(INVALID_INSERTION_MESSAGE % i)
     def _render(self):
         """
-        Preparing object to be used. REQURIED METHOD
+        REUIRED TO CORRECT INTERPRETATION OF HTML
+        Renders the _template field by using _clean method. 
+        Arguments: self.
         """
         for i in self._indexes_list:#Clean all replacement expressions
             self._clean(self, 0)
     def _link_elements(self, targets=[]):
         """
-        Links number of elemnts to make them avaliable to add event. self is a trigger, other elements are targets
+        Links elements as target for events in browsers.
+        Arguments: self, targets. 
+        targets - array of objects from the framework which will act as a targets of the event, object which has called this method also can act as a target.
         """
         self._trigger = self._generate_trigger() #classname for tag which will emit the event
         self._target = self._generate_target(self._trigger)#classname for tag which will be changed during the event
@@ -146,20 +157,25 @@ class Core_element(metaclass = Core_meta):
             raise Missing_parameter_error("Add attribute 'class' for html element %s" % i)
     def _add_script(self,toDo):
         """
-        Creates jquery interpritation of event for browsers
+        Adds some javascript to special file which will be sent to browsers. 
+        Arguments: self, 
+        toDo - javascript, you can use libraries such libraries: jquery and hljs
         """
         with open("./pages/scripts/script.js", "a") as script:
             script.write(toDo)
     def on_click(self, toDo, targets=[], params={}):
         """
-        Args:
-        the first - some predefined word
-        the second - elemetns which have to be involved as targets
-        the third - dictionary with parametres if they are required
+        Binds event on object. 
+        Arguments: self, toDo, targets, params. 
+        toDo - string which describes the action which will be done during the event, now it can be chosen from this list:
+            "change_color" -  Avaliable params: {"color":"css3_color"}
+        
+        targets - are targets for the event(object derived from Core_element) object that has called this method can be passed as a target too. 
+        params - special parameters for each case in list
         """
         self._link_elements(targets)
         self._on_clickParams = params
-        if toDo == "changeColor":
+        if toDo == "change_color":
             self._add_script(";(function(){var changed = false;var color = $('.%s').css('color');$('.%s').click(function(event){event.stopPropagation();if(changed){$('.%s').css({'color':color});changed = false;}else{$('.%s').css({'color':'%s'});changed = true;}});})();"%(self._target,self._trigger,self._target,self._target,self._on_clickParams["color"]))
         else:
             raise Unsupported_feature("'%s' event for click is unsupported, please write to author lds4ever2000@gmail.com" % toDo)
