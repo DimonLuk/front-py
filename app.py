@@ -37,9 +37,15 @@ if __name__ == "__main__":
         prepare_import()
         test = importlib.import_module("Page")
         test.unittest.main()
+    elif sys.argv[1] == "docs" and len(sys.argv) == 3:
+        prepare_import()
+        docs = importlib.import_module(sys.argv[2])
+        print(docs.__dict__[sys.argv[2]].__doc__)
     else:
         print("""
 Avaliable commands:
     start - to start app
     config - to setup configuration of application
+    test - to start unittests for all modules
+    docs Class_or_function_name - to get documentation about class or function
         """)

@@ -229,7 +229,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
     </body>
 </html>""",self.test1.__str__())
     def test_set_title(self):
-        self.test1.set_titile("TEST")
+        self.test1.set_title("TEST")
         self.assertEqual("""
 <!DOCTYPE html>
 <!--
