@@ -93,7 +93,7 @@ If you want to read this guide at your computer, you can write:
 $ python app.py tutorial
 
 To see documentation you should write:
-$ python app.py docs <Class_or_function_name>
+$ python app.py docs &ltClass_or_function_name&gt
 \"\"\"
 
 #So, now let's see what the framework can do
