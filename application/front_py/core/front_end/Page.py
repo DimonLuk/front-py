@@ -19,9 +19,16 @@ from Core_element import Core_element
 
 
 class Page(Core_element):
-    def __init__(self,title,encoding,background={}):
+    """
+    Derived from Core_element but it's special element, which has additional html code. 
+    Constructor's arguments: self, title, encoding, background. 
+    title - title of the page will be displayed at the tab of browser, for example if you pass into this argument "Your title" it will result as <title>Your title</title> in html inside <head></head>. 
+    encoding - sets the encoding of the page, default it's utf-8. 
+    background - JSON object with css3 rules to define background of all page, for example {"background-color":"#abcdef"}
+    """
+    def __init__(self,title,encoding="utf-8",background={}):
         self._mimetype = "text/html"
-        self.title = title
+        self._title = title
         self.encoding = encoding
         super().__init__("div",True,True,["class","style"])
         self._add_class("global")
@@ -62,15 +69,45 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
     </body>
 </html>"""
     def add_element(self,*content):
+        """
+        Adds element to page, elements can be both objects derived from Core_element and strings. 
+        Arguments: self, *content. 
+        *content - content to be placed to the page.
+        """
         for i in content:
             self.add_content(i)
-    def set_titile(self,title):
-        self.title = title
+    def set_title(self,title):
+        """
+        Changes previous title of the page. 
+        Arguments: self, title. 
+        title - title of the page will be displayed at the tab of browser, for example if you pass into this argument "Your title" it will result as <title>Your title</title> in html inside <head></head>.
+        """
+        self._title = title
     def set_background(self,background):
+        """
+        Changes previous background of the page. 
+        Arguments: self, background. 
+        background - JSON object with css3 rules to define background of all page, for example {"background-color":"#abcdef"}.
+        """
         self._add_style(background)
     def _render(self):
-        self._template = self._tmp % (self.title,self.encoding,BOOTSTRAP_CSS,self._template,JQUERY_3_2_1_MIN_JS,BOOTSTRAP_MIN_JS,SCRIPT_JS)
+        self._template = self._tmp % (self._title,self.encoding,BOOTSTRAP_CSS,self._template,JQUERY_3_2_1_MIN_JS,BOOTSTRAP_MIN_JS,SCRIPT_JS)
         super()._render()
+    def __setattr__(self,name,value):
+        """
+        You can change title and background in this way:
+        
+        page.title = "Another title" 
+        page.background = {"background-image":"url(image_name.image_format)"}. 
+        
+        To add image just place it into media folder of your project that by default has this path: (suppose you're in the folder where app.py is placed) application/static/media.
+        """
+        if name == "background":
+            self.set_background(value)
+        elif name == "title":
+            self.set_title(value)
+        else:
+            self.__dict__[name] = value
 
 
 
