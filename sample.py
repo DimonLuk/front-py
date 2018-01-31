@@ -93,7 +93,7 @@ If you want to read this guide at your computer, you can write:
 $ python app.py tutorial
 
 To see documentation you should write:
-$ python app.py docs <Class_or_function_name>
+$ python app.py docs &ltClass_or_function_name&gt
 \"\"\"
 
 #So, now let's see what the framework can do
@@ -147,6 +147,11 @@ def index(request):
         articles.add_article("The first fact","This framework is attemp to combine the best ideas from Django, Flask, Angular and other frameworks but %s complicated application architecture" % brand_text("without creating"))
         articles.add_article("The second fact","You have to use only %s 3.x to write %s front and back-end" % (brand_text("python"),brand_text("both")))
         articles.add_article("The third fact","Just see what you have to write on python (%s) and how many pure html you have to write to create the page you see:%s" % (brand_text("including reusable components"),Container_row(Image("python1.png","Code",6),Image("html.png","Code",6))))
+        #To make your image avaliable please put it into application/static/media folder
+        #And to add image somewhere just use write its name as you've seen above
+        #"Code" - is alt attribute of html image
+        # 6 -is number of columns for image width, max number is 12
+        
         #Or instead of wrapping content you can use special methods to add content.
         #Then create page, using parameters that has been defined above
         page = Page("Home",*page_params)

@@ -40,7 +40,7 @@ class Core_element(metaclass = Core_meta):
         if self._is_closing:#If tag has to be closed
             self._template = """<%s|||>|||</%s>""" % (element,element)
         else:#If tag doesn't have to be closed
-            self._template = """<%s|||>""" % element
+            self._template = """<%s||| />""" % element
         if self._is_add_attrs:
             for i in attributes:
                 self._replace(self," "+i+'="|||"',self._index) #Add attribute
@@ -190,22 +190,34 @@ class Test_core_element(unittest.TestCase):
         self.test = Core_element(
                 element="p", is_closing=True,
                 is_add_attrs=True, attributes=["class","style","someattr"])
-    
+        self.test2 = Core_element(
+                element = "img", is_closing = False,
+                is_add_attrs = True, attributes = ["class","style","someattr"]
+                ) 
     def test_constructor(self):
         self.assertEqual('<p class="" style="" someattr=""></p>', self.test.__str__())
+        self.assertEqual('<img class="" style="" someattr="" />',self.test2.__str__())
 
     def test_add_class(self):
-        self.test._add_class("Test")
-        self.assertEqual('<p class="Test " style="" someattr=""></p>', self.test.__str__())
+        self.test._add_class("Test","Test2")
+        self.test2._add_class("Test","Test2")
+        self.assertEqual('<p class="Test Test2 " style="" someattr=""></p>', self.test.__str__())
+        self.assertEqual('<img class="Test Test2 " style="" someattr="" />',self.test2.__str__())
     
     def test_add_style(self):
         self.test._add_style({"color":"black","test":25})
+        self.test2._add_style({"color":"black","test":25})
         self.assertEqual('<p class="" style="color:black; test:25; " someattr=""></p>', self.test.__str__())
+        self.assertEqual('<img class="" style="color:black; test:25; " someattr="" />',self.test2.__str__())
 
     def test_add_attr_value(self):
         self.test._add_attr_value("someattr", "test")
+        self.test2._add_attr_value("someattr","test")
         self.assertEqual('<p class="" style="" someattr="test"></p>', self.test.__str__())
+        self.assertEqual('<img class="" style="" someattr="test" />',self.test2.__str__())
 
     def test_add_content(self):
         self.test.add_content("Some test"," another test")
+        self.test2.add_content("Some test"," another test")
         self.assertEqual('<p class="" style="" someattr="">Some test another test</p>', self.test.__str__())
+        self.assertEqual('<img class="" style="" someattr="" />',self.test2.__str__())

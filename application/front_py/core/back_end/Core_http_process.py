@@ -18,9 +18,20 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 from http.server import BaseHTTPRequestHandler
 from constants import *
 from front_end import Page
+"""
+Test for this class and make_name function can be found at functions module of this package,
+because of importing issues
+
+_requst class is not tested because for now it's nothing to test here
+"""
+
+
 def make_name(address):
     """
-    Make unique name for function from request.path
+    Creates special name which will be added to Core_http_process attributes. 
+    Because names are built from http requests they contain '/', this function repleces it with '_aa'. 
+    Arguments: address. address - url of http request. Not imported to front_py package. 
+    !!!Not for user usage!!!
     """
     address = address.split("/")
     address = "_aa".join(address)
@@ -32,20 +43,18 @@ def make_name(address):
 
 class Core_http_process(BaseHTTPRequestHandler):
     """
-    Class that handles requests from the users
-    Now it can process only GET requests but of course it will process both GET and POST requests
-    addresses can be pattern like. For example /page/<any> handles any address like /page/123, /page/Dima,
-    but not /sth/page/sth and etc.
-    
+    Derived from BaseHTTPRequestHandler. 
+    Used for handling requests from user. 
+    For now can handle only GET requests. 
+    Constructor arguments: self, a, b, c. All arguments are derived from superclass, user mustn't pass any of them.
     """
     def __init__(self,a,b,c):
         super().__init__(a,b,c)
     def do_GET(self):
         """
-        Handles GET request.
-        At first try to download files from static/media folder
-        Then from user hardly defined addresses(that not include <any> in argument for serve decorator)
-        Then addresses that contain <any>
+        Handles GET requests. 
+        Can handle pattern templates like /<any>/page/<any> and etc. 
+        Arguments: self
         """
         self._find = self.path.split(".")#Files in media are sth like this name.extension
         self.request = _request(self.path,"GET")#Create request parametr that can be used by user
@@ -106,8 +115,12 @@ class Core_http_process(BaseHTTPRequestHandler):
 
 class _request:
     """
-    To incapsulate request
-    Nothing interestig right now
+    This class create simple API of browser html for user. 
+    Arguments: self, path, method, headers, body. 
+    path - represents path of browser request. 
+    method - method which has been used to send the request. 
+    headers - headers of the request (Not implemented yet). 
+    body - body of the http request (Not implemented yet)
     """
     def __init__(self,path,method,headers={},body={}):
         self.path = path
