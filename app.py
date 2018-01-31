@@ -35,7 +35,7 @@ if __name__ == "__main__":
             json.dump({"source_file":source_file,"address":address,"port":port},file)
     elif sys.argv[1] == "test" and len(sys.argv) == 2:
         prepare_import()
-        test = importlib.import_module("Page")
+        test = importlib.import_module("functions")
         test.unittest.main()
     elif sys.argv[1] == "docs" and len(sys.argv) == 3:
         prepare_import()

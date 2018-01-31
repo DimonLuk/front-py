@@ -20,7 +20,11 @@ from http.server import HTTPServer
 from back_end import Core_http_process
 def make_name(address):
     """
-    Make unique name for function from request.path
+    Creates special name which will be added to Core_http_process attributes. 
+    Because names are built from http requests they contain '/', this function repleces it with '_aa'. 
+    Arguments: address. 
+    address - url of http request. 
+    !!!Not imported to front_py package. Not for user usage!!! 
     """
     address = address.split("/")
     address = "_aa".join(address)
@@ -28,7 +32,9 @@ def make_name(address):
 
 def serve(address):
     """
-    Function is used to put user definded function to the request handler
+    Binds function to url which has to be served. 
+    Arguments: address - request itself, for example, if you want to serve "http://localhost:8000/test" you have to pass only "/test". 
+    Usage: as decorator for function that will create some response
     """
     def decorator(fn,address=address):
         def decorated(address=address):
@@ -39,6 +45,14 @@ def serve(address):
     return decorator
 
 def run_app(address="localhost",server=HTTPServer,handler=Core_http_process,port=8000):
+    """
+    Runs the server and application. 
+    Arguments: address, server, handler, port. 
+    address - ip address to be served, default is 'localhost'. 
+    server - server class which will serve the application, default is HTTPServer. 
+    handler - class that will handle requests, default is Core_http_process. 
+    port - port to be served, default is 8000
+    """
     server_address = (address,port)
     http = server(server_address,handler)
     print("""
@@ -48,6 +62,12 @@ This is free software, and you are welcome to redistribute it
 under certain conditions; For details see LICENSE.md.\n""")
     print("Started server at %s on port %s" % (address,port))
     http.serve_forever()
+
+"""
+There are some functions which names are hashes. 
+They are used to load scripts and styles, one of them is used for unittests
+"""
+
 
 @serve("/%s"%BOOTSTRAP_CSS)
 def je3202aea761d3d587dfcfc43c6982565(request):
@@ -72,3 +92,28 @@ def j13b2a30e265e18a6fd0792cc3fd7a09c(request):
 def j9a9569e9d73f33740eada95275da7f30(request):
     with open("application/static/scripts/script.js","r") as script:
         return(script.read(),"script/javascript")
+
+
+#For test purposes
+@serve("/041bf0b5619389a866f6fff4a1556401cec9dced44b5e78cfbf0eda24ff8787e")
+def j041bf0b5619389a866f6fff4a1556401cec9dced44b5e78cfbf0eda24ff8787e(request):
+    return ("041bf0b5619389a866f6fff4a1556401cec9dced44b5e78cfbf0eda24ff8787e","text/html")
+
+
+
+
+
+
+import unittest
+from threading import Thread
+import urllib.request
+class Test(unittest.TestCase):
+    def test_serve_and_Core_http_process(self):
+        server_thread = Thread(target=run_app, kwargs={"address":"localhost","port":8000})
+        server_thread.start()
+        result = urllib.request.urlopen("http://localhost:8000/041bf0b5619389a866f6fff4a1556401cec9dced44b5e78cfbf0eda24ff8787e")
+        self.assertEqual(b"041bf0b5619389a866f6fff4a1556401cec9dced44b5e78cfbf0eda24ff8787e",result.read())
+
+    def test_make_name(self):
+        self.assertEqual("_aatest_aatest_aa041bf0b5619389a866f6fff4a1556401cec9dced44b5e78cfbf0eda24ff8787e",
+                make_name("/test/test/041bf0b5619389a866f6fff4a1556401cec9dced44b5e78cfbf0eda24ff8787e"))
