@@ -1,11 +1,11 @@
 """
 Copyright (C) 2018  Dima Lukashov github.com/DimonLuk
-    
+
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
-      
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -20,12 +20,12 @@ from Core_meta import Core_meta
 
 class Core_element(metaclass = Core_meta):
     """
-    It's the main class which aim is creating python representation of html elements. 
-    Its metaclass is Core_meta. 
-    Constructor arguments: self, element, is_closing, is_add_attrs, attributes. 
-    element - shows which html element represents current object, but you should pass for example "p", "img" and etc. 
-    is_closing - shows if the html element has to be closed(for example <p\></p>) or not(<img ...attrs />). 
-    is_add_attrs - shows if some attributes has to be placed into html element. 
+    It's the main class which aim is creating python representation of html elements.
+    Its metaclass is Core_meta.
+    Constructor arguments: self, element, is_closing, is_add_attrs, attributes.
+    element - shows which html element represents current object, but you should pass for example "p", "img" and etc.
+    is_closing - shows if the html element has to be closed(for example <p\></p>) or not(<img ...attrs />).
+    is_add_attrs - shows if some attributes has to be placed into html element.
     attributes - array of strings with names of attributes to be added, for example ["style","class","id","myattr"] to element "p" will result as <p style="" class="" myattr=""></p>. If you haven't added attributes when the object has been created you won't be able to add values and attributes later
     """
     def __init__(
@@ -55,7 +55,7 @@ class Core_element(metaclass = Core_meta):
                 self._indexes_list["content"] = self._index#If tag has to be closed then save index for _replace method
     def __str__(self):
         """
-        Creates deepcopy of object, renders it with _render and returns _template of object which is html representation of object. 
+        Creates deepcopy of object, renders it with _render and returns _template of object which is html representation of object.
         Arguments: self.
         """
         import copy
@@ -65,9 +65,9 @@ class Core_element(metaclass = Core_meta):
 
     def __call__(self, *content):
         """
-        Creates deepcopy of object, put content into copy and return rendered _template. 
-        It's an implementation of wrapping syntax. 
-        Arguments: self, *content. 
+        Creates deepcopy of object, put content into copy and return rendered _template.
+        It's an implementation of wrapping syntax.
+        Arguments: self, *content.
         *content - content to be placed into the object
         """
         import copy
@@ -75,11 +75,11 @@ class Core_element(metaclass = Core_meta):
         cop.add_content(*content)
         cop._render()
         return cop._template
-    
+
     def _add_style(self, styles):
         """
-        Adds value to html attribute style if the object has it. 
-        Arguments: self, styles. 
+        Adds value to html attribute style if the object has it.
+        Arguments: self, styles.
         styles - JSON object with css3 style notation, for example {"text-align":"center","color":"#ff003b"}
         """
         self._styles = styles
@@ -88,8 +88,8 @@ class Core_element(metaclass = Core_meta):
                 self._replace(self, "%s:%s; " % (i, self._styles[i]), self._indexes_list["style"])
     def _add_class(self, *cls):
         """
-        Adds value to html attribute class if the object has it. 
-        Arguments: self, *cls. 
+        Adds value to html attribute class if the object has it.
+        Arguments: self, *cls.
         *cls - classnames to be added, for example some_object._add_class("col-lg-12","MyClass")
         """
         self._cls = cls#represents classes of html tag
@@ -100,11 +100,11 @@ class Core_element(metaclass = Core_meta):
         if attr in self._indexes_list:
             self._replace(self, value, self._indexes_list[attr])
 
-                    
+
     def add_content(self, *content):
         """
-        Adds content to html element if it can be added, content can't be changed after it has been put to object. 
-        Arguments: self, *content. 
+        Adds content to html element if it can be added, content can't be changed after it has been put to object.
+        Arguments: self, *content.
         *content - content to be put into object, can be both objects derived from Core_element and strings.
         """
         self._content = content#Represents content to be added to 'self' object
@@ -124,7 +124,7 @@ class Core_element(metaclass = Core_meta):
     def _render(self):
         """
         REUIRED TO CORRECT INTERPRETATION OF HTML
-        Renders the _template field by using _clean method. 
+        Renders the _template field by using _clean method.
         Arguments: self.
         """
         for i in self._indexes_list:#Clean all replacement expressions
@@ -132,7 +132,7 @@ class Core_element(metaclass = Core_meta):
     def _link_elements(self, targets=[]):
         """
         Links elements as target for events in browsers.
-        Arguments: self, targets. 
+        Arguments: self, targets.
         targets - array of objects from the framework which will act as a targets of the event, object which has called this method also can act as a target.
         """
         self._trigger = self._generate_trigger() #classname for tag which will emit the event
@@ -157,20 +157,20 @@ class Core_element(metaclass = Core_meta):
             raise Missing_parameter_error("Add attribute 'class' for html element %s" % i)
     def _add_script(self,toDo):
         """
-        Adds some javascript to special file which will be sent to browsers. 
-        Arguments: self, 
+        Adds some javascript to special file which will be sent to browsers.
+        Arguments: self,
         toDo - javascript, you can use libraries such libraries: jquery and hljs
         """
-        with open("./pages/scripts/script.js", "a") as script:
+        with open("./application/static/scripts/script.js", "a") as script:
             script.write(toDo)
     def on_click(self, toDo, targets=[], params={}):
         """
-        Binds event on object. 
-        Arguments: self, toDo, targets, params. 
+        Binds event on object.
+        Arguments: self, toDo, targets, params.
         toDo - string which describes the action which will be done during the event, now it can be chosen from this list:
             "change_color" -  Avaliable params: {"color":"css3_color"}
-        
-        targets - are targets for the event(object derived from Core_element) object that has called this method can be passed as a target too. 
+
+        targets - are targets for the event(object derived from Core_element) object that has called this method can be passed as a target too.
         params - special parameters for each case in list
         """
         self._link_elements(targets)
@@ -193,7 +193,7 @@ class Test_core_element(unittest.TestCase):
         self.test2 = Core_element(
                 element = "img", is_closing = False,
                 is_add_attrs = True, attributes = ["class","style","someattr"]
-                ) 
+                )
     def test_constructor(self):
         self.assertEqual('<p class="" style="" someattr=""></p>', self.test.__str__())
         self.assertEqual('<img class="" style="" someattr="" />',self.test2.__str__())
@@ -203,7 +203,7 @@ class Test_core_element(unittest.TestCase):
         self.test2._add_class("Test","Test2")
         self.assertEqual('<p class="Test Test2 " style="" someattr=""></p>', self.test.__str__())
         self.assertEqual('<img class="Test Test2 " style="" someattr="" />',self.test2.__str__())
-    
+
     def test_add_style(self):
         self.test._add_style({"color":"black","test":25})
         self.test2._add_style({"color":"black","test":25})
