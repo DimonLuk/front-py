@@ -20,3 +20,4 @@ if($(".global").height() < $(window).height()){
 	$(".global").height(Number($(window).height()));
 	$("footer").css({"margin-top":$(".global").height()-tmp+16+"px"});
 }
+;(function(){var changed = false;var color = $('.20180201193734233989Target').css('color');$('.20180201193734233989').click(function(event){event.stopPropagation();if(changed){$('.20180201193734233989Target').css({'color':color});changed = false;}else{$('.20180201193734233989Target').css({'color':'red'});changed = true;}});})();

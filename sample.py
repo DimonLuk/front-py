@@ -1,4 +1,4 @@
-from front_py import * 
+from front_py import *
 
 background_color = "#dddddd"
 brand_color = "red"
@@ -6,32 +6,60 @@ brand_text = Text()
 brand_text.color = brand_color
 crossed_text = Text()
 crossed_text.decor = "crossed"
-page_params = tuple(["utf-8",{"background":background_color}])
-menu = Inline_menu({"background":"black"},[{"Home":"/"},{"Git":"https://github.com/DimonLuk/front-py"},{"Documentation":"https://github.com/DimonLuk/front-py/wiki"}, {"Objectives":"/objectives"},{"User guide":"/userGuide"},{"Tester guide":"/testerGuide"},{"Developer guide":"/developerGuide"}],"white",Brand_text("Front-py",brand_color)) 
+page_params = tuple(["utf-8", {"background": background_color}])
+menu = Inline_menu(
+    {"background": "black"},
+    [{"Home": "/"},
+     {"Git": "https://github.com/DimonLuk/front-py"},
+     {"Documentation": "https://github.com/DimonLuk/front-py/wiki"},
+     {"Objectives": "/objectives"},
+     {"User guide": "/userGuide"},
+     {"Tester guide": "/testerGuide"},
+     {"Developer guide": "/developerGuide"}],
+    "white", Brand_text("Front-py", brand_color))
 foot = Text("&copy DimonLuk")
 foot.position = "center"
 foot.color = "white"
 footer = Footer(foot)
 footer.background_color = "black"
 
+
 @serve("/")
 def index(request):
     if request.method == "GET":
-        articles = Row_articles("Three facts about %s 0.0.1(pre-alpha)" % brand_text("Front-py"),horizontal_line=True,headers_level=2,horizontal_distance="50px")
-        articles.add_article("The first fact","This framework is attemp to combine the best ideas from Django, Flask, Angular and other frameworks but %s complicated application architecture" % brand_text("without creating"))
-        articles.add_article("The second fact","You have to use only %s 3.x to write %s front and back-end" % (brand_text("python"),brand_text("both")))
-        articles.add_article("The third fact","Just see what you have to write on python (%s) and how many pure html you have to write to create the page you see:%s" % (brand_text("including reusable components"),Container_row(Image("python1.png","Code",6),Image("html.png","Code",6))))
-    
-        page = Page("Home",*page_params)
-        page.add_element(menu.add_links({"Additional Link":"/nothing"},brand_color),articles,footer)
+        articles = Row_articles(
+            "Three facts about %s 0.0.1(pre-alpha)" %
+            brand_text("Front-py"),
+            horizontal_line=True,
+            headers_level=2,
+            horizontal_distance="50px")
+        articles.add_article(
+            "The first fact",
+            "This framework is attemp to combine the best ideas from Django, Flask, Angular and other frameworks but %s complicated application architecture" %
+            brand_text("without creating"))
+        articles.add_article(
+            "The second fact", "You have to use only %s 3.x to write %s front and back-end" %
+            (brand_text("python"), brand_text("both")))
+        articles.add_article(
+            "The third fact",
+            "Just see what you have to write on python (%s) and how many pure html you have to write to create the page you see:%s" %
+            (brand_text("including reusable components"),
+             Container_row(
+                Image(
+                    "python1.png",
+                    "Code",
+                    6),
+                Image(
+                    "html.png",
+                    "Code",
+                    6))))
+
+        page = Page("Home", *page_params)
+        page.add_element(menu.add_links(
+                             {"Additional Link": "/nothing"},
+                             brand_color),
+                         articles, footer)
         return page
-
-
-
-
-
-
-
 
 
 @serve("/objectives")
@@ -39,36 +67,120 @@ def objectives(request):
     if request.method == "GET":
         articles = Article(headers_level=2)
         myList = Numbered_list()
-        front_end = articles("Front-end",Numbered_list({},"%s" % crossed_text("Reorganising packages"),"Unit tests","Unnumbered list","Gallery","Forms","Tests","Customizing existing classes","Tests"))
-        back_end = articles("Back-end",Numbered_list({},"Handling POST request","Grand tests of framework","Creating API to database","Tests"))
-        experience = articles("Experience",Numbered_list({},"Writing documentation","Create complete guides for users, developers and testers","Work with %s on github" % Link("https://github.com/DimonLuk/front-py/wiki","wiki")))
-    
-        pre_alpha_objectives = Column_articles("%s pre-alpha objectives" % brand_text("Front-py"),"",1,"center","50px",True,front_end,back_end,experience)
-    
-        alpha_objectives = Column_articles("%s alpha objectives" % brand_text("Front-py"),headers_level=1,position="center",vertical_distance="50px",horizontal_line=True)
-    
-        front_end = articles("Front-end",myList("Galleries","Carousels","Registartion","Log in","Permission system","Admin panel"))
-        back_end = articles("Back-end",myList("Registration","Log In","Permission system","Admin panel","Optional: write own server"))
-        experience = articles("Experience",myList("Improve internal framework architecture","Improve API for users","Improve documentation and make complite guides for future beta version where API won't be changing"))
-    
-        alpha_objectives(front_end,back_end,experience)
-    
-        beta_objectives = Column_articles("%s beta objectives" % brand_text("Front-py"),headers_level=1,position="center",vertical_distance="50px",horizontal_line=True)
+        front_end = articles(
+            "Front-end",
+            Numbered_list(
+                {},
+                "%s" %
+                crossed_text("Reorganising packages"),
+                "Unit tests",
+                "Unnumbered list",
+                "Gallery",
+                "Forms",
+                "Tests",
+                "Customizing existing classes",
+                "Tests"))
+        back_end = articles(
+            "Back-end",
+            Numbered_list(
+                {},
+                "Handling POST request",
+                "Grand tests of framework",
+                "Creating API to database",
+                "Tests"))
+        experience = articles(
+            "Experience",
+            Numbered_list(
+                {},
+                "Writing documentation",
+                "Create complete guides for users, developers and testers",
+                "Work with %s on github" %
+                Link(
+                    "https://github.com/DimonLuk/front-py/wiki",
+                    "wiki")))
 
-        front_end = articles("Front-end",myList("Create simple API to make everything easily customizable","Test and improve"))
-        back_end = articles("Back-end",myList("Create simple API to make everythong easily customizable","Test and improve"))
-        experience = articles("Experience",myList("Test and improve"))
-    
-        beta_objectives(front_end,back_end,experience)
+        pre_alpha_objectives = Column_articles(
+            "%s pre-alpha objectives" %
+            brand_text("Front-py"),
+            "",
+            1,
+            "center",
+            "50px",
+            True,
+            front_end,
+            back_end,
+            experience)
 
-        page = Page("Objectives",*page_params)
-        page.add_element(menu,pre_alpha_objectives,alpha_objectives,beta_objectives,footer)#add elements on it
+        alpha_objectives = Column_articles(
+            "%s alpha objectives" %
+            brand_text("Front-py"),
+            headers_level=1,
+            position="center",
+            vertical_distance="50px",
+            horizontal_line=True)
+
+        front_end = articles(
+            "Front-end",
+            myList(
+                "Galleries",
+                "Carousels",
+                "Registartion",
+                "Log in",
+                "Permission system",
+                "Admin panel"))
+        back_end = articles(
+            "Back-end",
+            myList(
+                "Registration",
+                "Log In",
+                "Permission system",
+                "Admin panel",
+                "Optional: write own server"))
+        experience = articles(
+            "Experience",
+            myList(
+                "Improve internal framework architecture",
+                "Improve API for users",
+                "Improve documentation and make complite guides for future beta version where API won't be changing"))
+
+        alpha_objectives(front_end, back_end, experience)
+
+        beta_objectives = Column_articles(
+            "%s beta objectives" %
+            brand_text("Front-py"),
+            headers_level=1,
+            position="center",
+            vertical_distance="50px",
+            horizontal_line=True)
+
+        front_end = articles(
+            "Front-end",
+            myList(
+                "Create simple API to make everything easily customizable",
+                "Test and improve"))
+        back_end = articles(
+            "Back-end",
+            myList(
+                "Create simple API to make everythong easily customizable",
+                "Test and improve"))
+        experience = articles("Experience", myList("Test and improve"))
+
+        beta_objectives(front_end, back_end, experience)
+
+        page = Page("Objectives", *page_params)
+        page.add_element(
+            menu,
+            pre_alpha_objectives,
+            alpha_objectives,
+            beta_objectives,
+            footer)  # add elements on it
         return page
+
 
 @serve("/userGuide")
 def userGuide(request):
-    guide = Row_articles(save_format=True,is_code=True)
-    guide.add_article("","""
+    guide = Row_articles(save_format=True, is_code=True)
+    guide.add_article("", """
 \"\"\"
 I suppose that the best guide is the life example, so let's start
 
@@ -99,7 +211,7 @@ $ python app.py docs &ltClass_or_function_name&gt
 #So, now let's see what the framework can do
 
 #The first thing which is required is importing everything you need to develop your own pages
-from front_py import * 
+from front_py import *
 
 #Then you can setup your global variables that will make single style for all pages
 background_color = "#dddddd" #Grey
@@ -114,7 +226,7 @@ page_params = tuple(["utf-8",{"background":background_color}]) #Then specife par
 #For the moment of writing this tutorial it's avaliable one style of menu, Inline_menu, to read more, write in your terminal or command line:
 #$ python app.py docs Inline_menu
 #But I suppose that your IDE should show you info about this class
-menu = Inline_menu({"background":"black"},[{"Home":"/"},{"Git":"https://github.com/DimonLuk/front-py"},{"Documentation":"https://github.com/DimonLuk/front-py/wiki"}, {"Objectives":"/objectives"},{"User guide":"/userGuide"},{"Tester guide":"/testerGuide"},{"Developer guide":"/developerGuide"}],"white",Brand_text("Front-py",brand_color)) 
+menu = Inline_menu({"background":"black"},[{"Home":"/"},{"Git":"https://github.com/DimonLuk/front-py"},{"Documentation":"https://github.com/DimonLuk/front-py/wiki"}, {"Objectives":"/objectives"},{"User guide":"/userGuide"},{"Tester guide":"/testerGuide"},{"Developer guide":"/developerGuide"}],"white",Brand_text("Front-py",brand_color))
 
 #Then it's a good idea to create one footer for all your pages
 foot = Text("&copy DimonLuk")
@@ -151,7 +263,7 @@ def index(request):
         #And to add image somewhere just use write its name as you've seen above
         #"Code" - is alt attribute of html image
         # 6 -is number of columns for image width, max number is 12
-        
+
         #Or instead of wrapping content you can use special methods to add content.
         #Then create page, using parameters that has been defined above
         page = Page("Home",*page_params)
@@ -169,23 +281,23 @@ def objectives(request):
         front_end = articles("Front-end",Numbered_list({},"%s" % crossed_text("Reorganising packages"),"Unit tests","Unnumbered list","Gallery","Forms","Tests","Customizing existing classes","Tests"))
         back_end = articles("Back-end",Numbered_list({},"Handling POST request","Grand tests of framework","Creating API to database","Tests"))
         experience = articles("Experience",Numbered_list({},"Writing documentation","Create complete guides for users, developers and testers","Work with %s on github" % Link("https://github.com/DimonLuk/front-py/wiki","wiki")))
-    
+
         pre_alpha_objectives = Column_articles("%s pre-alpha objectives" % brand_text("Front-py"),"",1,"center","50px",True,front_end,back_end,experience)
-    
+
         alpha_objectives = Column_articles("%s alpha objectives" % brand_text("Front-py"),headers_level=1,position="center",vertical_distance="50px",horizontal_line=True)
-    
+
         front_end = articles("Front-end",myList("Galleries","Carousels","Registartion","Log in","Permission system","Admin panel"))
         back_end = articles("Back-end",myList("Registration","Log In","Permission system","Admin panel","Optional: write own server"))
         experience = articles("Experience",myList("Improve internal framework architecture","Improve API for users","Improve documentation and make complite guides for future beta version where API won't be changing"))
-    
+
         alpha_objectives(front_end,back_end,experience)
-    
+
         beta_objectives = Column_articles("%s beta objectives" % brand_text("Front-py"),headers_level=1,position="center",vertical_distance="50px",horizontal_line=True)
 
         front_end = articles("Front-end",myList("Create simple API to make everything easily customizable","Test and improve"))
         back_end = articles("Back-end",myList("Create simple API to make everythong easily customizable","Test and improve"))
         experience = articles("Experience",myList("Test and improve"))
-    
+
         beta_objectives(front_end,back_end,experience)
 
         page = Page("Objectives",*page_params)
@@ -201,20 +313,23 @@ def anypage(request):
     if request.method == "GET":
         page = Page("%s" % request.path[1:],*page_params)
         page.add_element(menu,request.path,footer)
-        return page            
-""",save_format=True,is_code=True,lang="python",background={"background":background_color})
+        return page
+""", save_format=True, is_code=True, lang="python", background={"background": background_color})
 
-    page = Page("User Guide",*page_params)
-    page.add_element(menu,guide,footer)
+    page = Page("User Guide", *page_params)
+    page.add_element(menu, guide, footer)
     return page
+
+
 @serve("/testerGuide")
 def testerGuide(request):
     if request.method == "GET":
         guide = Row_articles()
         #guide(text="I don't think that this project is so big to write very big instruction here. But I can give some advices. Try to create your own website with classes are presented in frontpy module. If you have any troubles, make screenshot of error, write some description and send this to me or try to fix it by yourself but at first read %s. My address is %s. Also you can try to create your own user-friendly classes but it's about Developer guide." % (Link("/developerGuide", "this guide"),Link("mailto:lds4ever2000@gmail.com","lds4ever2000@gmail.com")))
-        page = Page("Tester Guide",*page_params)
-        page.add_element(menu,guide,footer)
+        page = Page("Tester Guide", *page_params)
+        page.add_element(menu, guide, footer)
         return page
+
 
 @serve("/developerGuide")
 def testerGuide(request):
@@ -222,13 +337,13 @@ def testerGuide(request):
         guide = Row_articles()
         #guide("Developer codex :)",Numbered_list({},"No matter how it's difficult to create class, the only matter is how simple in use this class","Each class has to balance between simplicity and customizability","Each class has to redefine (if necessary) wrapping syntax","Almost every argument of any constructor or any method has to be predefined by author","But none of these rules are not aimed to reduce your creativity)))"))
         #guide(text="More information you can find %s" % Link("https://github.com/DimonLuk/front-py/wiki","here"))
-        page = Page("Developer Guide",*page_params)
-        page.add_element(menu,guide,footer)
+        page = Page("Developer Guide", *page_params)
+        page.add_element(menu, guide, footer)
         return page
+
 
 @serve("/<any>")
 def anypage(request):
-    page = Page("%s" % request.path[1:],*page_params)
-    page.add_element(menu,footer)
+    page = Page("%s" % request.path[1:], *page_params)
+    page.add_element(menu, footer)
     return page
-

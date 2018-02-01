@@ -3,27 +3,33 @@ import sys
 import json
 import importlib
 PATH = "application"
+
+
 def prepare_import():
-    framework = os.path.join(os.getcwd(),PATH)
-    sys.path.append(framework)      
-    for dirs,subdirs,files in os.walk(framework):
-        if not "__pycache__" in dirs:   
+    framework = os.path.join(os.getcwd(), PATH)
+    sys.path.append(framework)
+    for dirs, subdirs, files in os.walk(framework):
+        if not "__pycache__" in dirs:
             sys.path.append(dirs)
+
 
 if __name__ == "__main__":
     if sys.argv[1] == "start" and len(sys.argv) == 2:
         prepare_import()
         params = {}
-        with open(os.path.join(PATH,"config.json"),"r") as file:
+        with open(os.path.join(PATH, "config.json"), "r") as file:
             params = json.load(file)
         app = importlib.import_module(params["source_file"])
-        app.run_app(address=params["address"],port=params["port"])
+        app.run_app(address=params["address"], port=params["port"])
     elif sys.argv[1] == "config" and len(sys.argv) == 2:
         params = {}
-        source_file = input("Enter the filename where you application is (for example sample): ")
+        source_file = input(
+            "Enter the filename where you application is (for example sample.py): "
+        )[:-3]
         if not source_file:
             raise ValueError("Please enter the filename it's required")
-        address = input("Enter the addres you want to host (localhost is default): ")
+        address = input(
+            "Enter the addres you want to host (localhost is default): ")
         if not address:
             address = "localhost"
         port = input("Enter the port you want to host (8000 is default): ")
@@ -31,8 +37,9 @@ if __name__ == "__main__":
             port = int(port)
         elif not port:
             port = 8000
-        with open(os.path.join(PATH,"config.json"),"w") as file:
-            json.dump({"source_file":source_file,"address":address,"port":port},file)
+        with open(os.path.join(PATH, "config.json"), "w") as file:
+            json.dump({"source_file": source_file,
+                       "address": address, "port": port}, file)
     elif sys.argv[1] == "test" and len(sys.argv) == 2:
         prepare_import()
         test = importlib.import_module("functions")
@@ -73,7 +80,7 @@ $ python app.py docs <Class_or_function_name>
 #So, now let's see what the framework can do
 
 #The first thing which is required is importing everything you need to develop your own pages
-from front_py import * 
+from front_py import *
 
 #Then you can setup your global variables that will make single style for all pages
 background_color = "#dddddd" #Grey
@@ -88,7 +95,7 @@ page_params = tuple(["utf-8",{"background":background_color}]) #Then specife par
 #For the moment of writing this tutorial it's avaliable one style of menu, Inline_menu, to read more, write in your terminal or command line:
 #$ python app.py docs Inline_menu
 #But I suppose that your IDE should show you info about this class
-menu = Inline_menu({"background":"black"},[{"Home":"/"},{"Git":"https://github.com/DimonLuk/front-py"},{"Documentation":"https://github.com/DimonLuk/front-py/wiki"}, {"Objectives":"/objectives"},{"User guide":"/userGuide"},{"Tester guide":"/testerGuide"},{"Developer guide":"/developerGuide"}],"white",Brand_text("Front-py",brand_color)) 
+menu = Inline_menu({"background":"black"},[{"Home":"/"},{"Git":"https://github.com/DimonLuk/front-py"},{"Documentation":"https://github.com/DimonLuk/front-py/wiki"}, {"Objectives":"/objectives"},{"User guide":"/userGuide"},{"Tester guide":"/testerGuide"},{"Developer guide":"/developerGuide"}],"white",Brand_text("Front-py",brand_color))
 
 #Then it's a good idea to create one footer for all your pages
 foot = Text("&copy DimonLuk")
@@ -138,23 +145,23 @@ def objectives(request):
         front_end = articles("Front-end",Numbered_list({},"%s" % crossed_text("Reorganising packages"),"Unit tests","Unnumbered list","Gallery","Forms","Tests","Customizing existing classes","Tests"))
         back_end = articles("Back-end",Numbered_list({},"Handling POST request","Grand tests of framework","Creating API to database","Tests"))
         experience = articles("Experience",Numbered_list({},"Writing documentation","Create complete guides for users, developers and testers","Work with %s on github" % Link("https://github.com/DimonLuk/front-py/wiki","wiki")))
-    
+
         pre_alpha_objectives = Column_articles("%s pre-alpha objectives" % brand_text("Front-py"),"",1,"center","50px",True,front_end,back_end,experience)
-    
+
         alpha_objectives = Column_articles("%s alpha objectives" % brand_text("Front-py"),headers_level=1,position="center",vertical_distance="50px",horizontal_line=True)
-    
+
         front_end = articles("Front-end",myList("Galleries","Carousels","Registartion","Log in","Permission system","Admin panel"))
         back_end = articles("Back-end",myList("Registration","Log In","Permission system","Admin panel","Optional: write own server"))
         experience = articles("Experience",myList("Improve internal framework architecture","Improve API for users","Improve documentation and make complite guides for future beta version where API won't be changing"))
-    
+
         alpha_objectives(front_end,back_end,experience)
-    
+
         beta_objectives = Column_articles("%s beta objectives" % brand_text("Front-py"),headers_level=1,position="center",vertical_distance="50px",horizontal_line=True)
 
         front_end = articles("Front-end",myList("Create simple API to make everything easily customizable","Test and improve"))
         back_end = articles("Back-end",myList("Create simple API to make everythong easily customizable","Test and improve"))
         experience = articles("Experience",myList("Test and improve"))
-    
+
         beta_objectives(front_end,back_end,experience)
 
         page = Page("Objectives",*page_params)
@@ -170,7 +177,7 @@ def anypage(request):
     if request.method == "GET":
         page = Page("%s" % request.path[1:],*page_params)
         page.add_element(menu,request.path,footer)
-        return page                 
+        return page
 """)
     else:
         print("""
