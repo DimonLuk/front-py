@@ -21,13 +21,25 @@ from Core_meta import Core_meta
 
 class Core_element(metaclass=Core_meta):
     """
-    It's the main class which aim is creating python representation of html elements.
+    It's the main class which aim is creating python
+    representation of html elements.
     Its metaclass is Core_meta.
-    Constructor arguments: self, element, is_closing, is_add_attrs, attributes.
-    element - shows which html element represents current object, but you should pass for example "p", "img" and etc.
-    is_closing - shows if the html element has to be closed(for example <p\></p>) or not(<img ...attrs />).
-    is_add_attrs - shows if some attributes has to be placed into html element.
-    attributes - array of strings with names of attributes to be added, for example ["style","class","id","myattr"] to element "p" will result as <p style="" class="" myattr=""></p>. If you haven't added attributes when the object has been created you won't be able to add values and attributes later
+    Constructor arguments: self, element, is_closing,
+    is_add_attrs, attributes.
+    element: string, default: ""
+        - shows which html element represents current object,
+        but you should pass for example "p", "img" and etc.
+    is_closing: boolean, default: True
+        - shows if the html element has to be
+        closed(for example <p\></p>) or not(<img ...attrs />).
+    is_add_attrs: boolean, default: True
+    - shows if some attributes has to be placed into html element.
+    attributes: string[]
+        - array of strings with names of attributes to be added,
+        for example ["style","class","id","myattr"]
+        to element "p" will result as <p style="" class="" myattr=""></p>.
+        If you haven't added attributes when the object has been created
+        you won't be able to add values and attributes later
     """
 
     def __init__(
@@ -68,8 +80,10 @@ class Core_element(metaclass=Core_meta):
 
     def __str__(self):
         """
-        Creates deepcopy of object, renders it with _render and returns _template of object which is html representation of object.
+        Creates deepcopy of object, renders it with _render and
+        returns _template of object which is html representation of object.
         Arguments: self.
+        Returns: string
         """
         import copy
         cop = copy.deepcopy(self)
@@ -81,7 +95,10 @@ class Core_element(metaclass=Core_meta):
         Creates deepcopy of object, put content into copy and return rendered _template.
         It's an implementation of wrapping syntax.
         Arguments: self, *content.
-        *content - content to be placed into the object
+        *content: any number of strings and object that
+        are derived from Core_element
+            - content to be placed into the object
+        Returns: string
         """
         import copy
         cop = copy.deepcopy(self)
@@ -93,7 +110,9 @@ class Core_element(metaclass=Core_meta):
         """
         Adds value to html attribute style if the object has it.
         Arguments: self, styles.
-        styles - JSON object with css3 style notation, for example {"text-align":"center","color":"#ff003b"}
+        styles: object (see example)
+            - JSON object with css3 style notation,
+            for example {"text-align":"center","color":"#ff003b"}
         """
         self._styles = styles
         if "style" in self._indexes_list:
@@ -106,7 +125,9 @@ class Core_element(metaclass=Core_meta):
         """
         Adds value to html attribute class if the object has it.
         Arguments: self, *cls.
-        *cls - classnames to be added, for example some_object._add_class("col-lg-12","MyClass")
+        *cls: string[]
+            - classnames to be added,
+            for example some_object._add_class("col-lg-12","MyClass")
         """
         self._cls = cls  # represents classes of html tag
         if "class" in self._indexes_list:
@@ -119,9 +140,11 @@ class Core_element(metaclass=Core_meta):
 
     def add_content(self, *content):
         """
-        Adds content to html element if it can be added, content can't be changed after it has been put to object.
+        Adds content to html element if it can be added,
+        content can't be changed after it has been put to object.
         Arguments: self, *content.
-        *content - content to be put into object, can be both objects derived from Core_element and strings.
+        *content: any number of strings and objects from framework
+            - content to be put into object
         """
         self._content = content  # Represents content to be added to 'self' object
         for i in self._content:
@@ -143,9 +166,9 @@ class Core_element(metaclass=Core_meta):
 
     def _render(self):
         """
-        REUIRED TO CORRECT INTERPRETATION OF HTML
+        REQUIRED TO CORRECT INTERPRETATION OF HTML
         Renders the _template field by using _clean method.
-        Arguments: self.
+        Arguments: self
         """
         for i in self._indexes_list:  # Clean all replacement expressions
             self._clean(self, 0)
@@ -154,7 +177,10 @@ class Core_element(metaclass=Core_meta):
         """
         Links elements as target for events in browsers.
         Arguments: self, targets.
-        targets - array of objects from the framework which will act as a targets of the event, object which has called this method also can act as a target.
+        targets: objects from framework
+            - array of objects from the framework which will act as a
+            targets of the event, object which has called this method
+            also can act as a target.
         """
         self._trigger = self._generate_trigger()  # classname for tag which will emit the event
         # classname for tag which will be changed during the event
@@ -190,7 +216,8 @@ class Core_element(metaclass=Core_meta):
         """
         Adds some javascript to special file which will be sent to browsers.
         Arguments: self,
-        toDo - javascript, you can use libraries such libraries: jquery and hljs
+        toDo: string
+            - javascript, you can use such libraries: jquery and hljs
         """
         with open("./application/static/scripts/script.js", "a") as script:
             script.write(toDo)
@@ -199,11 +226,16 @@ class Core_element(metaclass=Core_meta):
         """
         Binds event on object.
         Arguments: self, toDo, targets, params.
-        toDo - string which describes the action which will be done during the event, now it can be chosen from this list:
-            "change_color" -  Avaliable params: {"color":"css3_color"}
+        toDoi: string
+            - describes the action which will be done during the
+            event, now it can be chosen from this list:
+                "change_color" -  Avaliable params: {"color":"css3_color"}
 
-        targets - are targets for the event(object derived from Core_element) object that has called this method can be passed as a target too.
-        params - special parameters for each case in list
+        targets: objects from framework
+            - are targets for the event,
+            object that has called this method can be passed as a target too.
+        params: object
+            - special parameters for each case in list
         """
         self._link_elements(targets)
         self._on_clickParams = params

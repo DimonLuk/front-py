@@ -25,7 +25,8 @@ def make_name(address):
     Creates special name which will be added to Core_http_process attributes.
     Because names are built from http requests they contain '/', this function repleces it with '_aa'.
     Arguments: address.
-    address - url of http request.
+    address: string
+        - url of http request.
     !!!Not imported to front_py package. Not for user usage!!!
     """
     address = address.split("/")
@@ -36,7 +37,10 @@ def make_name(address):
 def serve(address):
     """
     Binds function to url which has to be served.
-    Arguments: address - request itself, for example, if you want to serve "http://localhost:8000/test" you have to pass only "/test".
+    Arguments: address
+    address: string
+        - request itself, for example, if you want to serve
+        "http://localhost:8000/test" you have to pass only "/test".
     Usage: as decorator for function that will create some response
     """
     def decorator(fn, address=address):
@@ -53,10 +57,14 @@ def run_app(address="localhost", server=HTTPServer,
     """
     Runs the server and application.
     Arguments: address, server, handler, port.
-    address - ip address to be served, default is 'localhost'.
-    server - server class which will serve the application, default is HTTPServer.
-    handler - class that will handle requests, default is Core_http_process.
-    port - port to be served, default is 8000
+    address: string, default: "localhost"
+        - ip address to be served, default is 'localhost'.
+    server: class extends HTTPServer
+        - server class which will serve the application, default is HTTPServer.
+    handler: class extends Core_http_process
+        - class that will handle requests, default is Core_http_process.
+    port: int, default: 8000
+        - port to be served, default is 8000
     """
     server_address = (address, port)
     http = server(server_address, handler)

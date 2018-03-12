@@ -19,8 +19,8 @@ from http.server import BaseHTTPRequestHandler
 from constants import *
 from front_end import Page
 """
-Test for this class and make_name function can be found at functions module of this package,
-because of importing issues
+Test for this class and make_name function can be found at functions module
+of this package, because of importing issues
 
 _requst class is not tested because for now it's nothing to test here
 """
@@ -29,8 +29,12 @@ _requst class is not tested because for now it's nothing to test here
 def make_name(address):
     """
     Creates special name which will be added to Core_http_process attributes.
-    Because names are built from http requests they contain '/', this function repleces it with '_aa'.
-    Arguments: address. address - url of http request. Not imported to front_py package.
+    Because names are built from http requests they contain '/',
+    this function repleces it with '_aa'.
+    Arguments: address.abs
+    address: string
+        - url of http request. Not imported to front_py package.
+    Returns: string
     !!!Not for user usage!!!
     """
     address = address.split("/")
@@ -43,7 +47,8 @@ class Core_http_process(BaseHTTPRequestHandler):
     Derived from BaseHTTPRequestHandler.
     Used for handling requests from user.
     For now can handle only GET requests.
-    Constructor arguments: self, a, b, c. All arguments are derived from superclass, user mustn't pass any of them.
+    Constructor arguments: self, a, b, c.
+    All arguments are derived from superclass, user mustn't pass any of them.
     """
 
     def __init__(self, a, b, c):
@@ -132,10 +137,14 @@ class _request:
     """
     This class create simple API of browser html for user.
     Arguments: self, path, method, headers, body.
-    path - represents path of browser request.
-    method - method which has been used to send the request.
-    headers - headers of the request (Not implemented yet).
-    body - body of the http request (Not implemented yet)
+    path: string
+        - represents path of browser request.
+    method: string
+        - method which has been used to send the request.
+    headers: object
+        - headers of the request (Not implemented yet).
+    body: ???
+        - body of the http request (Not implemented yet)
     """
 
     def __init__(self, path, method, headers={}, body={}):

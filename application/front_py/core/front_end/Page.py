@@ -20,11 +20,18 @@ from Core_element import Core_element
 
 class Page(Core_element):
     """
-    Derived from Core_element but it's special element, which has additional html code.
+    Derived from Core_element but it's special element,
+    which has additional html code.
     Constructor's arguments: self, title, encoding, background.
-    title - title of the page will be displayed at the tab of browser, for example if you pass into this argument "Your title" it will result as <title>Your title</title> in html inside <head></head>.
-    encoding - sets the encoding of the page, default it's utf-8.
-    background - JSON object with css3 rules to define background of all page, for example {"background-color":"#abcdef"}
+    title: string
+        - title of the page will be displayed at the tab of browser,
+        for example if you pass into this argument "Your title" it will
+        result as <title>Your title</title> in html inside <head></head>.
+    encoding: string, default: "utf-8"
+        - sets the encoding of the page, default it's utf-8.
+    background: object
+        - JSON object with css3 rules to define background
+        of all page, for example {"background-color":"#abcdef"}
     """
 
     def __init__(self, title, encoding="utf-8", background={}):
@@ -74,7 +81,8 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
         """
         Adds element to page, elements can be both objects derived from Core_element and strings.
         Arguments: self, *content.
-        *content - content to be placed to the page.
+        *content: objects from the framework
+            - content to be placed to the page.
         """
         for i in content:
             self.add_content(i)
@@ -83,7 +91,10 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
         """
         Changes previous title of the page.
         Arguments: self, title.
-        title - title of the page will be displayed at the tab of browser, for example if you pass into this argument "Your title" it will result as <title>Your title</title> in html inside <head></head>.
+        title: string
+            - title of the page will be displayed at the tab of browser,
+            for example if you pass into this argument "Your title" it will
+            result as <title>Your title</title> in html inside <head></head>.
         """
         self._title = title
 
@@ -91,7 +102,9 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
         """
         Changes previous background of the page.
         Arguments: self, background.
-        background - JSON object with css3 rules to define background of all page, for example {"background-color":"#abcdef"}.
+        background: object
+            - JSON object with css3 rules to define background of all page,
+            for example {"background-color":"#abcdef"}.
         """
         self._add_style(background)
 
@@ -108,7 +121,10 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
         page.title = "Another title"
         page.background = {"background-image":"url(image_name.image_format)"}.
 
-        To add image just place it into media folder of your project that by default has this path: (suppose you're in the folder where app.py is placed) application/static/media.
+        To add image just place it into media folder of your project
+        that by default has this path:
+            (suppose you're in the folder where app.py is placed)
+            application/static/media
         """
         if name == "background":
             self.set_background(value)
