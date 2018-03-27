@@ -11,7 +11,7 @@ menu = Inline_menu(
     {"background": "black"},
     [{"Home": "/"},
      {"Git": "https://github.com/DimonLuk/front-py"},
-     {"Documentation": "https://github.com/DimonLuk/front-py/wiki"},
+     {"Documentation": "./documentation/html/index.html"},
      {"Objectives": "/objectives"},
      {"User guide": "/userGuide"},
      {"Tester guide": "/testerGuide"},

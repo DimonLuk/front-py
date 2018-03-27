@@ -19,25 +19,33 @@ from Core_element import Core_element
 
 
 class Page(Core_element):
-    """
-    Derived from Core_element but it's special element,
+    """!
+    @brief Derived from Core_element but it's special element,
     which has additional html code.
-    Constructor's arguments: self, title, encoding, background.
-    title: string
-        - title of the page will be displayed at the tab of browser,
-        for example if you pass into this argument "Your title" it will
-        result as <title>Your title</title> in html inside <head></head>.
-    encoding: string, default: "utf-8"
-        - sets the encoding of the page, default it's utf-8.
-    background: object
-        - JSON object with css3 rules to define background
-        of all page, for example {"background-color":"#abcdef"}
+    @param title: string
+    - title of the page will be displayed at the tab of browser,
+    for example if you pass into this argument "Your title" it will
+    result as <title>Your title</title> in html inside <head></head>.
+    @param encoding: string, default: "utf-8"
+    - sets the encoding of the page, default it's utf-8.
+    @parambackground: object
+    - JSON object with css3 rules to define background
+    of all page, for example
+    @code{"background-color":"#abcdef"}@endcode
     """
 
     def __init__(self, title, encoding="utf-8", background={}):
+        ## Mimetype of page
         self._mimetype = "text/html"
+
+        ## _title is the value inside
+        # @code<title></title>@endcode tag
         self._title = title
+
+        ## encoding is the encdoing of the page
+        # default: utf-8
         self.encoding = encoding
+
         super().__init__("div", True, True, ["class", "style"])
         self._add_class("global")
         if background:
@@ -78,53 +86,56 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 </html>"""
 
     def add_element(self, *content):
-        """
-        Adds element to page, elements can be both objects derived from Core_element and strings.
-        Arguments: self, *content.
-        *content: objects from the framework
-            - content to be placed to the page.
+        """!
+        @brief Adds element to page, elements can be both objects derived from Core_element and strings.
+        @param *content: objects from the framework
+        - content to be placed to the page.
         """
         for i in content:
             self.add_content(i)
 
     def set_title(self, title):
-        """
-        Changes previous title of the page.
-        Arguments: self, title.
-        title: string
-            - title of the page will be displayed at the tab of browser,
-            for example if you pass into this argument "Your title" it will
-            result as <title>Your title</title> in html inside <head></head>.
+        """!
+        @brief Changes previous title of the page.
+        @param title: string
+        - title of the page will be displayed at the tab of browser,
+        for example if you pass into this argument "Your title" it will
+        result as <title>Your title</title> in html inside <head></head>.
         """
         self._title = title
 
     def set_background(self, background):
-        """
-        Changes previous background of the page.
-        Arguments: self, background.
-        background: object
-            - JSON object with css3 rules to define background of all page,
-            for example {"background-color":"#abcdef"}.
+        """!
+        @brief Changes previous background of the page.
+        @param background: object
+        - JSON object with css3 rules to define background of all page,
+        for example
+        @code{"background-color":"#abcdef"}@endcode
         """
         self._add_style(background)
 
     def _render(self):
+        """!
+        @brief inherited from Core_element#_render
+        """
+
+        ##Inherited from Core_element#_template
         self._template = self._tmp % (
             self._title, self.encoding, BOOTSTRAP_CSS, self._template,
             JQUERY_3_2_1_MIN_JS, BOOTSTRAP_MIN_JS, SCRIPT_JS)
         super()._render()
 
     def __setattr__(self, name, value):
-        """
-        You can change title and background in this way:
-
+        """!
+        @details You can change title and background in this way:
+        @code
         page.title = "Another title"
         page.background = {"background-image":"url(image_name.image_format)"}.
-
+        @endcode
         To add image just place it into media folder of your project
         that by default has this path:
-            (suppose you're in the folder where app.py is placed)
-            application/static/media
+        (suppose you're in the folder where app.py is placed)
+        @code application/static/media @endcode
         """
         if name == "background":
             self.set_background(value)
