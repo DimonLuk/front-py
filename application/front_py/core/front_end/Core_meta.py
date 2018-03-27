@@ -15,19 +15,17 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
 
-
 def _replace(self, it, content, index):
-    """
-    Replaces "|||"(replacement expression) with some defined content.
-    Arguments: self, it, content, index.
-    it: object that derived from Core_element
-        - determines element which _template has to be changed
-    content: string
-        - content to be inserted.
-    index: int
-        - shows which "|||"(replacement expression) has to be replaced,
-        starts from 0, in Core_element indexes are contained in
-        the _indexes_list object
+    """!
+    @brief Replaces "|||" (replacement expression) wwith some defined content
+    @param it: object that derived from Core_element
+    - determines element which _template has to be changed
+    @param content: string
+    - content to be inserted.
+    @param index: int
+    - shows which "|||"(replacement expression) has to be replaced,
+    starts from 0, in Core_element indexes are contained in
+    the _indexes_list object
     """
     toRm = 0  # Position where the content to be inserted
     count = 0  # Shows which replacement expression has been found
@@ -45,13 +43,12 @@ def _replace(self, it, content, index):
 
 
 def _clean(self, it, index):
-    """
-    Cleans all "|||"(replacement expression).
-    Arguments: self, it,index.
-    it: object that is derived form the framework
-        - object where "|||"(replacement expression) has to removed
-    index: int
-        - shows which "|||"(replacement expression) has to be cleaned.
+    """!
+    @brief Cleans all "|||"(replacement expression).
+    @param it: object that is derived form the Core_element
+    - object where "|||"(replacement expression) has to removed
+    @param index: int
+    - shows which "|||"(replacement expression) has to be cleaned.
     """
     toRm = 0  # Position in the 'template' where the replacement expremession to be removed
     count = 0  # Shows current expression
@@ -68,10 +65,10 @@ def _clean(self, it, index):
 
 
 def _generate_trigger(self):
-    """
-    Generates classname for html element which will act as the trigger for the event.
-    Arguments: self - this method can be found only in object derived from Core_element.
-    Returns: string
+    """!
+    @brief Generates classname for html element which will act as the trigger for the event.
+    @param self - this method can be found only in object derived from Core_element.
+    @return string
     """
     import datetime
     trigger = "%s" % datetime.datetime.now()
@@ -85,19 +82,18 @@ def _generate_trigger(self):
 
 
 def _generate_target(self, trigger):
-    """
-    Generates classname for html elements which will act as the targets of the event.
-    Arguments: self, trigger.
-    trigger: string
-        - key that is used to generate target key
-    Returns: string
+    """!
+    @brief Generates classname for html elements which will act as the targets of the event.
+    @param trigger: string
+    - key that is used to generate target key
+    @return string
     """
     return trigger+"Target"
 
 
 class Core_meta(type):
-    """
-    Metaclass which provdes service methods for Core_element
+    """!
+    @brief Metaclass which provides service methods for Core_element
     """
     def __new__(cls, name, bases, dct):
         dct["_replace"] = _replace
