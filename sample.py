@@ -27,38 +27,8 @@ footer.background_color = "black"
 @serve("/")
 def index(request):
     if request.method == "GET":
-        articles = Row_articles(
-            "Three facts about %s 0.0.1(pre-alpha)" %
-            brand_text("Front-py"),
-            horizontal_line=True,
-            headers_level=2,
-            horizontal_distance="50px")
-        articles.add_article(
-            "The first fact",
-            "This framework is attemp to combine the best ideas from Django, Flask, Angular and other frameworks but %s complicated application architecture" %
-            brand_text("without creating"))
-        articles.add_article(
-            "The second fact", "You have to use only %s 3.x to write %s front and back-end" %
-            (brand_text("python"), brand_text("both")))
-        articles.add_article(
-            "The third fact",
-            "Just see what you have to write on python (%s) and how many pure html you have to write to create the page you see:%s" %
-            (brand_text("including reusable components"),
-             Container_row(
-                Image(
-                    "python1.png",
-                    "Code",
-                    6),
-                Image(
-                    "html.png",
-                    "Code",
-                    6))))
-
         page = Page("Home", *page_params)
-        page.add_element(menu.add_links(
-                             {"Additional Link": "/nothing"},
-                             brand_color),
-                         articles, footer)
+        page.add_element(menu, footer)
         return page
 
 

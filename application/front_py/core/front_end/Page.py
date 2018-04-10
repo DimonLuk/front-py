@@ -34,20 +34,23 @@ class Page(Core_element):
     @code{"background-color":"#abcdef"}@endcode
     """
 
-    def __init__(self, title, encoding="utf-8", background={}):
-        ## Mimetype of page
+    def __init__(self, title, url="/",encoding="utf-8", background={}):
+        # Mimetype of page
         self._mimetype = "text/html"
+        self.url = url
 
-        ## _title is the value inside
+        # _title is the value inside
         # @code<title></title>@endcode tag
         self._title = title
 
-        ## encoding is the encdoing of the page
+        # encoding is the encdoing of the page
         # default: utf-8
         self.encoding = encoding
 
         super().__init__("div", True, True, ["class", "style"])
         self._add_class("global")
+        self.script = "<script>$(window).on('load', function(){$.ajax({url:'http://localhost:8000%s',success:function(data){$('.global').html(data)}})});</script>"
+        self.add_content(self.script % self.url)
         if background:
             self._add_style(background)
         self._tmp = """
@@ -75,10 +78,10 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
         <link rel="icon" href="favicon.ico" type="image/x-icon"/>
         <link rel="shortcut icon" href="favicon.ico" type="image/x-icon"/>
         <link rel="stylesheet" type="text/css" href="%s">
+        <script src="%s"></script>
     </head>
     <body style="margin-top:-16px;">
             %s
-        <script src="%s"></script>
         <script src="%s"></script>
         <script src="%s"></script>
         <script>hljs.initHighlightingOnLoad();</script>
@@ -119,10 +122,10 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
         @brief inherited from Core_element#_render
         """
 
-        ##Inherited from Core_element#_template
+        # Inherited from Core_element#_template
         self._template = self._tmp % (
-            self._title, self.encoding, BOOTSTRAP_CSS, self._template,
-            JQUERY_3_2_1_MIN_JS, BOOTSTRAP_MIN_JS, SCRIPT_JS)
+            self._title, self.encoding, BOOTSTRAP_CSS, JQUERY_3_2_1_MIN_JS,
+            self._template, BOOTSTRAP_MIN_JS, SCRIPT_JS)
         super()._render()
 
     def __setattr__(self, name, value):

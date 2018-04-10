@@ -96,6 +96,10 @@ class Core_http_process(BaseHTTPRequestHandler):
                 self._response = bytes(self._resp._template.encode("utf-8"))
                 self._send_response(self._resp._mimetype)
                 self.wfile.write(self._response)
+            elif isinstance(self._resp, str):
+                self._response = bytes(self._resp.encode("utf-8"))
+                self._send_response("text/html")
+                self.wfile.write(self._response)
             else:
                 raise Unsupported_feature(
                     INVALID_INSERTION_MESSAGE % self._resp)
