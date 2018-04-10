@@ -27,38 +27,10 @@ footer.background_color = "black"
 @serve("/")
 def index(request):
     if request.method == "GET":
-        articles = Row_articles(
-            "Three facts about %s 0.0.1(pre-alpha)" %
-            brand_text("Front-py"),
-            horizontal_line=True,
-            headers_level=2,
-            horizontal_distance="50px")
-        articles.add_article(
-            "The first fact",
-            "This framework is attemp to combine the best ideas from Django, Flask, Angular and other frameworks but %s complicated application architecture" %
-            brand_text("without creating"))
-        articles.add_article(
-            "The second fact", "You have to use only %s 3.x to write %s front and back-end" %
-            (brand_text("python"), brand_text("both")))
-        articles.add_article(
-            "The third fact",
-            "Just see what you have to write on python (%s) and how many pure html you have to write to create the page you see:%s" %
-            (brand_text("including reusable components"),
-             Container_row(
-                Image(
-                    "python1.png",
-                    "Code",
-                    6),
-                Image(
-                    "html.png",
-                    "Code",
-                    6))))
-
-        page = Page("Home", *page_params)
-        page.add_element(menu.add_links(
-                             {"Additional Link": "/nothing"},
-                             brand_color),
-                         articles, footer)
+        page = Page("Home", background={"background":background_color})
+        container = Block_container()
+        container._add_class("content")
+        page.add_element(menu, container,footer)
         return page
 
 
@@ -168,13 +140,12 @@ def objectives(request):
         beta_objectives(front_end, back_end, experience)
 
         page = Page("Objectives", *page_params)
-        page.add_element(
-            menu,
+        content = Block_container()
+        content.add_content(
             pre_alpha_objectives,
             alpha_objectives,
-            beta_objectives,
-            footer)  # add elements on it
-        return page
+            beta_objectives)  # add elements on it
+        return content
 
 
 @serve("/userGuide")

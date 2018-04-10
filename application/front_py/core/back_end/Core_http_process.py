@@ -17,7 +17,8 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 from http.server import BaseHTTPRequestHandler
 from constants import *
-from front_end import Page
+from front_end import Core_element, Page
+from exceptions import Unsupported_feature
 """
 Test for this class and make_name function can be found at functions module
 of this package, because of importing issues
@@ -91,10 +92,14 @@ class Core_http_process(BaseHTTPRequestHandler):
                 self._send_response(self._resp[1])
                 self.wfile.write(self._response)
             # If it's user defined function, than its type is WebPage
-            elif isinstance(self._resp, Page):
+            elif isinstance(self._resp, Core_element):
                 self._resp._render()
                 self._response = bytes(self._resp._template.encode("utf-8"))
-                self._send_response(self._resp._mimetype)
+                self._send_response("text/html")
+                self.wfile.write(self._response)
+            elif isinstance(self._resp, str):
+                self._response = bytes(self._resp.encode("utf-8"))
+                self._send_response("text/html")
                 self.wfile.write(self._response)
             else:
                 raise Unsupported_feature(

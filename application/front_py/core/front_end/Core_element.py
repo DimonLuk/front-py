@@ -247,8 +247,7 @@ class Core_element(metaclass=Core_meta):
         @param toDo: string
         - javascript, you can use such libraries: jquery and hljs
         """
-        with open("./application/static/scripts/script.js", "a") as script:
-            script.write(toDo)
+        self.add_content("<script>%s</script>" % toDo)
 
     def on_click(self, toDo, targets=[], params={}):
         """!
