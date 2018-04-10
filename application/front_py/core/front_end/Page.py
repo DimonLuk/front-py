@@ -49,8 +49,6 @@ class Page(Core_element):
 
         super().__init__("div", True, True, ["class", "style"])
         self._add_class("global")
-        self.script = "<script>$(window).on('load', function(){$.ajax({url:'http://localhost:8000%s',success:function(data){$('.global').html(data)}})});</script>"
-        self.add_content(self.script % self.url)
         if background:
             self._add_style(background)
         self._tmp = """

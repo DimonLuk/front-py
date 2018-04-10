@@ -27,8 +27,10 @@ footer.background_color = "black"
 @serve("/")
 def index(request):
     if request.method == "GET":
-        page = Page("Home", *page_params)
-        page.add_element(menu, footer)
+        page = Page("Home", background={"background":background_color})
+        container = Block_container()
+        container._add_class("content")
+        page.add_element(menu, container,footer)
         return page
 
 
@@ -138,13 +140,12 @@ def objectives(request):
         beta_objectives(front_end, back_end, experience)
 
         page = Page("Objectives", *page_params)
-        page.add_element(
-            menu,
+        content = Block_container()
+        content.add_content(
             pre_alpha_objectives,
             alpha_objectives,
-            beta_objectives,
-            footer)  # add elements on it
-        return page
+            beta_objectives)  # add elements on it
+        return content
 
 
 @serve("/userGuide")
