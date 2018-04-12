@@ -287,19 +287,15 @@ def anypage(request):
         return page
 """, save_format=True, is_code=True, lang="python", background={"background": background_color})
 
-    page = Page("User Guide", *page_params)
-    page.add_element(menu, guide, footer)
-    return page
+    return guide
 
 
 @serve("/testerGuide")
 def testerGuide(request):
     if request.method == "GET":
         guide = Row_articles()
-        #guide(text="I don't think that this project is so big to write very big instruction here. But I can give some advices. Try to create your own website with classes are presented in frontpy module. If you have any troubles, make screenshot of error, write some description and send this to me or try to fix it by yourself but at first read %s. My address is %s. Also you can try to create your own user-friendly classes but it's about Developer guide." % (Link("/developerGuide", "this guide"),Link("mailto:lds4ever2000@gmail.com","lds4ever2000@gmail.com")))
-        page = Page("Tester Guide", *page_params)
-        page.add_element(menu, guide, footer)
-        return page
+        guide(text="I don't think that this project is so big to write very big instruction here. But I can give some advices. Try to create your own website with classes are presented in frontpy module. If you have any troubles, make screenshot of error, write some description and send this to me or try to fix it by yourself but at first read %s. My address is %s. Also you can try to create your own user-friendly classes but it's about Developer guide." % (Link("/developerGuide", "this guide"),Link("mailto:lds4ever2000@gmail.com","lds4ever2000@gmail.com")))
+        return guide
 
 
 @serve("/developerGuide")
@@ -307,10 +303,8 @@ def testerGuide(request):
     if request.method == "GET":
         guide = Row_articles()
         #guide("Developer codex :)",Numbered_list({},"No matter how it's difficult to create class, the only matter is how simple in use this class","Each class has to balance between simplicity and customizability","Each class has to redefine (if necessary) wrapping syntax","Almost every argument of any constructor or any method has to be predefined by author","But none of these rules are not aimed to reduce your creativity)))"))
-        #guide(text="More information you can find %s" % Link("https://github.com/DimonLuk/front-py/wiki","here"))
-        page = Page("Developer Guide", *page_params)
-        page.add_element(menu, guide, footer)
-        return page
+        guide(text="More information you can find %s" % Link("https://github.com/DimonLuk/front-py/wiki","here"))
+        return guide
 
 
 @serve("/<any>")
