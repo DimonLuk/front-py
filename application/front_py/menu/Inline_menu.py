@@ -93,7 +93,7 @@ class Inline_menu(e._Block_element):
 
         self.links_list = e._Unnumbered_list_element()
         self.links_list._add_class("navbar-nav", "mr-left")
-
+        first = True
         for i in self.links:
             li = e._In_list_element()
             li._add_class("nav-item", "active")
@@ -105,7 +105,13 @@ class Inline_menu(e._Block_element):
                 href._add_class("nav-link")
                 href._add_style({"color": self.links_color})
                 li.add_content(href)
-                li._add_script("$('.%s').off().click(function(e){e.preventDefault();$.ajax({url:'http://localhost:8000'+$(this).find('a').attr('href'), success:function(data){$('.content').html(data);}});});" % ("j"+str(hex(hash(li)))))
+                if first:
+                    li._add_script("$(document).ready(function(e){$.ajax({url:'%s', success:function(data){$('.content').html(data);}});});" % i[j])
+                    li._add_script("$('.%s').off().click(function(e){e.preventDefault();$.ajax({url:$(this).find('a').attr('href'), success:function(data){$('.content').html(data);}});});" % ("j"+str(hex(hash(li)))))
+                    first = False
+                else:
+                    li._add_script("$('.%s').off().click(function(e){e.preventDefault();$.ajax({url:$(this).find('a').attr('href'), success:function(data){$('.content').html(data);}});});" % ("j"+str(hex(hash(li)))))
+
 
             self.links_list.add_content(li)
 
