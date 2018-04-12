@@ -103,6 +103,7 @@ class Inline_menu(e._Block_element):
                 href._add_class("nav-link")
                 href._add_style({"color": self.links_color})
                 li.add_content(href)
+                li._add_script("$('.nav-item').off().click(function(e){e.preventDefault();$.ajax({url:'http://localhost:8000'+$(this).find('a').attr('href'), success:function(data){$('.content').html(data);}});});")
 
             self.links_list.add_content(li)
 
