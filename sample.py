@@ -9,7 +9,7 @@ crossed_text.decor = "crossed"
 page_params = tuple(["utf-8", {"background": background_color}])
 menu = Inline_menu(
     {"background": "black"},
-    [{"Home": "/"},
+    [{"Home": "/home"},
      {"Git": "https://github.com/DimonLuk/front-py"},
      {"Documentation": "./documentation/html/index.html"},
      {"Objectives": "/objectives"},
@@ -33,6 +33,37 @@ def index(request):
         page.add_element(menu, container,footer)
         return page
 
+@serve("/home")
+def home(request):
+    if request.method == "GET":
+        articles = Row_articles(
+            "Three facts about %s 0.0.1(pre-alpha)" %
+            brand_text("Front-py"),
+            horizontal_line=True,
+            headers_level=2,
+            horizontal_distance="50px")
+        articles.add_article(
+            "The first fact",
+            "This framework is attemp to combine the best ideas from Django, Flask, Angular and other frameworks but %s complicated application architecture" %
+            brand_text("without creating"))
+        articles.add_article(
+            "The second fact", "You have to use only %s 3.x to write %s front and back-end" %
+            (brand_text("python"), brand_text("both")))
+        articles.add_article(
+            "The third fact",
+            "Just see what you have to write on python (%s) and how many pure html you have to write to create the page you see:%s" %
+            (brand_text("including reusable components"),
+             Container_row(
+                Image(
+                    "python1.png",
+                    "Code",
+                    6),
+                Image(
+                    "html.png",
+                    "Code",
+                    6))))
+
+        return articles
 
 @serve("/objectives")
 def objectives(request):
