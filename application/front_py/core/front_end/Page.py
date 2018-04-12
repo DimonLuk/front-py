@@ -77,12 +77,12 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
         <link rel="shortcut icon" href="favicon.ico" type="image/x-icon"/>
         <link rel="stylesheet" type="text/css" href="%s">
         <script src="%s"></script>
-    </head>
-    <body style="margin-top:-16px;">
-            %s
         <script src="%s"></script>
         <script src="%s"></script>
         <script>hljs.initHighlightingOnLoad();</script>
+    </head>
+    <body style="margin-top:-16px;">
+            %s
     </body>
 </html>"""
 
@@ -123,7 +123,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
         # Inherited from Core_element#_template
         self._template = self._tmp % (
             self._title, self.encoding, BOOTSTRAP_CSS, JQUERY_3_2_1_MIN_JS,
-            self._template, BOOTSTRAP_MIN_JS, SCRIPT_JS)
+            BOOTSTRAP_MIN_JS, SCRIPT_JS, self._template)
         super()._render()
 
     def __setattr__(self, name, value):

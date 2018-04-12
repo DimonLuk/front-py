@@ -99,11 +99,13 @@ class Inline_menu(e._Block_element):
             li._add_class("nav-item", "active")
             for j in i:
                 href = e._Link_element(i[j])
+                if not "http" in i[j]:
+                    li._add_class("%s" % ("j"+str(hex(hash(li)))))
                 href.add_content(j)
                 href._add_class("nav-link")
                 href._add_style({"color": self.links_color})
                 li.add_content(href)
-                li._add_script("$('.nav-item').off().click(function(e){e.preventDefault();$.ajax({url:'http://localhost:8000'+$(this).find('a').attr('href'), success:function(data){$('.content').html(data);}});});")
+                li._add_script("$('.%s').off().click(function(e){e.preventDefault();$.ajax({url:'http://localhost:8000'+$(this).find('a').attr('href'), success:function(data){$('.content').html(data);}});});" % ("j"+str(hex(hash(li)))))
 
             self.links_list.add_content(li)
 
