@@ -53,6 +53,8 @@ class Core_element(metaclass=Core_meta):
         ##Shows if the html tag has to be closed
         self._is_closing = is_closing
 
+        self._mimetype = "text/html"
+
         ##List of HTML attributes to be written in the tag
         self._attributes = attributes
 

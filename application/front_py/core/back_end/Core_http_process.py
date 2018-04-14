@@ -19,6 +19,8 @@ from http.server import BaseHTTPRequestHandler
 from constants import *
 from front_end import Core_element, Page
 from exceptions import Unsupported_feature
+import json
+import multipart
 """
 Test for this class and make_name function can be found at functions module
 of this package, because of importing issues
@@ -129,6 +131,10 @@ class Core_http_process(BaseHTTPRequestHandler):
                     self._send_response(self._resp._mimetype)
                     self.wfile.write(self._response)
                     return "OK"
+    def do_POST(self):
+        content_length = int(self.headers["Content-Length"])
+        #request_data = json.loads(self.rfile.read(content_length))
+        print(self.rfile.read(content_length))
 
     def _send_response(self, typ):
         """!
