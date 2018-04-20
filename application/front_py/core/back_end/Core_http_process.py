@@ -133,8 +133,9 @@ class Core_http_process(BaseHTTPRequestHandler):
                     return "OK"
     def do_POST(self):
         content_length = int(self.headers["Content-Length"])
-        #request_data = json.loads(self.rfile.read(content_length))
-        print(self.rfile.read(content_length))
+        request_data = json.loads(self.rfile.read(content_length))
+        request = _request(self.path, "POST", headers=self.headers, body=request_data)
+        print(request["Content-Length"])
 
     def _send_response(self, typ):
         """!
@@ -168,8 +169,14 @@ class _request:
     - body of the http request (Not implemented yet)
     """
 
-    def __init__(self, path, method, headers={}, body={}):
+    def __init__(self, path: str, method: object, headers: object = {}, body: object = {}) -> object:
         self.path = path
         self.method = method
         self.headers = headers
         self.body = body
+
+    def __getattr__(self, item):
+        return self.body[item]
+
+    def __getitem__(self, item):
+        return self.headers[item]
