@@ -83,6 +83,17 @@ class Core_http_process(BaseHTTPRequestHandler):
         # Okey, it's not a file from media, it may be user hardly defined
         # address
         self.name = make_name(self.path)
+        self.process_response()
+
+
+    def do_POST(self):
+        content_length = int(self.headers["Content-Length"])
+        request_data = json.loads(self.rfile.read(content_length))
+        self.request = _request(self.path, "POST", headers=self.headers, body=request_data)
+        self.name = make_name(self.path)
+        self.process_response()
+
+    def process_response(self):
         self._response = b""  # Has to be bytes
         try:  # Check if the required function exists
             self._resp = self.__class__.__dict__[
@@ -93,7 +104,7 @@ class Core_http_process(BaseHTTPRequestHandler):
                 self._response = bytes(self._resp[0].encode("utf-8"))
                 self._send_response(self._resp[1])
                 self.wfile.write(self._response)
-            # If it's user defined function, than its type is WebPage
+            # If it's user defined function, than it belongs to Core_element's children
             elif isinstance(self._resp, Core_element):
                 self._resp._render()
                 self._response = bytes(self._resp._template.encode("utf-8"))
@@ -131,12 +142,6 @@ class Core_http_process(BaseHTTPRequestHandler):
                     self._send_response(self._resp._mimetype)
                     self.wfile.write(self._response)
                     return "OK"
-    def do_POST(self):
-        content_length = int(self.headers["Content-Length"])
-        # request_data = json.loads(self.rfile.read(content_length))
-        filename = "_".join(self.rfile.read(content_length).split(b'\r\n')[1].split(b';')[2][11:-1].decode("utf-8")
-                            .split("."))
-        print(filename)
 
     def _send_response(self, typ):
         """!
