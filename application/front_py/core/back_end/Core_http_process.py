@@ -133,9 +133,10 @@ class Core_http_process(BaseHTTPRequestHandler):
                     return "OK"
     def do_POST(self):
         content_length = int(self.headers["Content-Length"])
-        request_data = json.loads(self.rfile.read(content_length))
-        request = _request(self.path, "POST", headers=self.headers, body=request_data)
-        print(request["Content-Length"])
+        # request_data = json.loads(self.rfile.read(content_length))
+        filename = "_".join(self.rfile.read(content_length).split(b'\r\n')[1].split(b';')[2][11:-1].decode("utf-8")
+                            .split("."))
+        print(filename)
 
     def _send_response(self, typ):
         """!
