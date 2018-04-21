@@ -32,6 +32,11 @@ def index(request):
         container._add_class("content")
         page.add_element(menu, container,footer)
         return page
+    if request.method == "POST":
+        for i in request:
+            print(request[i])
+        return "OK"
+
 
 @serve("/home")
 def home(request):
