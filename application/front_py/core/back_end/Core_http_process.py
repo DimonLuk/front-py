@@ -115,6 +115,7 @@ class Core_http_process(BaseHTTPRequestHandler):
                 self._send_response("text/html")
                 self.wfile.write(self._response)
             else:
+                self.send_error(501, INVALID_INSERTION_MESSAGE % self._resp)
                 raise Unsupported_feature(
                     INVALID_INSERTION_MESSAGE % self._resp)
         except KeyError as kr:
@@ -142,6 +143,7 @@ class Core_http_process(BaseHTTPRequestHandler):
                     self._send_response(self._resp._mimetype)
                     self.wfile.write(self._response)
                     return "OK"
+            self.send_error(501, "Function to serve %s is not implemented" % self.path)
 
     def _send_response(self, typ):
         """!
@@ -185,4 +187,9 @@ class _request:
         return self.body[item]
 
     def __getitem__(self, item):
-        return self.headers[item]
+        return self.body[item]
+
+    def __iter__(self):
+        for i in self.body:
+            yield i
+

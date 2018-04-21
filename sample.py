@@ -33,7 +33,8 @@ def index(request):
         page.add_element(menu, container,footer)
         return page
     if request.method == "POST":
-        print(request.activity_jpg)
+        for i in request:
+            print(request[i])
         return "OK"
 
 
