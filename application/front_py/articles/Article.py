@@ -53,6 +53,8 @@ class Article(e._Article_element):
         if self.save_format and self.is_code:
             self.paragraph = e._Code_element()
             self.paragraph._add_class(lang)
+            self.paragraph._add_class("j"+str(hex(hash(self.paragraph))))
+            self.paragraph.add_content("<script>$('.%s').each(function(i, block) {hljs.highlightBlock(block);});</script>" % ("j"+str(hex(hash(self.paragraph)))))
         else:
             self.paragraph = e._Paragraph_element()
         if background:

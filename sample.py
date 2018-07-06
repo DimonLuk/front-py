@@ -9,7 +9,7 @@ crossed_text.decor = "crossed"
 page_params = tuple(["utf-8", {"background": background_color}])
 menu = Inline_menu(
     {"background": "black"},
-    [{"Home": "/"},
+    [{"Home": "/home"},
      {"Git": "https://github.com/DimonLuk/front-py"},
      {"Documentation": "./documentation/html/index.html"},
      {"Objectives": "/objectives"},
@@ -26,6 +26,20 @@ footer.background_color = "black"
 
 @serve("/")
 def index(request):
+    if request.method == "GET":
+        page = Page("Home", background={"background":background_color})
+        container = Block_container()
+        container._add_class("content")
+        page.add_element(menu, container,footer)
+        return page
+    if request.method == "POST":
+        for i in request:
+            print(request[i])
+        return "OK"
+
+
+@serve("/home")
+def home(request):
     if request.method == "GET":
         articles = Row_articles(
             "Three facts about %s 0.0.1(pre-alpha)" %
@@ -54,13 +68,7 @@ def index(request):
                     "Code",
                     6))))
 
-        page = Page("Home", *page_params)
-        page.add_element(menu.add_links(
-                             {"Additional Link": "/nothing"},
-                             brand_color),
-                         articles, footer)
-        return page
-
+        return articles
 
 @serve("/objectives")
 def objectives(request):
@@ -168,13 +176,12 @@ def objectives(request):
         beta_objectives(front_end, back_end, experience)
 
         page = Page("Objectives", *page_params)
-        page.add_element(
-            menu,
+        content = Block_container()
+        content.add_content(
             pre_alpha_objectives,
             alpha_objectives,
-            beta_objectives,
-            footer)  # add elements on it
-        return page
+            beta_objectives)  # add elements on it
+        return content
 
 
 @serve("/userGuide")
@@ -316,19 +323,15 @@ def anypage(request):
         return page
 """, save_format=True, is_code=True, lang="python", background={"background": background_color})
 
-    page = Page("User Guide", *page_params)
-    page.add_element(menu, guide, footer)
-    return page
+    return guide
 
 
 @serve("/testerGuide")
 def testerGuide(request):
     if request.method == "GET":
         guide = Row_articles()
-        #guide(text="I don't think that this project is so big to write very big instruction here. But I can give some advices. Try to create your own website with classes are presented in frontpy module. If you have any troubles, make screenshot of error, write some description and send this to me or try to fix it by yourself but at first read %s. My address is %s. Also you can try to create your own user-friendly classes but it's about Developer guide." % (Link("/developerGuide", "this guide"),Link("mailto:lds4ever2000@gmail.com","lds4ever2000@gmail.com")))
-        page = Page("Tester Guide", *page_params)
-        page.add_element(menu, guide, footer)
-        return page
+        guide(text="I don't think that this project is so big to write very big instruction here. But I can give some advices. Try to create your own website with classes are presented in frontpy module. If you have any troubles, make screenshot of error, write some description and send this to me or try to fix it by yourself but at first read %s. My address is %s. Also you can try to create your own user-friendly classes but it's about Developer guide." % (Link("/developerGuide", "this guide"),Link("mailto:lds4ever2000@gmail.com","lds4ever2000@gmail.com")))
+        return guide
 
 
 @serve("/developerGuide")
@@ -336,10 +339,8 @@ def testerGuide(request):
     if request.method == "GET":
         guide = Row_articles()
         #guide("Developer codex :)",Numbered_list({},"No matter how it's difficult to create class, the only matter is how simple in use this class","Each class has to balance between simplicity and customizability","Each class has to redefine (if necessary) wrapping syntax","Almost every argument of any constructor or any method has to be predefined by author","But none of these rules are not aimed to reduce your creativity)))"))
-        #guide(text="More information you can find %s" % Link("https://github.com/DimonLuk/front-py/wiki","here"))
-        page = Page("Developer Guide", *page_params)
-        page.add_element(menu, guide, footer)
-        return page
+        guide(text="More information you can find %s" % Link("https://github.com/DimonLuk/front-py/wiki","here"))
+        return guide
 
 
 @serve("/<any>")

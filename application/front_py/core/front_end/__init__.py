@@ -17,3 +17,4 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 from Page import Page
 import elements
+from Core_element import Core_element
