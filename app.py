@@ -2,8 +2,11 @@ import os
 import sys
 import json
 import importlib
-PATH = "application"
+import unittest
 
+
+PATH = "application"
+MODULES_TO_TEST = ("Page", "functions", "Core_element")
 
 def prepare_import():
     framework = os.path.join(os.getcwd(), PATH)
@@ -42,10 +45,10 @@ if __name__ == "__main__":
                        "address": address, "port": port}, file)
     elif sys.argv[1] == "test" and len(sys.argv) == 2:
         prepare_import()
-        # test = importlib.import_module("Page")
-        # test.unittest.main()
-        test = importlib.import_module("functions")
-        test.unittest.main()
+        suites = unittest.TestSuite()
+        for module in MODULES_TO_TEST:
+            suites.addTest(unittest.defaultTestLoader.loadTestsFromName(module))
+        unittest.TextTestRunner().run(suites)
     elif sys.argv[1] == "docs" and len(sys.argv) == 3:
         prepare_import()
         docs = importlib.import_module(sys.argv[2])

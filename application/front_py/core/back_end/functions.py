@@ -120,21 +120,20 @@ def j041bf0b5619389a866f6fff4a1556401cec9dced44b5e78cfbf0eda24ff8787e(request):
 
 
 import unittest
-from threading import Thread
+from multiprocessing import Process
 import urllib.request
 
 
 class Test(unittest.TestCase):
     def test_serve_and_Core_http_process(self):
-        server_thread = Thread(
-            target=run_app, kwargs={
-                "address": "localhost", "port": 8000})
-        server_thread.start()
+        server_process = Process(target=run_app, kwargs={"address": "localhost", "port": 8000})
+        server_process.start()
         result = urllib.request.urlopen(
             "http://localhost:8000/041bf0b5619389a866f6fff4a1556401cec9dced44b5e78cfbf0eda24ff8787e")
         self.assertEqual(
             b"041bf0b5619389a866f6fff4a1556401cec9dced44b5e78cfbf0eda24ff8787e",
             result.read())
+        server_process.terminate()
 
     def test_make_name(self):
         self.assertEqual(
