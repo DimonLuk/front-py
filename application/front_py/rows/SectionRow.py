@@ -14,18 +14,18 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
-from containers import Section_container
-from Block_row import Block_row
+from containers import SectionContainer
+from BlockRow import BlockRow
 
 
-class Section_row(Section_container):
+class SectionRow(SectionContainer):
     """
-    Creates a row inside Section_container
+    Creates a row inside SectionContainer
     """
 
     def __init__(self):
         super().__init__()
-        self.row = Block_row()
+        self.row = BlockRow()
 
     def add_content(self, *content):
         self.row.add_content(*content)

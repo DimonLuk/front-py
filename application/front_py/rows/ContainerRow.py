@@ -14,14 +14,24 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
-from core import elements as e
+from containers import BlockContainer
+from BlockRow import BlockRow
 
 
-class Section_container(e._Section_element):
+class ContainerRow(BlockContainer):
     """
-    The same as block but section, only semantic difference
+    Creates row inside a BlockContainer
     """
 
-    def __init__(self):
+    def __init__(self, *content):
         super().__init__()
-        self._add_class("container")
+        self.row = BlockRow()
+        if content:
+            self.add_content(*content)
+
+    def add_content(self, *content):
+        self.row.add_content(*content)
+
+    def _render(self):
+        super().add_content(self.row)
+        super()._render()

@@ -17,12 +17,11 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 from core import elements as e
 
 
-class Block_row(e._Block_element):
+class SectionContainer(e._SectionElement):
     """
-    Simple row
+    The same as block but section, only semantic difference
     """
 
-    def __init__(self, *content):
+    def __init__(self):
         super().__init__()
-        self._add_class("row")
-        self.add_content(*content)
+        self._add_class("container")

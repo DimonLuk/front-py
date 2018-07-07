@@ -17,7 +17,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 from core import elements as e
 
 
-class Paragraph(e._Paragraph_element):
+class Paragraph(e._ParagraphElement):
     """
     Simple paragraph
     The first argument is text which is not required

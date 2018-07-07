@@ -15,12 +15,12 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
 from core import elements as e
-from containers import Section_container
-from rows import Block_row
+from containers import SectionContainer
+from rows import BlockRow
 from defaults import Header
 
 
-class Column_articles(Section_container):
+class ColumnArticles(SectionContainer):
     def __init__(
             self, header="", footer="", headers_level=1, position="",
             vertical_distance="30px", horizontal_line=False, *articles):
@@ -29,7 +29,7 @@ class Column_articles(Section_container):
         self.headers_level = headers_level
         self.line = horizontal_line
         self.footer = footer
-        self.row_header = Block_row()
+        self.row_header = BlockRow()
 
         self.head = Header(self.headers_level, header)
         if position == "center":
@@ -39,7 +39,7 @@ class Column_articles(Section_container):
             self.row_header._add_style({"margin-bottom": vertical_distance})
         super().add_content(self.row_header)
 
-        self.rowArticles = Block_row()
+        self.rowArticles = BlockRow()
         if articles:
             self.rowArticles.add_content(*articles)
 
@@ -51,7 +51,7 @@ class Column_articles(Section_container):
         if self.footer:
             super().add_content(self.footer)
         if self.line:
-            super().add_content(e._Horizontal_line_element())
+            super().add_content(e._HorizontalLineElement())
         super()._render()
 
     def __call__(self, *articles):

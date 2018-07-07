@@ -17,7 +17,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 from core import elements as e
 
 
-class Text(e._Text_element):
+class Text(e._TextElement):
     """
     Simple text
     The first argument of constructor is text which will be shown it's nit required

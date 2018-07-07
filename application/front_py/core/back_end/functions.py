@@ -17,17 +17,18 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 from exceptions import *
 from constants import *
 from http.server import HTTPServer
-from back_end import Core_http_process
+from back_end import CoreHttpProcess
 
 
 def make_name(address):
-    """
-    Creates special name which will be added to Core_http_process attributes.
+    """Creates special name which will be added to CoreHttpProcess attributes.
     Because names are built from http requests they contain '/', this function repleces it with '_aa'.
-    Arguments: address.
-    address: string
-        - url of http request.
     !!!Not imported to front_py package. Not for user usage!!!
+
+    Parameters
+    ----------
+    address: string
+        url of http request.
     """
     address = address.split("/")
     address = "_aa".join(address)
@@ -35,36 +36,39 @@ def make_name(address):
 
 
 def serve(address):
-    """
-    Binds function to url which has to be served.
-    Arguments: address
+    """Binds function to url which has to be served.
+
+    Parameters
+    ----------
     address: string
-        - request itself, for example, if you want to serve
+        request itself, for example, if you want to serve
         "http://localhost:8000/test" you have to pass only "/test".
+
     Usage: as decorator for function that will create some response
     """
     def decorator(fn, address=address):
         def decorated(address=address):
             address = make_name(address)
-            setattr(Core_http_process, address, fn)
+            setattr(CoreHttpProcess, address, fn)
         decorated()
         return decorated
     return decorator
 
 
 def run_app(address="localhost", server=HTTPServer,
-            handler=Core_http_process, port=8000):
-    """
-    Runs the server and application.
-    Arguments: address, server, handler, port.
+            handler=CoreHttpProcess, port=8000):
+    """Runs the server and application.
+
+    Parameters
+    ----------
     address: string, default: "localhost"
-        - ip address to be served, default is 'localhost'.
+        ip address to be served, default is 'localhost'.
     server: class extends HTTPServer
-        - server class which will serve the application, default is HTTPServer.
-    handler: class extends Core_http_process
-        - class that will handle requests, default is Core_http_process.
+        server class which will serve the application, default is HTTPServer.
+    handler: class extends CoreHttpProcess
+        class that will handle requests, default is CoreHttpProcess.
     port: int, default: 8000
-        - port to be served, default is 8000
+        port to be served, default is 8000
     """
     server_address = (address, port)
     http = server(server_address, handler)
@@ -116,21 +120,20 @@ def j041bf0b5619389a866f6fff4a1556401cec9dced44b5e78cfbf0eda24ff8787e(request):
 
 
 import unittest
-from threading import Thread
+from multiprocessing import Process
 import urllib.request
 
 
 class Test(unittest.TestCase):
-    def test_serve_and_Core_http_process(self):
-        server_thread = Thread(
-            target=run_app, kwargs={
-                "address": "localhost", "port": 8000})
-        server_thread.start()
+    def test_serve_and_CoreHttpProcess(self):
+        server_process = Process(target=run_app, kwargs={"address": "localhost", "port": 8000})
+        server_process.start()
         result = urllib.request.urlopen(
             "http://localhost:8000/041bf0b5619389a866f6fff4a1556401cec9dced44b5e78cfbf0eda24ff8787e")
         self.assertEqual(
             b"041bf0b5619389a866f6fff4a1556401cec9dced44b5e78cfbf0eda24ff8787e",
             result.read())
+        server_process.terminate()
 
     def test_make_name(self):
         self.assertEqual(

@@ -7,7 +7,7 @@ brand_text.color = brand_color
 crossed_text = Text()
 crossed_text.decor = "crossed"
 page_params = tuple(["utf-8", {"background": background_color}])
-menu = Inline_menu(
+menu = InlineMenu(
     {"background": "black"},
     [{"Home": "/home"},
      {"Git": "https://github.com/DimonLuk/front-py"},
@@ -16,7 +16,7 @@ menu = Inline_menu(
      {"User guide": "/userGuide"},
      {"Tester guide": "/testerGuide"},
      {"Developer guide": "/developerGuide"}],
-    "white", Brand_text("Front-py", brand_color))
+    "white", BrandText("Front-py", brand_color))
 foot = Text("&copy DimonLuk")
 foot.position = "center"
 foot.color = "white"
@@ -28,7 +28,7 @@ footer.background_color = "black"
 def index(request):
     if request.method == "GET":
         page = Page("Home", background={"background":background_color})
-        container = Block_container()
+        container = BlockContainer()
         container._add_class("content")
         page.add_element(menu, container,footer)
         return page
@@ -41,7 +41,7 @@ def index(request):
 @serve("/home")
 def home(request):
     if request.method == "GET":
-        articles = Row_articles(
+        articles = RowArticles(
             "Three facts about %s 0.0.1(pre-alpha)" %
             brand_text("Front-py"),
             horizontal_line=True,
@@ -58,7 +58,7 @@ def home(request):
             "The third fact",
             "Just see what you have to write on python (%s) and how many pure html you have to write to create the page you see:%s" %
             (brand_text("including reusable components"),
-             Container_row(
+             ContainerRow(
                 Image(
                     "python1.png",
                     "Code",
@@ -74,10 +74,10 @@ def home(request):
 def objectives(request):
     if request.method == "GET":
         articles = Article(headers_level=2)
-        myList = Numbered_list()
+        myList = NumberedList()
         front_end = articles(
             "Front-end",
-            Numbered_list(
+            NumberedList(
                 {},
                 "%s" %
                 crossed_text("Reorganising packages"),
@@ -90,7 +90,7 @@ def objectives(request):
                 "Tests"))
         back_end = articles(
             "Back-end",
-            Numbered_list(
+            NumberedList(
                 {},
                 "Handling POST request",
                 "Grand tests of framework",
@@ -98,7 +98,7 @@ def objectives(request):
                 "Tests"))
         experience = articles(
             "Experience",
-            Numbered_list(
+            NumberedList(
                 {},
                 "Writing documentation",
                 "Create complete guides for users, developers and testers",
@@ -107,7 +107,7 @@ def objectives(request):
                     "https://github.com/DimonLuk/front-py/wiki",
                     "wiki")))
 
-        pre_alpha_objectives = Column_articles(
+        pre_alpha_objectives = ColumnArticles(
             "%s pre-alpha objectives" %
             brand_text("Front-py"),
             "",
@@ -119,7 +119,7 @@ def objectives(request):
             back_end,
             experience)
 
-        alpha_objectives = Column_articles(
+        alpha_objectives = ColumnArticles(
             "%s alpha objectives" %
             brand_text("Front-py"),
             headers_level=1,
@@ -153,7 +153,7 @@ def objectives(request):
 
         alpha_objectives(front_end, back_end, experience)
 
-        beta_objectives = Column_articles(
+        beta_objectives = ColumnArticles(
             "%s beta objectives" %
             brand_text("Front-py"),
             headers_level=1,
@@ -176,7 +176,7 @@ def objectives(request):
         beta_objectives(front_end, back_end, experience)
 
         page = Page("Objectives", *page_params)
-        content = Block_container()
+        content = BlockContainer()
         content.add_content(
             pre_alpha_objectives,
             alpha_objectives,
@@ -186,7 +186,7 @@ def objectives(request):
 
 @serve("/userGuide")
 def userGuide(request):
-    guide = Row_articles(save_format=True, is_code=True)
+    guide = RowArticles(save_format=True, is_code=True)
     guide.add_article("", """
 \"\"\"
 I suppose that the best guide is the life example, so let's start
@@ -230,10 +230,10 @@ crossed_text.decor = "crossed"
 page_params = tuple(["utf-8",{"background":background_color}]) #Then specife parameters for page, its encoding and background color
 
 #Now it's a good idea to create menu which will contain all links to all your pages
-#For the moment of writing this tutorial it's avaliable one style of menu, Inline_menu, to read more, write in your terminal or command line:
-#$ python app.py docs Inline_menu
+#For the moment of writing this tutorial it's avaliable one style of menu, InlineMenu, to read more, write in your terminal or command line:
+#$ python app.py docs InlineMenu
 #But I suppose that your IDE should show you info about this class
-menu = Inline_menu({"background":"black"},[{"Home":"/"},{"Git":"https://github.com/DimonLuk/front-py"},{"Documentation":"https://github.com/DimonLuk/front-py/wiki"}, {"Objectives":"/objectives"},{"User guide":"/userGuide"},{"Tester guide":"/testerGuide"},{"Developer guide":"/developerGuide"}],"white",Brand_text("Front-py",brand_color))
+menu = InlineMenu({"background":"black"},[{"Home":"/"},{"Git":"https://github.com/DimonLuk/front-py"},{"Documentation":"https://github.com/DimonLuk/front-py/wiki"}, {"Objectives":"/objectives"},{"User guide":"/userGuide"},{"Tester guide":"/testerGuide"},{"Developer guide":"/developerGuide"}],"white",BrandText("Front-py",brand_color))
 
 #Then it's a good idea to create one footer for all your pages
 foot = Text("&copy DimonLuk")
@@ -257,7 +257,7 @@ def index(request):
     if request.method == "GET":
         #Then you can begin creating your content.
         #Sooner it'll be API between DB and the framework but for this moment all data should be hard-coded
-        articles = Row_articles("Three facts about %s 0.0.1(pre-alpha)" % brand_text("Front-py"),horizontal_line=True,headers_level=2,horizontal_distance="50px")
+        articles = RowArticles("Three facts about %s 0.0.1(pre-alpha)" % brand_text("Front-py"),horizontal_line=True,headers_level=2,horizontal_distance="50px")
         #Above you can see wrapping syntax, exactly at:
         #'"Three facts about %s 0.0.1(pre-alpha)" % brand_text("Front-py")'
         #You see that you can create one style and then wrap some content in this object
@@ -265,7 +265,7 @@ def index(request):
         #Then you can yous 'brand_text' again
         articles.add_article("The first fact","This framework is attemp to combine the best ideas from Django, Flask, Angular and other frameworks but %s complicated application architecture" % brand_text("without creating"))
         articles.add_article("The second fact","You have to use only %s 3.x to write %s front and back-end" % (brand_text("python"),brand_text("both")))
-        articles.add_article("The third fact","Just see what you have to write on python (%s) and how many pure html you have to write to create the page you see:%s" % (brand_text("including reusable components"),Container_row(Image("python1.png","Code",6),Image("html.png","Code",6))))
+        articles.add_article("The third fact","Just see what you have to write on python (%s) and how many pure html you have to write to create the page you see:%s" % (brand_text("including reusable components"),ContainerRow(Image("python1.png","Code",6),Image("html.png","Code",6))))
         #To make your image avaliable please put it into application/static/media folder
         #And to add image somewhere just use write its name as you've seen above
         #"Code" - is alt attribute of html image
@@ -284,14 +284,14 @@ def index(request):
 def objectives(request):
     if request.method == "GET":
         articles = Article(headers_level=2)
-        myList = Numbered_list()
-        front_end = articles("Front-end",Numbered_list({},"%s" % crossed_text("Reorganising packages"),"Unit tests","Unnumbered list","Gallery","Forms","Tests","Customizing existing classes","Tests"))
-        back_end = articles("Back-end",Numbered_list({},"Handling POST request","Grand tests of framework","Creating API to database","Tests"))
-        experience = articles("Experience",Numbered_list({},"Writing documentation","Create complete guides for users, developers and testers","Work with %s on github" % Link("https://github.com/DimonLuk/front-py/wiki","wiki")))
+        myList = NumberedList()
+        front_end = articles("Front-end",NumberedList({},"%s" % crossed_text("Reorganising packages"),"Unit tests","Unnumbered list","Gallery","Forms","Tests","Customizing existing classes","Tests"))
+        back_end = articles("Back-end",NumberedList({},"Handling POST request","Grand tests of framework","Creating API to database","Tests"))
+        experience = articles("Experience",NumberedList({},"Writing documentation","Create complete guides for users, developers and testers","Work with %s on github" % Link("https://github.com/DimonLuk/front-py/wiki","wiki")))
 
-        pre_alpha_objectives = Column_articles("%s pre-alpha objectives" % brand_text("Front-py"),"",1,"center","50px",True,front_end,back_end,experience)
+        pre_alpha_objectives = ColumnArticles("%s pre-alpha objectives" % brand_text("Front-py"),"",1,"center","50px",True,front_end,back_end,experience)
 
-        alpha_objectives = Column_articles("%s alpha objectives" % brand_text("Front-py"),headers_level=1,position="center",vertical_distance="50px",horizontal_line=True)
+        alpha_objectives = ColumnArticles("%s alpha objectives" % brand_text("Front-py"),headers_level=1,position="center",vertical_distance="50px",horizontal_line=True)
 
         front_end = articles("Front-end",myList("Galleries","Carousels","Registartion","Log in","Permission system","Admin panel"))
         back_end = articles("Back-end",myList("Registration","Log In","Permission system","Admin panel","Optional: write own server"))
@@ -299,7 +299,7 @@ def objectives(request):
 
         alpha_objectives(front_end,back_end,experience)
 
-        beta_objectives = Column_articles("%s beta objectives" % brand_text("Front-py"),headers_level=1,position="center",vertical_distance="50px",horizontal_line=True)
+        beta_objectives = ColumnArticles("%s beta objectives" % brand_text("Front-py"),headers_level=1,position="center",vertical_distance="50px",horizontal_line=True)
 
         front_end = articles("Front-end",myList("Create simple API to make everything easily customizable","Test and improve"))
         back_end = articles("Back-end",myList("Create simple API to make everythong easily customizable","Test and improve"))
@@ -329,7 +329,7 @@ def anypage(request):
 @serve("/testerGuide")
 def testerGuide(request):
     if request.method == "GET":
-        guide = Row_articles()
+        guide = RowArticles()
         guide(text="I don't think that this project is so big to write very big instruction here. But I can give some advices. Try to create your own website with classes are presented in frontpy module. If you have any troubles, make screenshot of error, write some description and send this to me or try to fix it by yourself but at first read %s. My address is %s. Also you can try to create your own user-friendly classes but it's about Developer guide." % (Link("/developerGuide", "this guide"),Link("mailto:lds4ever2000@gmail.com","lds4ever2000@gmail.com")))
         return guide
 
@@ -337,8 +337,8 @@ def testerGuide(request):
 @serve("/developerGuide")
 def testerGuide(request):
     if request.method == "GET":
-        guide = Row_articles()
-        #guide("Developer codex :)",Numbered_list({},"No matter how it's difficult to create class, the only matter is how simple in use this class","Each class has to balance between simplicity and customizability","Each class has to redefine (if necessary) wrapping syntax","Almost every argument of any constructor or any method has to be predefined by author","But none of these rules are not aimed to reduce your creativity)))"))
+        guide = RowArticles()
+        #guide("Developer codex :)",NumberedList({},"No matter how it's difficult to create class, the only matter is how simple in use this class","Each class has to balance between simplicity and customizability","Each class has to redefine (if necessary) wrapping syntax","Almost every argument of any constructor or any method has to be predefined by author","But none of these rules are not aimed to reduce your creativity)))"))
         guide(text="More information you can find %s" % Link("https://github.com/DimonLuk/front-py/wiki","here"))
         return guide
 
