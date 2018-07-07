@@ -46,3 +46,21 @@ class BrandImage(BrandText):
         super().__init__()
         self.img = e._ImageElement(imageName, alt)
         self.add_content(self.img)
+
+
+
+
+
+
+
+
+import unittest
+
+
+class Test(unittest.TestCase):
+
+    def test_BrandText(self):
+        self.assertEqual("""<a class="navbar-brand " style="color:#ffffff; " href="#"></a>""", BrandText().__str__())
+
+    def test_BrandImage(self):
+        self.assertEqual("""<a class="navbar-brand " style="color:#ffffff; " href="#"><img class="" style="" src="test" alt="test" /></a>""", BrandImage("test", "test").__str__())

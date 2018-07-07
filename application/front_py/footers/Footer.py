@@ -49,3 +49,28 @@ class Footer(e._FooterElement):
             self._add_style({"background": value})
         else:
             self.__dict__[name] = value
+
+
+
+
+
+
+
+
+import unittest
+
+
+class Test(unittest.TestCase):
+
+    def test_Footer(self):
+        self.assertEqual("""<footer class="footer " style="padding-top:15.0px; padding-bottom:15.0px; "><div class="container " style=""><div class="row " style=""></div></div></footer>""", Footer().__str__())
+
+    def test_Footer_add_content(self):
+        a = Footer()
+        a.add_content("test", a)
+        self.assertEqual("""<footer class="footer " style="padding-top:15.0px; padding-bottom:15.0px; "><div class="container " style=""><div class="row " style="">test<footer class="footer " style="padding-top:15.0px; padding-bottom:15.0px; "><div class="container " style=""><div class="row " style="">test</div></div></footer></div></div></footer>""", a.__str__())
+
+    def test_Footer__setattr__(self):
+        a = Footer()
+        a.background_color = "red"
+        self.assertEqual("""<footer class="footer " style="padding-top:15.0px; padding-bottom:15.0px; background:red; "><div class="container " style=""><div class="row " style=""></div></div></footer>""", a.__str__())

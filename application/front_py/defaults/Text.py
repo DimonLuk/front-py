@@ -48,3 +48,22 @@ class Text(e._TextElement):
 
     def addStyle(self, style):
         self._add_style(self, style)
+
+
+
+
+
+
+
+import unittest
+
+
+class Test(unittest.TestCase):
+
+    def test_Text(self):
+        self.assertEqual("""<span class="" style=""></span>""", Text().__str__())
+
+    def test_Text__setattr__(self):
+        a = Text("test")
+        a.color = "red"
+        self.assertEqual("""<span class="" style="color:red; ">test</span>""", a.__str__())

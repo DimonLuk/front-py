@@ -36,3 +36,27 @@ class NumberedList(e._NumberedListElement):
         cop.add_elements(*elements)
         cop._render()
         return cop._template
+
+
+
+
+
+
+
+
+import unittest
+
+
+class Test(unittest.TestCase):
+
+    def test_NumberedList(self):
+        self.assertEqual("""<ol class="" style=""></ol>""", NumberedList().__str__())
+
+    def test_NumberedList_add_elements(self):
+        a = NumberedList()
+        a.add_elements("Test", a)
+        self.assertEqual("""<ol class="" style=""><li class="" style="">Test</li><li class="" style=""><ol class="" style=""><li class="" style="">Test</li></ol></li></ol>""", a.__str__())
+
+    def test_NumberedList__call__(self):
+        a = NumberedList()
+        self.assertEqual("""<ol class="" style=""><li class="" style="">Test</li><li class="" style=""><ol class="" style=""></ol></li></ol>""", a("Test", a))

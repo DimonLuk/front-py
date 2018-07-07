@@ -21,3 +21,19 @@ class Link(e._LinkElement):
     def __init__(self, href, text):
         super().__init__(href=href)
         self.add_content(text)
+
+
+
+
+
+
+
+
+
+import unittest
+
+
+class Test(unittest.TestCase):
+
+    def test_Link(self):
+        self.assertEqual("""<a class="" style="" href="test">test</a>""", Link("test", "test").__str__())

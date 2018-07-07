@@ -25,3 +25,16 @@ class BlockContainer(e._BlockElement):
     def __init__(self):
         super().__init__()
         self._add_class("container")
+
+
+
+
+
+
+import unittest
+
+
+class Test(unittest.TestCase):
+
+    def test_BlockContainer(self):
+        self.assertEqual("""<div class="container " style=""></div>""", BlockContainer().__str__())
