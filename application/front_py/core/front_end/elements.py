@@ -258,6 +258,71 @@ import unittest
 
 
 class Test(unittest.TestCase):
-    def test(self):
-        for i in _TEST:
-            print(i())
+    def test_Text_element(self):
+        self.assertEqual("""<span class="" style=""></span>""", _Text_element().__str__())
+
+    def test_Paragraph_element(self):
+        self.assertEqual("""<p class="" style=""></p>""", _Paragraph_element().__str__())
+
+    def test_Menu_element(self):
+        self.assertEqual("""<menu class="" style=""></menu>""", _Menu_element().__str__())
+
+    def test_Navigation_element(self):
+        self.assertEqual("""<nav class="" style=""></nav>""", _Navigation_element().__str__())
+
+    def test_Unnumbered_list_element(self):
+        self.assertEqual("""<ul class="" style=""></ul>""", _Unnumbered_list_element().__str__())
+
+    def test_Numbered_list_element(self):
+        self.assertEqual("""<ol class="" style=""></ol>""", _Numbered_list_element().__str__())
+
+    def test_In_list_element(self):
+        self.assertEqual("""<li class="" style=""></li>""", _In_list_element().__str__())
+
+    def test_Link_element(self):
+        self.assertEqual("""<a class="" style="" href="#"></a>""", _Link_element().__str__())
+
+    def test_Image_element(self):
+        self.assertEqual("""<img class="" style="" src="#" alt="image" />""", _Image_element().__str__())
+
+    def test_Block_element(self):
+        self.assertEqual("""<div class="" style=""></div>""", _Block_element().__str__())
+
+    def test_Section_element(self):
+        self.assertEqual("""<section class="" style=""></section>""", _Section_element().__str__())
+
+    def test_Aside_element(self):
+        self.assertEqual("""<aside class="" style=""></aside>""", _Aside_element().__str__())
+
+    def test_Footer_element(self):
+        self.assertEqual("""<footer class="" style=""></footer>""", _Footer_element().__str__())
+
+    def test_Form_element(self):
+        self.assertEqual("""<form class="" style="" method="POST" name=""></form>""", _Form_element().__str__())
+
+    def test_Input_element(self):
+        self.assertEqual("""<input class="" style="" type="text" placeholder="Placeholder" />""", _Input_element().__str__())
+
+    def test_Button_element(self):
+        self.assertEqual("""<button class="" style="" type="">Button</button>""", _Button_element().__str__())
+
+    def test_Header_element(self):
+        self.assertEqual("""<header class="" style=""></header>""", _Header_element().__str__())
+
+    def test_Input_text_area(self):
+        self.assertEqual("""<textarea class="" style="" placeholder="Placeholder"></textarea>""", _Input_text_area().__str__())
+
+    def test_Header_text_element(self):
+        self.assertEqual("""<h1 class="" style=""></h1>""", _Header_text_element().__str__())
+
+    def test_Horizontal_line_element(self):
+        self.assertEqual("""<hr />""", _Horizontal_line_element().__str__())
+
+    def test_Formated_text_element(self):
+        self.assertEqual("""<pre class="" style=""></pre>""", _Formated_text_element().__str__())
+
+    def test_Code_element(self):
+        self.assertEqual("""<code class="" style=""></code>""", _Code_element().__str__())
+
+    def test_Article_element(self):
+        self.assertEqual("""<article class="" style=""></article>""", _Article_element().__str__())

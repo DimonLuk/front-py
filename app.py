@@ -6,7 +6,7 @@ import unittest
 
 
 PATH = "application"
-MODULES_TO_TEST = ("Page", "functions", "Core_element")
+MODULES_TO_TEST = ("Page", "functions", "Core_element", "elements")
 
 def prepare_import():
     framework = os.path.join(os.getcwd(), PATH)
