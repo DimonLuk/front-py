@@ -33,3 +33,23 @@ class SectionRow(SectionContainer):
     def _render(self):
         super().add_content(self.row)
         super()._render()
+
+
+
+
+
+
+
+
+import unittest
+
+
+class Test(unittest.TestCase):
+
+    def test_SectionRow(self):
+        self.assertEqual("""<section class="container " style=""><div class="row " style=""></div></section>""", SectionRow().__str__())
+
+    def test_SectionRow_add_content(self):
+        a = SectionRow()
+        a.add_content("Test", a)
+        self.assertEqual("""<section class="container " style=""><div class="row " style="">Test<section class="container " style=""><div class="row " style="">Test</div></section></div></section>""", a.__str__())

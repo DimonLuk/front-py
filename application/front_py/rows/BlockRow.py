@@ -26,3 +26,16 @@ class BlockRow(e._BlockElement):
         super().__init__()
         self._add_class("row")
         self.add_content(*content)
+
+
+
+
+
+
+import unittest
+
+
+class Test(unittest.TestCase):
+
+    def test_BlocRow(self):
+        self.assertEqual("""<div class="row " style=""></div>""", BlockRow().__str__())

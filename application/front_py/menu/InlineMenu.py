@@ -23,7 +23,7 @@ class InlineMenu(e._BlockElement):
     Simple inline bootstrap menu
 
     The first argument is json represantion of background like {"background":"<some color here>"}
-    The second is json like links {"Home":"/","Any page":"/any"}
+    The second is json like links [{"Home":"/","Any page":"/any"}]
     The third is color of links
     The fourth is BrandText or BrandImage object
 
@@ -149,3 +149,22 @@ class InlineMenu(e._BlockElement):
 
     def add_links(self, links, color=""):
         return self(links, color)
+
+
+
+
+
+
+
+
+import unittest
+
+
+class Test(unittest.TestCase):
+
+    def test_InlineMenu(self):
+        """
+        Can't be tested because of hash is used
+        TODO solve this problem
+        """
+        a = InlineMenu({"background": "black"}, [{"Home": "/"}], "red", "")

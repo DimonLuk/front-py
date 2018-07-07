@@ -25,3 +25,18 @@ class SectionContainer(e._SectionElement):
     def __init__(self):
         super().__init__()
         self._add_class("container")
+
+
+
+
+
+
+
+
+import unittest
+
+
+class Test(unittest.TestCase):
+
+    def test_SectionContainer(self):
+        self.assertEqual("""<section class="container " style=""></section>""", SectionContainer().__str__())

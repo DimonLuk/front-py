@@ -30,3 +30,18 @@ class Header(e._HeaderElement):
     def _render(self):
         self.add_content(self.h)
         super()._render()
+
+
+
+
+
+import unittest
+
+
+class Test(unittest.TestCase):
+
+    def test_HeaderText(self):
+        self.assertEqual("""<h1 class="" style=""></h1>""", HeaderText().__str__())
+
+    def test_Header(self):
+        self.assertEqual("""<header class="" style=""><h1 class="" style=""></h1></header>""", Header().__str__())

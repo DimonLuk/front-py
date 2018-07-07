@@ -25,3 +25,18 @@ class Paragraph(e._ParagraphElement):
 
     def __init__(self, text=""):
         super().__init__(text=text)
+
+
+
+
+
+
+
+
+import unittest
+
+
+class Test(unittest.TestCase):
+
+    def test_Paragraph(self):
+        self.assertEqual("""<p class="" style=""></p>""", Paragraph().__str__())

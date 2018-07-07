@@ -28,3 +28,15 @@ class Image(e._LinkElement):
         self.image._add_style({"width": "100%"})
         self._add_class("col-%s" % str(columns))
         self.add_content(self.image)
+
+
+
+
+
+import unittest
+
+
+class Test(unittest.TestCase):
+
+    def test_Image(self):
+        self.assertEqual("""<a class="col-6 " style="" href=""><img class="" style="width:100%; " src="" alt="picture" /></a>""", Image("").__str__())

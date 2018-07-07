@@ -35,3 +35,25 @@ class ContainerRow(BlockContainer):
     def _render(self):
         super().add_content(self.row)
         super()._render()
+
+
+
+
+
+
+
+
+
+
+import unittest
+
+
+class Test(unittest.TestCase):
+
+    def test_ContainerRow(self):
+        self.assertEqual("""<div class="container " style=""><div class="row " style=""></div></div>""", ContainerRow().__str__())
+
+    def test_ContainerRow_add_content(self):
+        a = ContainerRow()
+        a.add_content("Test", a)
+        self.assertEqual("""<div class="container " style=""><div class="row " style="">Test<div class="container " style=""><div class="row " style="">Test</div></div></div></div>""", a.__str__())
