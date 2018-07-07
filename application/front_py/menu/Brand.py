@@ -17,7 +17,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 from core import elements as e
 
 
-class Brand_text(e._Link_element):
+class BrandText(e._LinkElement):
     """
     Company name or other brand short and nice info
 
@@ -35,7 +35,7 @@ class Brand_text(e._Link_element):
         self.add_content(self.text)
 
 
-class Brand_image(Brand_text):
+class BrandImage(BrandText):
     """
     Company logo
     The firts arg is name of the picture which is inside the media folder of the project
@@ -44,5 +44,23 @@ class Brand_image(Brand_text):
 
     def __init__(self, imageName, alt):
         super().__init__()
-        self.img = e._Image_element(imageName, alt)
+        self.img = e._ImageElement(imageName, alt)
         self.add_content(self.img)
+
+
+
+
+
+
+
+
+import unittest
+
+
+class Test(unittest.TestCase):
+
+    def test_BrandText(self):
+        self.assertEqual("""<a class="navbar-brand " style="color:#ffffff; " href="#"></a>""", BrandText().__str__())
+
+    def test_BrandImage(self):
+        self.assertEqual("""<a class="navbar-brand " style="color:#ffffff; " href="#"><img class="" style="" src="test" alt="test" /></a>""", BrandImage("test", "test").__str__())

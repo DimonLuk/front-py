@@ -14,5 +14,5 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
-from Brand import Brand_text, Brand_image
-from Inline_menu import Inline_menu
+from Brand import BrandText, BrandImage
+from InlineMenu import InlineMenu

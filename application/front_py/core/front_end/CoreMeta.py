@@ -20,13 +20,13 @@ def _replace(self, it, content, index):
 
     Parameters
     ----------
-    it: object that derived from Core_element
+    it: object that derived from CoreElement
         determines element which _template has to be changed
     content: string
         content to be inserted.
     index: int
         shows which "|||"(replacement expression) has to be replaced,
-        starts from 0, in Core_element indexes are contained in
+        starts from 0, in CoreElement indexes are contained in
         the _indexes_list object
     """
     toRm = 0  # Position where the content to be inserted
@@ -49,7 +49,7 @@ def _clean(self, it, index):
 
     Parameters
     ----------
-    it: object that is derived form the Core_element
+    it: object that is derived form the CoreElement
         object where "|||"(replacement expression) has to removed
     index: int
         shows which "|||"(replacement expression) has to be cleaned.
@@ -73,8 +73,8 @@ def _generate_trigger(self):
 
     Parameters
     ----------
-    self: Core_element like object
-        this method can be found only in object derived from Core_element.
+    self: CoreElement like object
+        this method can be found only in object derived from CoreElement.
 
     Returns
     ----------
@@ -108,12 +108,12 @@ def _generate_target(self, trigger):
     return trigger+"Target"
 
 
-class Core_meta(type):
-    """Metaclass which provides service methods for Core_element
+class CoreMeta(type):
+    """Metaclass which provides service methods for CoreElement
     """
     def __new__(cls, name, bases, dct):
         dct["_replace"] = _replace
         dct["_clean"] = _clean
         dct["_generate_trigger"] = _generate_trigger
         dct["_generate_target"] = _generate_target
-        return super(Core_meta, cls).__new__(cls, name, bases, dct)
+        return super(CoreMeta, cls).__new__(cls, name, bases, dct)

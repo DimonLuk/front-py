@@ -15,10 +15,10 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
 from core import elements as e
-from rows import Container_row
+from rows import ContainerRow
 
 
-class Footer(e._Footer_element):
+class Footer(e._FooterElement):
     """
     Cretes footer
     The first argument is content to be displayed
@@ -28,7 +28,7 @@ class Footer(e._Footer_element):
     def __init__(self, content="", height=30):
         super().__init__()
         self._add_class("footer")
-        self.row = Container_row()
+        self.row = ContainerRow()
 
         if content:
             self.row.add_content(content)
@@ -49,3 +49,28 @@ class Footer(e._Footer_element):
             self._add_style({"background": value})
         else:
             self.__dict__[name] = value
+
+
+
+
+
+
+
+
+import unittest
+
+
+class Test(unittest.TestCase):
+
+    def test_Footer(self):
+        self.assertEqual("""<footer class="footer " style="padding-top:15.0px; padding-bottom:15.0px; "><div class="container " style=""><div class="row " style=""></div></div></footer>""", Footer().__str__())
+
+    def test_Footer_add_content(self):
+        a = Footer()
+        a.add_content("test", a)
+        self.assertEqual("""<footer class="footer " style="padding-top:15.0px; padding-bottom:15.0px; "><div class="container " style=""><div class="row " style="">test<footer class="footer " style="padding-top:15.0px; padding-bottom:15.0px; "><div class="container " style=""><div class="row " style="">test</div></div></footer></div></div></footer>""", a.__str__())
+
+    def test_Footer__setattr__(self):
+        a = Footer()
+        a.background_color = "red"
+        self.assertEqual("""<footer class="footer " style="padding-top:15.0px; padding-bottom:15.0px; background:red; "><div class="container " style=""><div class="row " style=""></div></div></footer>""", a.__str__())

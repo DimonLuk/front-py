@@ -17,7 +17,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 from core import elements as e
 
 
-class Block_row(e._Block_element):
+class BlockRow(e._BlockElement):
     """
     Simple row
     """
@@ -26,3 +26,16 @@ class Block_row(e._Block_element):
         super().__init__()
         self._add_class("row")
         self.add_content(*content)
+
+
+
+
+
+
+import unittest
+
+
+class Test(unittest.TestCase):
+
+    def test_BlocRow(self):
+        self.assertEqual("""<div class="row " style=""></div>""", BlockRow().__str__())

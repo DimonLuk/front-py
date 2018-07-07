@@ -17,14 +17,26 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 from core import elements as e
 
 
-class Image(e._Link_element):
+class Image(e._LinkElement):
     """
     Simple responsive image
     """
 
     def __init__(self, href, alt="picture", columns=6):
         super().__init__(href)
-        self.image = e._Image_element(src=href, alt=alt)
+        self.image = e._ImageElement(src=href, alt=alt)
         self.image._add_style({"width": "100%"})
         self._add_class("col-%s" % str(columns))
         self.add_content(self.image)
+
+
+
+
+
+import unittest
+
+
+class Test(unittest.TestCase):
+
+    def test_Image(self):
+        self.assertEqual("""<a class="col-6 " style="" href=""><img class="" style="width:100%; " src="" alt="picture" /></a>""", Image("").__str__())

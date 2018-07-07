@@ -17,7 +17,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 from core import elements as e
 
 
-class Paragraph(e._Paragraph_element):
+class Paragraph(e._ParagraphElement):
     """
     Simple paragraph
     The first argument is text which is not required
@@ -25,3 +25,18 @@ class Paragraph(e._Paragraph_element):
 
     def __init__(self, text=""):
         super().__init__(text=text)
+
+
+
+
+
+
+
+
+import unittest
+
+
+class Test(unittest.TestCase):
+
+    def test_Paragraph(self):
+        self.assertEqual("""<p class="" style=""></p>""", Paragraph().__str__())

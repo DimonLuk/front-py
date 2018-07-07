@@ -16,11 +16,11 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
 from constants import *
 from exceptions import *
-from Core_meta import Core_meta
+from CoreMeta import CoreMeta
 
 
-class Core_element(metaclass=Core_meta):
-    """!It's the main class which aim is creating python representation of html elements. Its metaclass is Core_meta.
+class CoreElement(metaclass=CoreMeta):
+    """!It's the main class which aim is creating python representation of html elements. Its metaclass is CoreMeta.
 
     Parameters
     ----------
@@ -115,7 +115,7 @@ class Core_element(metaclass=Core_meta):
 
         Parameters
         ----------
-        *content: any number of strings and object that are derived from Core_element
+        *content: any number of strings and object that are derived from CoreElement
             content to be placed into the object
 
         Returns
@@ -294,13 +294,13 @@ class Core_element(metaclass=Core_meta):
 import unittest
 
 
-class Test_core_element(unittest.TestCase):
+class TestCoreElement(unittest.TestCase):
     def __init__(self, a):
         super().__init__(a)
-        self.test = Core_element(
+        self.test = CoreElement(
                 element="p", is_closing=True,
                 is_add_attrs=True, attributes=["class", "style", "someattr"])
-        self.test2 = Core_element(
+        self.test2 = CoreElement(
                 element="img", is_closing=False,
                 is_add_attrs=True, attributes=["class", "style", "someattr"]
                 )
