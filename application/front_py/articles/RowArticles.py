@@ -15,13 +15,12 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
 from core import elements as e
-from rows import Section_row
+from rows import SectionRow
 from Article import Article
 
 
-class Row_articles(Section_row):
-    """
-    Creates a lot of articles. Each article in one single row
+class RowArticles(SectionRow):
+    """Creates a lot of articles. Each article in one single row
 
     The first argument is title of all articles| not required
     The second is position, now only center or nothing allowed| not required
@@ -41,10 +40,10 @@ class Row_articles(Section_row):
         self.articles = []  # Array with all articles
         if section_title:
             self.section_title = section_title
-            header = e._Header_element()
+            header = e._HeaderElement()
             if position == "center":
                 header._add_class("mx-auto")
-            h = e._Header_text_element(1, self.section_title)
+            h = e._HeaderTextElement(1, self.section_title)
             header.add_content(h)
             self.add_content(header)
         self.horizontal_line = horizontal_line
@@ -70,7 +69,7 @@ class Row_articles(Section_row):
             lang=lang,
             background=background)
         if self.horizontal_line:
-            article.add_content(e._Horizontal_line_element())
+            article.add_content(e._HorizontalLineElement())
 
         if self.horizontal_distance:
             article._add_style({"margin-top": self.horizontal_distance})
@@ -94,3 +93,40 @@ class Row_articles(Section_row):
     def __iter__(self):
         for i in self.articles:
             yield i
+
+
+
+
+
+
+
+
+
+
+import unittest
+
+
+class Test(unittest.TestCase):
+
+    def test_RowArticles(self):
+        self.assertEqual("""<section class="container " style=""><div class="row " style=""></div></section>""", RowArticles().__str__())
+
+    def test_RowArticles_add_article(self):
+        a = RowArticles()
+        a.add_article("Test")
+        self.assertEqual("""<section class="container " style=""><div class="row " style=""><article class="col-lg-12 col-12 " style=""><header class="" style=""><h2 class="" style="">Test</h2></header></article></div></section>""", a.__str__())
+
+    def test_RowArticles__call__(self):
+        a = RowArticles()
+        self.assertEqual("""<section class="container " style=""><div class="row " style=""><article class="col-lg-12 col-12 " style=""><header class="" style=""><h2 class="" style="">Test</h2></header><p class="" style=""><section class="container " style=""><div class="row " style=""></div></section></p></article></div></section>""", a("Test", a).__str__())
+
+    def test_RowArticle__iter__(self):
+        a = RowArticles()
+        a.add_article("a")
+        a.add_article("b")
+        results = ("""<article class="col-lg-12 col-12 " style=""><header class="" style=""><h2 class="" style="">a</h2></header></article>""",
+                   """<article class="col-lg-12 col-12 " style=""><header class="" style=""><h2 class="" style="">b</h2></header></article>""")
+        k = 0
+        for i in a:
+            self.assertEqual(results[k], i.__str__())
+            k += 1

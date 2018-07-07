@@ -15,5 +15,5 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
 from Article import Article
-from Column_articles import Column_articles
-from Row_articles import Row_articles
+from ColumnArticles import ColumnArticles
+from RowArticles import RowArticles

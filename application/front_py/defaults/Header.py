@@ -17,16 +17,31 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 from core import elements as e
 
 
-class Header_text(e._Header_text_element):
+class HeaderText(e._HeaderTextElement):
     def __init__(self, level=1, text=""):
         super().__init__(level=level, text=text)
 
 
-class Header(e._Header_element):
+class Header(e._HeaderElement):
     def __init__(self, level=1, text=""):
         super().__init__()
-        self.h = Header_text(level, text)
+        self.h = HeaderText(level, text)
 
     def _render(self):
         self.add_content(self.h)
         super()._render()
+
+
+
+
+
+import unittest
+
+
+class Test(unittest.TestCase):
+
+    def test_HeaderText(self):
+        self.assertEqual("""<h1 class="" style=""></h1>""", HeaderText().__str__())
+
+    def test_Header(self):
+        self.assertEqual("""<header class="" style=""><h1 class="" style=""></h1></header>""", Header().__str__())

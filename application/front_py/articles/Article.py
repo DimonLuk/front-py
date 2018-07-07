@@ -17,31 +17,30 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 from core import elements as e
 
 
-class Article(e._Article_element):
-    """
-    Dervied from e._Article_element. Used for displaying text, image and video
+class Article(e._ArticleElement):
+    """Dervied from e._ArticleElement. Used for displaying text, image and video
     information as a single article.
-    Constructor arguments: header_text, headers_level, paragraph, footer,
-    column_num, responsive, save_format, is_code, lang, background.
 
+    Parameters
+    ----------
     header_text: string or framework object, default: ""
-        - text that acts as a header of an article
+        text that acts as a header of an article
     headers_level: int, default: 1
-        - display how deep this header is used to bring
+        display how deep this header is used to bring
         some semantic to the webpage
     parapgraph: string or framework object, default:""
-        - text of paragraph (can include images and videos) to be displayed
+        text of paragraph (can include images and videos) to be displayed
     column_num: int, default: 4
-        - shows how many of 12 columns this paragraph has to take
+        shows how many of 12 columns this paragraph has to take
     responsive: boolean, default: True
-        -shows if this paragraph has to be responsive
+        shows if this paragraph has to be responsive
     save_format: boolean, default: False
-        - shows if the text has to be displayed in default html format
+        shows if the text has to be displayed in default html format
         or use exact formating that is hardcoded
     is_code: boolean, defualt: False
-        - shows if the text is a source code of some programming language
+        shows if the text is a source code of some programming language
     lang: string, default: ""
-            - determines which programming language this text is
+        determines which programming language this text is
     """
     def __init__(self, header_text="", headers_level=1, paragraph="",
                  footer="", column_num=4, responsive=True, save_format=False,
@@ -51,12 +50,12 @@ class Article(e._Article_element):
         self.save_format = save_format
         self.is_code = is_code
         if self.save_format and self.is_code:
-            self.paragraph = e._Code_element()
+            self.paragraph = e._CodeElement()
             self.paragraph._add_class(lang)
             self.paragraph._add_class("j"+str(hex(hash(self.paragraph))))
             self.paragraph.add_content("<script>$('.%s').each(function(i, block) {hljs.highlightBlock(block);});</script>" % ("j"+str(hex(hash(self.paragraph)))))
         else:
-            self.paragraph = e._Paragraph_element()
+            self.paragraph = e._ParagraphElement()
         if background:
             self.paragraph._add_style(background)
         self.text = paragraph
@@ -69,9 +68,9 @@ class Article(e._Article_element):
         if self.responsive:
             self._add_class("col-12")
         if self.header_text:
-            self.header = e._Header_element()
+            self.header = e._HeaderElement()
 
-            self.h = e._Header_text_element(headers_level)
+            self.h = e._HeaderTextElement(headers_level)
             self.h.add_content(header_text)
 
             self.header.add_content(self.h)
@@ -79,18 +78,16 @@ class Article(e._Article_element):
             self.paragraph.add_content(self.text)
 
     def add_content(self, *content):
-        """
-        Adds content to the article's paragraph
-        Arguments: *content.
+        """Adds content to the article's paragraph
         *content: any number of strings or frameworks objects(can be mixed)
-            - content to be added and to be displayed
+            content to be added and to be displayed
         """
         self.checker = True
         self.paragraph.add_content(*content)
 
     def _render(self):
         if self.save_format and self.is_code:
-            tmp = e._Formated_text_element()
+            tmp = e._FormatedTextElement()
             tmp.add_content(self.paragraph)
             self.paragraph = tmp
         if self.header_text:
@@ -110,3 +107,26 @@ class Article(e._Article_element):
             column_num=self.column_num,
             responsive=self.responsive)
         return obj
+
+
+
+
+
+
+
+
+import unittest
+
+
+class Test(unittest.TestCase):
+    def test_Article(self):
+        self.assertEqual("""<article class="col-lg-4 col-12 " style=""></article>""", Article().__str__())
+
+    def test_Article__call__(self):
+        a = Article()
+        self.assertEqual("""<article class="col-lg-4 col-12 " style=""><header class="" style=""><h1 class="" style="">a</h1></header><p class="" style="">b</p>c</article>""", a("a", "b", "c").__str__())
+
+    def test_Article_add_content(self):
+        a = Article()
+        a.add_content("Test", a)
+        self.assertEqual("""<article class="col-lg-4 col-12 " style=""><p class="" style="">Test<article class="col-lg-4 col-12 " style=""><p class="" style="">Test</p></article></p></article>""", a.__str__())
