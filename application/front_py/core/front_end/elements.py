@@ -1,28 +1,51 @@
 """
-This module contains main elements which is used to develop framework
+This module contains primitive html elements which is used to develop framework
 It contains:
+
     <menu>:_Menu_element
+
     <nav>:_Navigation_element
+
     <ul>:_Unnumbered_list_element
+
     <ol>:_Numbered_list_element
+
     <li>:_In_list_element
+
     <a>:_Link_element
+
     <p>:_Paragraph_element
+
     <img>:_Image_element
+
     <div>:_Block_element
+
     <section>:_Section_element
+
     <aside>:_Aside_element
+
     <span>:_Text_element
+
     <footer>:_Footer_element
+
     <form>:_Form_element
+
     <input>(all types):_Input_element
+
     <button>:_Button_element
+
     <header>:_Header_element
+
     <textarea>:_Input_text_area
+
     <h1-6>:_Header_text_element
+
     <hr>:_Horizontal_line_element
+
     <pre>:_Formated_text_element
+
     <code>:_Code_element
+
     <article>:_Article_element
 
 Copyright (C) 2018  Dima Lukashov github.com/DimonLuk

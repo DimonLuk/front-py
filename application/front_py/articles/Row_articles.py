@@ -20,8 +20,7 @@ from Article import Article
 
 
 class Row_articles(Section_row):
-    """
-    Creates a lot of articles. Each article in one single row
+    """Creates a lot of articles. Each article in one single row
 
     The first argument is title of all articles| not required
     The second is position, now only center or nothing allowed| not required

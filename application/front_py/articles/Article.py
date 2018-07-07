@@ -18,30 +18,29 @@ from core import elements as e
 
 
 class Article(e._Article_element):
-    """
-    Dervied from e._Article_element. Used for displaying text, image and video
+    """Dervied from e._Article_element. Used for displaying text, image and video
     information as a single article.
-    Constructor arguments: header_text, headers_level, paragraph, footer,
-    column_num, responsive, save_format, is_code, lang, background.
 
+    Parameters
+    ----------
     header_text: string or framework object, default: ""
-        - text that acts as a header of an article
+        text that acts as a header of an article
     headers_level: int, default: 1
-        - display how deep this header is used to bring
+        display how deep this header is used to bring
         some semantic to the webpage
     parapgraph: string or framework object, default:""
-        - text of paragraph (can include images and videos) to be displayed
+        text of paragraph (can include images and videos) to be displayed
     column_num: int, default: 4
-        - shows how many of 12 columns this paragraph has to take
+        shows how many of 12 columns this paragraph has to take
     responsive: boolean, default: True
-        -shows if this paragraph has to be responsive
+        shows if this paragraph has to be responsive
     save_format: boolean, default: False
-        - shows if the text has to be displayed in default html format
+        shows if the text has to be displayed in default html format
         or use exact formating that is hardcoded
     is_code: boolean, defualt: False
-        - shows if the text is a source code of some programming language
+        shows if the text is a source code of some programming language
     lang: string, default: ""
-            - determines which programming language this text is
+        determines which programming language this text is
     """
     def __init__(self, header_text="", headers_level=1, paragraph="",
                  footer="", column_num=4, responsive=True, save_format=False,
@@ -79,11 +78,9 @@ class Article(e._Article_element):
             self.paragraph.add_content(self.text)
 
     def add_content(self, *content):
-        """
-        Adds content to the article's paragraph
-        Arguments: *content.
+        """Adds content to the article's paragraph
         *content: any number of strings or frameworks objects(can be mixed)
-            - content to be added and to be displayed
+            content to be added and to be displayed
         """
         self.checker = True
         self.paragraph.add_content(*content)

@@ -42,6 +42,8 @@ if __name__ == "__main__":
                        "address": address, "port": port}, file)
     elif sys.argv[1] == "test" and len(sys.argv) == 2:
         prepare_import()
+        # test = importlib.import_module("Page")
+        # test.unittest.main()
         test = importlib.import_module("functions")
         test.unittest.main()
     elif sys.argv[1] == "docs" and len(sys.argv) == 3:

@@ -30,14 +30,18 @@ _requst class is not tested because for now it's nothing to test here
 
 
 def make_name(address):
-    """!
-    @brief Creates special name which will be added to Core_http_process attributes.
-    Because names are built from http requests they contain '/',
-    this function repleces it with '_aa'.
-    @para address: string
-    - url of http request. Not imported to front_py package.
-    @return string
-    @details !!!Not for user usage!!!
+    """Creates special name which will be added to Core_http_process attributes.
+    Because names are built from http requests they contain '/', this function repleces it with '_aa'.
+    !!!Not for user usage!!!
+
+    Parameters
+    ----------
+    address: string
+        url of http request. Not imported to front_py package.
+
+    Returns
+    ----------
+    name: string
     """
     address = address.split("/")
     address = "_aa".join(address)
@@ -45,31 +49,28 @@ def make_name(address):
 
 
 class Core_http_process(BaseHTTPRequestHandler):
-    """!
-    @brief Used for handling requests from user.
-    @details For now can handle only GET requests.
-    All arguments are derived from superclass, user mustn't pass any of them.
+    """Used for handling requests from user. All arguments are derived from superclass, user mustn't pass any of them.
     """
 
     def __init__(self, a, b, c):
         super().__init__(a, b, c)
 
     def do_GET(self):
-        """!
-        @brief Handles GET requests.
-        Can handle pattern templates like @code/<any>/page/<any>@endcode
+        """Handles GET requests.
+        Can handle pattern templates like
+        >>> /<any>/page/<any>
         and etc.
         """
 
-        ## Files in media folder to be loaded
+        # Files in media folder to be loaded
         self._find = self.path.split(
             ".")  # Files in media are sth like this name.extension
-        ## back_end#Core_http_process#request object that can be used by user
+        # back_end#Core_http_process#request object that can be used by user
         self.request = _request(self.path, "GET")
         if self._find[-1] in AVALIABLE_FORMATS:
             with open("application/static/media%s" % self.path, "rb") as sth:
 
-                ## Response to be sent to user
+                # Response to be sent to user
                 self._response = sth.read()
                 if self._find[-1] == "map":
                     self._send_response("application/json")
@@ -146,35 +147,41 @@ class Core_http_process(BaseHTTPRequestHandler):
             self.send_error(501, "Function to serve %s is not implemented" % self.path)
 
     def _send_response(self, typ):
-        """!
-        @brief Sends a response to user
-        @param typ: string
-        - type of the resposne "text/html", "application/json" and etc.
+        """Sends a response to user
+
+        Parameters
+        ----------
+        typ: string
+            type of the resposne "text/html", "application/json" and etc.
         """
         self.send_response(200)  # Nothing interesting here
         self._send_headers(typ)
 
     def _send_headers(self, typ):
-        """!
-        @brief Set headers to the response
-        @param typ: string
-        - type of the response "text/html", "application/json" and etc.
+        """Set headers to the response
+
+        Parameters
+        ----------
+        typ: string
+            type of the response "text/html", "application/json" and etc.
         """
         self.send_header("Content-type", typ)
         self.end_headers()
 
 
 class _request:
-    """!
-    @brief This class create simple API of browser html for user.
-    @param path: string
-    - represents path of browser request.
-    @param method: string
-    - method which has been used to send the request.
-    @param headers: object
-    - headers of the request (Not implemented yet).
-    @param body: ???
-    - body of the http request (Not implemented yet)
+    """This class create simple API of browser html for user.
+
+    Parameters
+    ----------
+    path: string
+        represents path of browser request.
+    method: string
+        method which has been used to send the request.
+    headers: object
+        headers of the request (Not implemented yet).
+    body: ???
+        body of the http request (Not implemented yet)
     """
 
     def __init__(self, path: str, method: object, headers: object = {}, body: object = {}) -> object:
