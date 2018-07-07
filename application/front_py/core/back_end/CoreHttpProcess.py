@@ -17,7 +17,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 from http.server import BaseHTTPRequestHandler
 from constants import *
-from front_end import Core_element, Page
+from front_end import CoreElement, Page
 from exceptions import Unsupported_feature
 import json
 import multipart
@@ -30,7 +30,7 @@ _requst class is not tested because for now it's nothing to test here
 
 
 def make_name(address):
-    """Creates special name which will be added to Core_http_process attributes.
+    """Creates special name which will be added to CoreHttpProcess attributes.
     Because names are built from http requests they contain '/', this function repleces it with '_aa'.
     !!!Not for user usage!!!
 
@@ -48,7 +48,7 @@ def make_name(address):
     return address
 
 
-class Core_http_process(BaseHTTPRequestHandler):
+class CoreHttpProcess(BaseHTTPRequestHandler):
     """Used for handling requests from user. All arguments are derived from superclass, user mustn't pass any of them.
     """
 
@@ -65,7 +65,7 @@ class Core_http_process(BaseHTTPRequestHandler):
         # Files in media folder to be loaded
         self._find = self.path.split(
             ".")  # Files in media are sth like this name.extension
-        # back_end#Core_http_process#request object that can be used by user
+        # back_end#CoreHttpProcess#request object that can be used by user
         self.request = _request(self.path, "GET")
         if self._find[-1] in AVALIABLE_FORMATS:
             with open("application/static/media%s" % self.path, "rb") as sth:
@@ -105,8 +105,8 @@ class Core_http_process(BaseHTTPRequestHandler):
                 self._response = bytes(self._resp[0].encode("utf-8"))
                 self._send_response(self._resp[1])
                 self.wfile.write(self._response)
-            # If it's user defined function, than it belongs to Core_element's children
-            elif isinstance(self._resp, Core_element):
+            # If it's user defined function, than it belongs to CoreElement's children
+            elif isinstance(self._resp, CoreElement):
                 self._resp._render()
                 self._response = bytes(self._resp._template.encode("utf-8"))
                 self._send_response("text/html")

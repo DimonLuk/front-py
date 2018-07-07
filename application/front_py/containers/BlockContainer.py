@@ -17,22 +17,11 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 from core import elements as e
 
 
-class Numbered_list(e._Numbered_list_element):
-    def __init__(self, content_style={}, *content):
+class BlockContainer(e._BlockElement):
+    """
+    Is used to build complex structures, sometimes can be useful for user, so no '_' in the begining of name
+    """
+
+    def __init__(self):
         super().__init__()
-        self.li = e._In_list_element()
-        self.li._add_style(content_style)
-        if content:
-            for i in content:
-                self.add_content(self.li(i))
-
-    def add_elements(self, *elements):
-        for i in elements:
-            self.add_content(self.li(i))
-
-    def __call__(self, *elements):
-        import copy
-        cop = copy.deepcopy(self)
-        cop.add_elements(*elements)
-        cop._render()
-        return cop._template
+        self._add_class("container")

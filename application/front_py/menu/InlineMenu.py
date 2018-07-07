@@ -15,17 +15,17 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
 from core import elements as e
-from Brand import Brand_text, Brand_image
+from Brand import BrandText, BrandImage
 
 
-class Inline_menu(e._Block_element):
+class InlineMenu(e._BlockElement):
     """
     Simple inline bootstrap menu
 
     The first argument is json represantion of background like {"background":"<some color here>"}
     The second is json like links {"Home":"/","Any page":"/any"}
     The third is color of links
-    The fourth is Brand_text or Brand_image object
+    The fourth is BrandText or BrandImage object
 
     If you call this object you'll get deepcopy of it
     """
@@ -43,14 +43,14 @@ class Inline_menu(e._Block_element):
         super().__init__()
         self._add_style(background)
 
-        self.header = e._Header_element()
+        self.header = e._HeaderElement()
         self.header._add_class("container")
         self.header._add_style(self.background)
 
-        self.menu = e._Menu_element()
+        self.menu = e._MenuElement()
         self.menu._add_class("row")
 
-        self.navigation = e._Navigation_element()
+        self.navigation = e._NavigationElement()
         self.navigation._add_class(
             "navbar",
             "navbar-toggleable-md",
@@ -60,7 +60,7 @@ class Inline_menu(e._Block_element):
             "mx-auto")
         self.navigation._add_style(self.background)
 
-        self.collapse_button = e._Button_element(
+        self.collapse_button = e._ButtonElement(
             text="",
             attributes=[
                 "class",
@@ -80,25 +80,25 @@ class Inline_menu(e._Block_element):
         self.collapse_button._add_attr_value("aria-expanded", "false")
         self.collapse_button._add_attr_value("aria-label", "Toggle navigation")
 
-        self.toggle_icon = e._Text_element()
+        self.toggle_icon = e._TextElement()
         self.toggle_icon._add_class("navbar-toggler-icon")
         self._add_style({"color": "white"})
         self.collapse_button.add_content(self.toggle_icon)
 
-        self.nav_block = e._Block_element()
+        self.nav_block = e._BlockElement()
         self.nav_block._add_class(
             "collapse",
             "navbar-collapse",
             "toggleTarget")
 
-        self.links_list = e._Unnumbered_list_element()
+        self.links_list = e._UnnumberedListElement()
         self.links_list._add_class("navbar-nav", "mr-left")
         first = True
         for i in self.links:
-            li = e._In_list_element()
+            li = e._InListElement()
             li._add_class("nav-item", "active")
             for j in i:
-                href = e._Link_element(i[j])
+                href = e._LinkElement(i[j])
                 if not "http" in i[j]:
                     li._add_class("%s" % ("j"+str(hex(hash(li)))))
                 href.add_content(j)
@@ -126,10 +126,10 @@ class Inline_menu(e._Block_element):
 
     def _add_link(self, links, color=""):
         for link in links:
-            li = e._In_list_element()
+            li = e._InListElement()
             li._add_class("nav-item", "active")
 
-            href = e._Link_element(links[link])
+            href = e._LinkElement(links[link])
             href.add_content(link)
             href._add_class("nav-link")
             if color:

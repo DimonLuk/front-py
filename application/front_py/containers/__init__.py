@@ -14,5 +14,5 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
-from Block_container import Block_container
-from Section_container import Section_container
+from BlockContainer import BlockContainer
+from SectionContainer import SectionContainer

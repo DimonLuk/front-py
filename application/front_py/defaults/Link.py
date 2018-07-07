@@ -17,7 +17,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 from core import elements as e
 
 
-class Link(e._Link_element):
+class Link(e._LinkElement):
     def __init__(self, href, text):
         super().__init__(href=href)
         self.add_content(text)

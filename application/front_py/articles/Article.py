@@ -17,8 +17,8 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 from core import elements as e
 
 
-class Article(e._Article_element):
-    """Dervied from e._Article_element. Used for displaying text, image and video
+class Article(e._ArticleElement):
+    """Dervied from e._ArticleElement. Used for displaying text, image and video
     information as a single article.
 
     Parameters
@@ -50,12 +50,12 @@ class Article(e._Article_element):
         self.save_format = save_format
         self.is_code = is_code
         if self.save_format and self.is_code:
-            self.paragraph = e._Code_element()
+            self.paragraph = e._CodeElement()
             self.paragraph._add_class(lang)
             self.paragraph._add_class("j"+str(hex(hash(self.paragraph))))
             self.paragraph.add_content("<script>$('.%s').each(function(i, block) {hljs.highlightBlock(block);});</script>" % ("j"+str(hex(hash(self.paragraph)))))
         else:
-            self.paragraph = e._Paragraph_element()
+            self.paragraph = e._ParagraphElement()
         if background:
             self.paragraph._add_style(background)
         self.text = paragraph
@@ -68,9 +68,9 @@ class Article(e._Article_element):
         if self.responsive:
             self._add_class("col-12")
         if self.header_text:
-            self.header = e._Header_element()
+            self.header = e._HeaderElement()
 
-            self.h = e._Header_text_element(headers_level)
+            self.h = e._HeaderTextElement(headers_level)
             self.h.add_content(header_text)
 
             self.header.add_content(self.h)
@@ -87,7 +87,7 @@ class Article(e._Article_element):
 
     def _render(self):
         if self.save_format and self.is_code:
-            tmp = e._Formated_text_element()
+            tmp = e._FormatedTextElement()
             tmp.add_content(self.paragraph)
             self.paragraph = tmp
         if self.header_text:

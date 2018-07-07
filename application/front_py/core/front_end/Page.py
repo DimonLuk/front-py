@@ -15,11 +15,11 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
 from constants import *
-from Core_element import Core_element
+from CoreElement import CoreElement
 
 
-class Page(Core_element):
-    """Derived from Core_element but it's special element, which has additional html code.
+class Page(CoreElement):
+    """Derived from CoreElement but it's special element, which has additional html code.
 
     Parameters
     ----------
@@ -88,7 +88,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 </html>"""
 
     def add_element(self, *content):
-        """Adds element to page, elements can be both objects derived from Core_element and strings.
+        """Adds element to page, elements can be both objects derived from CoreElement and strings.
 
         Parameters
         ----------
@@ -123,10 +123,10 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
         self._add_style(background)
 
     def _render(self):
-        """inherited from Core_element._render
+        """inherited from CoreElement._render
         """
 
-        # Inherited from Core_element#_template
+        # Inherited from CoreElement#_template
         self._template = self._tmp % (
             self._title, self.encoding, BOOTSTRAP_CSS, JQUERY_3_2_1_MIN_JS,
             BOOTSTRAP_MIN_JS, SCRIPT_JS, self._template)
