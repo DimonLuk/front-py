@@ -57,3 +57,25 @@ class ColumnArticles(SectionContainer):
     def __call__(self, *articles):
         for i in articles:
             self.add_content(i)
+
+
+
+
+
+
+
+
+
+
+import unittest
+
+
+class Test(unittest.TestCase):
+    def test_ColumnArticles(self):
+        self.assertEqual("""<section class="container " style=""><div class="row " style="margin-bottom:30px; "><header class="" style=""><h1 class="" style=""></h1></header></div><div class="row " style=""></div></section>""", ColumnArticles().__str__())
+
+    def test_ColumnArticles_add_content(self):
+        a = ColumnArticles()
+        a.add_content("Test", a)
+        self.maxDiff = None
+        self.assertEqual("""<section class="container " style=""><div class="row " style="margin-bottom:30px; "><header class="" style=""><h1 class="" style=""></h1></header></div><div class="row " style="">Test<section class="container " style=""><div class="row " style="margin-bottom:30px; "><header class="" style=""><h1 class="" style=""></h1></header></div><div class="row " style="">Test</div></section></div></section>""", a.__str__())

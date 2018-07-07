@@ -294,7 +294,7 @@ class CoreElement(metaclass=CoreMeta):
 import unittest
 
 
-class Test_core_element(unittest.TestCase):
+class TestCoreElement(unittest.TestCase):
     def __init__(self, a):
         super().__init__(a)
         self.test = CoreElement(

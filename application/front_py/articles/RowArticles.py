@@ -93,3 +93,40 @@ class RowArticles(SectionRow):
     def __iter__(self):
         for i in self.articles:
             yield i
+
+
+
+
+
+
+
+
+
+
+import unittest
+
+
+class Test(unittest.TestCase):
+
+    def test_RowArticles(self):
+        self.assertEqual("""<section class="container " style=""><div class="row " style=""></div></section>""", RowArticles().__str__())
+
+    def test_RowArticles_add_article(self):
+        a = RowArticles()
+        a.add_article("Test")
+        self.assertEqual("""<section class="container " style=""><div class="row " style=""><article class="col-lg-12 col-12 " style=""><header class="" style=""><h2 class="" style="">Test</h2></header></article></div></section>""", a.__str__())
+
+    def test_RowArticles__call__(self):
+        a = RowArticles()
+        self.assertEqual("""<section class="container " style=""><div class="row " style=""><article class="col-lg-12 col-12 " style=""><header class="" style=""><h2 class="" style="">Test</h2></header><p class="" style=""><section class="container " style=""><div class="row " style=""></div></section></p></article></div></section>""", a("Test", a).__str__())
+
+    def test_RowArticle__iter__(self):
+        a = RowArticles()
+        a.add_article("a")
+        a.add_article("b")
+        results = ("""<article class="col-lg-12 col-12 " style=""><header class="" style=""><h2 class="" style="">a</h2></header></article>""",
+                   """<article class="col-lg-12 col-12 " style=""><header class="" style=""><h2 class="" style="">b</h2></header></article>""")
+        k = 0
+        for i in a:
+            self.assertEqual(results[k], i.__str__())
+            k += 1

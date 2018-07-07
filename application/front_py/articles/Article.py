@@ -107,3 +107,26 @@ class Article(e._ArticleElement):
             column_num=self.column_num,
             responsive=self.responsive)
         return obj
+
+
+
+
+
+
+
+
+import unittest
+
+
+class Test(unittest.TestCase):
+    def test_Article(self):
+        self.assertEqual("""<article class="col-lg-4 col-12 " style=""></article>""", Article().__str__())
+
+    def test_Article__call__(self):
+        a = Article()
+        self.assertEqual("""<article class="col-lg-4 col-12 " style=""><header class="" style=""><h1 class="" style="">a</h1></header><p class="" style="">b</p>c</article>""", a("a", "b", "c").__str__())
+
+    def test_Article_add_content(self):
+        a = Article()
+        a.add_content("Test", a)
+        self.assertEqual("""<article class="col-lg-4 col-12 " style=""><p class="" style="">Test<article class="col-lg-4 col-12 " style=""><p class="" style="">Test</p></article></p></article>""", a.__str__())
