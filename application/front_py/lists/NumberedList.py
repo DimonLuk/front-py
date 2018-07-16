@@ -18,6 +18,15 @@ from core import elements as e
 
 
 class NumberedList(e._NumberedListElement):
+    """
+    Parameters
+    ----------
+
+    content_style: json like object with css properties written in css values
+        set style for content
+    *content: string or object from framework or some amount of them
+        content to be displayed
+    """
     def __init__(self, content_style={}, *content):
         super().__init__()
         self.li = e._InListElement()
@@ -27,10 +36,29 @@ class NumberedList(e._NumberedListElement):
                 self.add_content(self.li(i))
 
     def add_elements(self, *elements):
+        """
+        Parameters
+        ----------
+
+        elements: str or object from framework or some number of them
+        """
         for i in elements:
             self.add_content(self.li(i))
 
     def __call__(self, *elements):
+        """
+        Wrapping non-modifying method which create deep copy of existing object and add elements to it
+
+        Parameters
+        ----------
+
+        elements: str or object from framework or some number of them
+
+        Returns
+        ----------
+
+        Deepcopied and rendered object with added element
+        """
         import copy
         cop = copy.deepcopy(self)
         cop.add_elements(*elements)

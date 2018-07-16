@@ -18,11 +18,33 @@ from core import elements as e
 
 
 class HeaderText(e._HeaderTextElement):
+    """
+    This is exactly <h1>, <h2> and etc. tag
+
+    Parameters
+    ----------
+
+    level: int
+        <h1>, <h2> an etc.
+    text: string
+        Text to be displayed as header
+    """
     def __init__(self, level=1, text=""):
         super().__init__(level=level, text=text)
 
 
 class Header(e._HeaderElement):
+    """
+    This is <header><h1></h1>, <h2></h2> and etc.</header>
+
+    Parameters
+    ----------
+
+    level: int
+        <h1>, <h2> and etc
+    text: string
+        text to be placed int header
+    """
     def __init__(self, level=1, text=""):
         super().__init__()
         self.h = HeaderText(level, text)

@@ -21,8 +21,12 @@ class BrandText(e._LinkElement):
     """
     Company name or other brand short and nice info
 
-    The first argument is text
-    The second is color
+    Parameters
+    ----------
+    text: str
+        name of company or important data to be displayed
+    color: str
+        color of the text
     """
 
     def __init__(self, text="", color="#ffffff"):
@@ -40,6 +44,13 @@ class BrandImage(BrandText):
     Company logo
     The firts arg is name of the picture which is inside the media folder of the project
     The second is text to be displayed if picture can't be loaded
+
+    Parameters
+    ----------
+    imageName: str
+        name of image which is within static/media folder
+    alt: str
+        alternative text for people who can't see images
     """
 
     def __init__(self, imageName, alt):
