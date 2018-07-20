@@ -20,12 +20,28 @@ from Article import Article
 
 
 class RowArticles(SectionRow):
-    """Creates a lot of articles. Each article in one single row
+    """
+    Parameters
+    ----------
 
-    The first argument is title of all articles| not required
-    The second is position, now only center or nothing allowed| not required
-
-    Use 'config' method to set your preferences for all articles
+    section_title: string
+        how your block of articles will be called
+    position: special string
+        center, left or right
+    horizontal_distance: special string for example 30px
+        distance between each article
+    horizontal_line: bool
+        if it is necessary to underscore all articles
+    headers_level: int
+        how big header of each article has to be
+    save_format: bool
+        indicates if the formatting from source string has to be saved
+    is_code: bool
+        indicates if it's code
+    lang: string
+        language for codding for example python, javascript and etc.
+    articles_background: json_object with css properties
+        json object with css properties
     """
 
     def __init__(
@@ -56,7 +72,22 @@ class RowArticles(SectionRow):
     def add_article(self, header_text="", text="", footer="",
                     save_format=False, is_code=False, lang="", background={}):
         """
-        Adds single artile with header, text, and footer. All arguments are not required and can be objects
+        Parameters
+        ----------
+
+        header_text: string
+            header of single article
+        text: string
+            text of article
+        footer: string
+            footer of article
+        save_format: bool
+            save source string formatting
+        is_code: bool
+            if it's some program code
+        lang: string
+            programming language
+        background: json object with css properties
         """
         article = Article(
             header_text=header_text,
@@ -81,6 +112,13 @@ class RowArticles(SectionRow):
         super()._render()
 
     def __call__(self, header_text="", text="", footer=""):
+        """
+        Create new article and wrap it into existing context and modify this contextual object
+
+        Returns
+        ----------
+        new article wraped into existing object
+        """
         self.add_article(
             header_text=header_text,
             text=text,

@@ -20,9 +20,11 @@ from rows import ContainerRow
 
 class Footer(e._FooterElement):
     """
-    Cretes footer
-    The first argument is content to be displayed
-    The second is height of the footer
+    Parameters
+    ----------
+
+    content: str or object from framework
+        content to be displayed
     """
 
     def __init__(self, content="", height=30):
@@ -45,6 +47,20 @@ class Footer(e._FooterElement):
         super()._render()
 
     def __setattr__(self, name, value):
+        """
+        Allows special syntax to set some css attributes.
+
+        Parameters
+        ----------
+
+        name: str
+            css property name but written in pythonic style, for example background-color is represented as background_color
+        value: str
+            css property value
+
+        TODO
+        realise more possibilities to customize this object
+        """
         if name == "background_color":
             self._add_style({"background": value})
         else:
