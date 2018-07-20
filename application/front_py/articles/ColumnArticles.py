@@ -24,6 +24,24 @@ class ColumnArticles(SectionContainer):
     def __init__(
             self, header="", footer="", headers_level=1, position="",
             vertical_distance="30px", horizontal_line=False, *articles):
+        """
+        Parameters
+        ----------
+        header: string or framework object
+            text or object which represents header of article
+        footer: string or framework object
+            text or object which represents footer of article
+        headers_level: int
+            can be int from 1 to 7 like in html
+        position: special string
+            string which is center, left or right
+        vertical_distance: string which looks like int + px, for example 30px
+            I do not remember certainly what is it, need to experiment )))
+        horizontal_line: bool
+            line which will underscore all articles
+        articles: several of Article
+            I suppose it is simple
+        """
         super().__init__()
         self.header = header
         self.headers_level = headers_level

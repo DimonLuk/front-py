@@ -18,6 +18,15 @@ from core import elements as e
 
 
 class Link(e._LinkElement):
+    """
+    Parameters
+    ----------
+
+    href: string
+        address where user will be redirected
+    text: string or framework object
+        text or framework object to be displayed
+    """
     def __init__(self, href, text):
         super().__init__(href=href)
         self.add_content(text)

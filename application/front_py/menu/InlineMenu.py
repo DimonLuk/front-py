@@ -28,6 +28,16 @@ class InlineMenu(e._BlockElement):
     The fourth is BrandText or BrandImage object
 
     If you call this object you'll get deepcopy of it
+
+    Parameters
+    ----------
+    background: json like object which represents css properties
+        {"background":"<some color here>"}
+    links: json
+        [{"Home":"/","Any page":"/any"}]
+    color: str
+        "#ffffff"
+    brand: BrandText or BrandImage
     """
 
     def __init__(self, background, links, links_color, brand):
@@ -141,6 +151,17 @@ class InlineMenu(e._BlockElement):
             self.links_list.add_content(li)
 
     def __call__(self, links={}, color=""):
+        """
+        Parameters
+        ----------
+        links: json
+            [{"Home":"/","Any page":"/any"}]
+        color: str
+            "#ffffff"
+        Returns
+        ----------
+        Deepcopied object with additional parameters you've passed
+        """
         import copy
         cop = copy.deepcopy(self)
         if links:

@@ -18,12 +18,11 @@ from core import elements as e
 
 
 class Paragraph(e._ParagraphElement):
-    """
-    Simple paragraph
-    The first argument is text which is not required
-    """
 
     def __init__(self, text=""):
+        """
+        You know, it's just paragraph with text :)
+        """
         super().__init__(text=text)
 
 
