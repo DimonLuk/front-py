@@ -19,16 +19,19 @@ from core import elements as e
 
 class Text(e._TextElement):
     """
-    Simple text
-    The first argument of constructor is text which will be shown it's nit required
-
     It can be used as wrapper, you can define some simple styles and use it to wrap text
     For example:
-    greenText = Text()
-    greenText.color = "green" or greenText.addStyle({"color":"green"})
-    p = Paragraph("Some %s text" % greenText("green"))
+    >>> greenText = Text()
+    >>> greenText.color = "green" or greenText.addStyle({"color":"green"})
+    >>> p = Paragraph("Some %s text" % greenText("green"))
 
     Or you can use this class in usual way
+
+    Parameters
+    ----------
+
+    text: str
+        just text
     """
 
     def __init__(self, text=""):

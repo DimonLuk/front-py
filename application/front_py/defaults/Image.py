@@ -19,7 +19,15 @@ from core import elements as e
 
 class Image(e._LinkElement):
     """
-    Simple responsive image
+    Parameters
+    ----------
+
+    href: string
+        it's name of image that is placed within static/ folder
+    alt: string
+        alternative text for people who can't see the picture itself
+    columns: int
+        how many of 12 columns the picture will take
     """
 
     def __init__(self, href, alt="picture", columns=6):
